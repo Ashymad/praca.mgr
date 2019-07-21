@@ -66,7 +66,7 @@ sorting=none,
 language=autobib,
 autolang=other,
 % Zapisuj datę dostępu do strony WWW w formacie RRRR-MM-DD.
-urldate=edtf,
+urldate=iso,
 seconds=true,
 % Nie dodawaj numerów stron, na których występuje cytowanie.
 backref=false,
@@ -178,39 +178,41 @@ backend=biber
 
 %---------------------------------------------------------------------------
 
-\author{{[}Imiona i Nazwisko]}
+\author{Szymon Piotr Mikulicz}
 
 \makeatletter% Poniższe makra są wyłącznie zdefiniowane w klasie aghdpl-imir
 \@ifclassloaded{aghdpl}{%
 
   \sex{m} % Mężczyzna - m; kobieta - cokolwiek
-  \shortauthor{{[Im.\ i nazwisko]}}
-  \albumnum{{[xxxxxx]}}
-  \address{{[Adres]}}
+  \shortauthor{S.\ Mikulicz}
+  \albumnum{279253}
+  \address{Legionów 49, 05-220 Zielonka}
 
-  \titlePL{{[Bardzo długi temat niezwykle dogłębnej pracy dyplomowej inżynierskiej debatującej nad ekstraordynaryjnie pasjonującym zagadnieniem]}}
-  \titleEN{{[Very long title of extremely indepth engineer dimploma thesis exploring an extraordinarily interesing subject]}}
+  \titlePL{Wykorzystanie uczenia maszynowego do identyfikacji metody kompresji
+  sygnału akustycznego}
+  \titleEN{{The use of machine learning to identify the method of acoustic
+  signal compression}}
 
-  \shorttitlePL{{[Skrócony temat pracy]}} % skrócona wersja tytułu
-  \shorttitleEN{{[Short thesis subject]}}
+  \shorttitlePL{Identyfikacja kompresji audio} % skrócona wersja tytułu
+  \shorttitleEN{Identification of audio compression}
 
   % rodzaj pracy bez końcówki fleksyjnej np. inżyniersk, magistersk
   \thesistypePL{magistersk}
-  \thesistypeEN{engineer}
+  \thesistypeEN{master's}
 
-  \supervisor{{[Tytuł, imię i nazwisko promotora]}}
+  \supervisor{dr hab. inż. Bartłomiej Borkowski}
 
-  \reviewer{{[Tytuł, imię i nazwisko recenzenta]}}
+  \reviewer{prof. dr hab. inż. Jerzy Wiciak}
 
-  \degreeprogrammePL{{[Nazwa kierunku studiów]}}
-  \degreeprogrammeEN{{[Field of Study]}}
+  \degreeprogrammePL{Inżynieria Akustyczna}
+  \degreeprogrammeEN{Acoustic Engineering}
 
-  \specialisationPL{{[Nazwa specjalności]}}
-  \specialisationEN{{[Specialisation]}}
+  \specialisationPL{Drgania i Hałas w Technice i Środowisku}
+  \specialisationEN{Vibration and Noise in Technology and Environment}
 
-  \graduationyear{{[Rok ukończenia]}}
-  \years{2017/2018}
-  \yearofstudy{IV}
+  \graduationyear{2019}
+  \years{2018/2019}
+  \yearofstudy{II}
   \formPL{stacjonarne}
   \formEN{full-time}
 
@@ -219,9 +221,9 @@ backend=biber
   \agree{t}
 
   % praktyka (dyplomowa)
-  \apprenticeship{{[}Praktyka dyplomowa]}
+  \apprenticeship{Katedra Mechaniki i Wibroakustyki}
 
-  \department{Katedra Transportu Linowego}
+  \department{Department of Mechanics and Vibroacoustics}
 
   \facultyPL{Wydział Inżynierii Mechanicznej i Robotyki}
   \facultyEN{Faculty of Mechanical Engineering and Robotics}
@@ -244,8 +246,8 @@ backend=biber
   }
 
   \acknowledgements{%
-    Serdecznie dziękuję \dots tu ciąg dalszych podziękowań np.\ dla promotora,
-    żony, sąsiada itp.
+    Serdecznie dziękuję mojemu promotorowi, prof. Borkowskiemu, za cierpliwość,
+    Stevenowi G.  Johnsonowi za MDCT.jl oraz Donaldowi E. Knuthowi za \TeX
   }
 
   \setlength{\cftsecnumwidth}{10mm}
