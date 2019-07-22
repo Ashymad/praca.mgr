@@ -246,8 +246,9 @@ backend=biber
   }
 
   \acknowledgements{%
-    Serdecznie dziękuję mojemu promotorowi, prof. Borkowskiemu, za cierpliwość,
-    Stevenowi G.  Johnsonowi za MDCT.jl oraz Donaldowi E. Knuthowi za \TeX
+    Dziękuję mojemu promotorowi, prof.~Borkowskiemu, za cierpliwość,
+    Stevenowi G.  Johnsonowi za MDCT.jl, Donaldowi E. Knuthowi za \TeX\ oraz
+    moim przyjaciołom z Grupy Wsparcia.
   }
 
   \setlength{\cftsecnumwidth}{10mm}
@@ -282,7 +283,29 @@ backend=biber
 \section{Cel pracy}
 \section{Zawartość pracy}
 \chapter{Kompresja audio}
-\section{Cel i zastosowanie}
+\section{Wprowadzenie}
+W akustyce pojęcie kompresji odnosi się często do zastosowania pewnego typu
+procesora dynamicznego, którego celem jest zmniejszenie dynamiki utworu poprzez
+zmniejszenie poziomu fragmentów sygnału przekraczających pewien ustalony
+poziom. Nie o tym jest ta praca. W informatyce to pojęcie odnosi się do procesu
+zmniejszenia rozmiaru pliku. Jako że pliki multimedialne typu filmy i muzyka są
+dużej wielkości (jakiej, porównać!) bez użycia kompresji w porównaniu do innego
+typu plików wykorzystywanych przez użytkowników komputera, a ponadto przesyłane
+są często one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru
+oszczędza ogromne ilości miejsca na dysku (jakie ilości) jak i przepustowości
+sieci. Z tego powodu kompresja audio, video i obrazów jest stosowana
+powszechnie, nieskompresowane pliki multimedialne używane są wyłącznie gdy
+wymagany jest szybki dostęp do ich fragmentów i brak obaw o pogorszenie
+jakości, to znaczy podczas procesu ich edycji.
+
+Ponadto, gdyż rodzaj kompresji stosowany do innych plików, np.\ tekstowych,
+czyli kompresja bezstratna nie osiąga wystarczającego zmniejszenia rozmiaru
+plików multimedialnych, z powodu wysokiej entropii tego rodzaju plików, stosuje
+się metody pozwalające na dalsze zmniejszenie rozmiaru kosztem utraty
+możliwości odtworzenie oryginalnego sygnału po dekompresji -- z tego powodu ten
+typ kompresji nazywa się kompresją stratną.
+
+(może wykres z rozmiarami plików po kompresji)
 \section{Kompresja bezstratna}
 \section{Kompresja stratna}
 \subsection{MP3}
