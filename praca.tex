@@ -27,6 +27,8 @@
 \setlist{nosep} % or \setlist{noitemsep} to leave space around whole list
 \usepackage[bookmarks,hidelinks]{hyperref}
 
+\usepackage{import}
+
 % Środowisko float do kodu źródłowego \begin{program}
 
 \floatstyle{plaintop}
@@ -246,9 +248,9 @@ backend=biber
   }
 
   \acknowledgements{%
-    Dziękuję mojemu promotorowi, prof.~Borkowskiemu, za cierpliwość,
-    Stevenowi G.  Johnsonowi za MDCT.jl, Donaldowi E. Knuthowi za \TeX\ oraz
-    moim przyjaciołom z Grupy Wsparcia.
+    Dziękuję mojemu promotorowi, prof.~Borkowskiemu, za cierpliwość, Stevenowi
+    G.  Johnsonowi za MDCT.jl, Donaldowi E. Knuthowi za \TeX\ oraz moim
+    przyjaciołom z Grupy Wsparcia.
   }
 
   \setlength{\cftsecnumwidth}{10mm}
@@ -289,14 +291,15 @@ procesora dynamicznego, którego celem jest zmniejszenie dynamiki utworu poprzez
 zmniejszenie poziomu fragmentów sygnału przekraczających pewien ustalony
 poziom. Nie o tym jest ta praca. W informatyce to pojęcie odnosi się do procesu
 zmniejszenia rozmiaru pliku. Jako że pliki multimedialne typu filmy i muzyka są
-dużej wielkości (jakiej, porównać!) bez użycia kompresji w porównaniu do innego
-typu plików wykorzystywanych przez użytkowników komputera, a ponadto przesyłane
-są często one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru
-oszczędza ogromne ilości miejsca na dysku (jakie ilości) jak i przepustowości
-sieci. Z tego powodu kompresja audio, video i obrazów jest stosowana
-powszechnie, nieskompresowane pliki multimedialne używane są wyłącznie gdy
-wymagany jest szybki dostęp do ich fragmentów i brak obaw o pogorszenie
-jakości, to znaczy podczas procesu ich edycji.
+dużej wielkości {\color{red}jakiej, porównać!} bez użycia kompresji w
+porównaniu do innego typu plików wykorzystywanych przez użytkowników komputera,
+a ponadto przesyłane są często one przez łącze sieciowe do odbiorcy,
+zmniejszenie ich rozmiaru oszczędza ogromne ilości miejsca na dysku
+{\color{red}jakie ilości} jak i przepustowości sieci. Z tego powodu kompresja
+audio, video i obrazów jest stosowana powszechnie, nieskompresowane pliki
+multimedialne używane są wyłącznie gdy wymagany jest szybki dostęp do ich
+fragmentów i brak obaw o pogorszenie jakości, to znaczy podczas procesu ich
+edycji.
 
 Ponadto, gdyż rodzaj kompresji stosowany do innych plików, np.\ tekstowych,
 czyli kompresja bezstratna nie osiąga wystarczającego zmniejszenia rozmiaru
@@ -305,8 +308,60 @@ się metody pozwalające na dalsze zmniejszenie rozmiaru kosztem utraty
 możliwości odtworzenie oryginalnego sygnału po dekompresji -- z tego powodu ten
 typ kompresji nazywa się kompresją stratną.
 
-(może wykres z rozmiarami plików po kompresji)
+{\color{red}może wykres z rozmiarami plików po kompresji}
 \section{Kompresja bezstratna}
+
+W procesie kompresji stratnej uzyskuje się zmniejszenie rozmiaru pliku bez
+utraty informacji. Uzyskuje się to poprzez zastosowanie pewnych przekształceń
+które zostaną tu wytłumaczone na przykładzie kompresji FLAC
+(eng. \textit{Free Lossless Audio Codec}), z dwóch powodów: FLAC jest obecnie
+najpopularniejszym formatem kompresji bezstratnej oraz posiada w pełni otwartą
+specyfikację i referencyjny enkoder.
+
+\begin{figure}[!tbh]
+  \centering
+  \import{./vecgraphics/}{FLAC-scheme.pdf_tex}
+  \caption{Schemat kompresji bezstratnej (na przykładzie FLAC)}
+  \label{fig:FLAC_scheme}
+\end{figure}
+
+Podczas procesu kompresji FLAC występują cztery główne kroki (patrz rys.
+\ref{fig:FLAC_scheme}): fragmentacja, dekorelacja, modelowanie i kodowanie.
+Pierwszy krok, czyli fragmentacja dzieli sygnał cyfrowy na fragmenty (eng.
+\textit{blocks}), których długość wybierana jest na tyle krótka by model
+stworzony w trzecim kroku był jak najbardziej efektywny i na tyle długa by
+nadmiarowość (eng. \textit{overhead}) wynikająca z konieczności zapisu
+parametrów zastosowanych do kompresji fragmentu była jak najmniejsza. 
+
+W drugim kroku przeprowadzana jest dekorelacja kanałów w pliku audio, w
+przypadku pliku stereofonicznego kanały prawy $r$ i lewy $l$ zamieniane są na środkowy
+$m = \frac{l + r}{2}$ i boczny $s = l - r$. Pozwala to znacznie zwiększyć
+poziom kompresji w dalszych krokach, ponieważ typowo duża korelacja pomiędzy
+kanałami powoduje że kanał różnicowy (boczny) zawiera niewielkie wartości
+amplitudy próbek.
+
+Trzeci krok jest najbardziej istotny gdyż w nim tworzony jest model
+matematyczny w taki sposób, by różnica pomiędzy sygnałem wygenerowanym przez
+niego a sygnałem rzeczywistym (nazywana błędem lub residuum), wymagała
+jak najmniejszej liczby bitów na próbkę (eng. \textit{bits-per-sample}).
+Standard FLAC przewiduje dwa typy modeli: wielomian lub kodowanie predykcyjne
+LPC (eng. \textit{Linear Predictive Coding}). Dopasowanie wielomianu wymaga
+mniejszej mocy obliczeniowej lecz wynik jest mniej dokładny niż LPC.
+
+Ostatni krok to kodowanie entropijne uzyskanego w poprzednim kroku sygnału
+błędu. W kompresji FLAC wykorzystane jest kodowanie Huffmana, które
+wykorzystuje nierównomierności rozkładu częstotliwości występowania sekwencji
+bitów w danych, zapisując najczęściej występujące sekwencję mniejszą liczbą
+bitów. Zazwyczaj związane jest to z zapisem tzw.\ słownika, który
+przyporządkowuje sekwencje bitów do kodów Huffmana. Natomiast ponieważ dane
+błędu uzyskane w tym procesie posiadają rozkład Laplace'a (podwójnie
+wykładniczy) możliwe jest zastosowanie szczególnego układu kodów Huffmana,
+nazwanych kodami Rice'a. Własnością tych kodów jest możliwość ich wygenerowania
+na podstawie pojedynczego parametru opisującego rozkład danych (parametru
+Rice'a), ponadto standard FLAC pozwala na podzielenie fragmentu na części,
+gdzie każda część posiada inny parametr Rice'a, co pozwala na lepsze
+dopasowanie go do zmienności rozkładu w trakcie trwania sygnału.
+
 \section{Kompresja stratna}
 \subsection{MP3}
 \subsection{AAC}
