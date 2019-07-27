@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.92.4, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'FLAC-scheme.pdf' (pdf, eps, ps)
+%% Accompanies image file 'PAC-scheme.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{391.06609194bp}%
+    \setlength{\unitlength}{277.88963258bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,17 +50,18 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.06258476)%
+  \begin{picture}(1,0.23767769)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{FLAC-scheme.pdf}}%
-    \put(0.05493472,0.02102813){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Fragmentacja\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=2]{FLAC-scheme.pdf}}%
-    \put(0.30600603,0.02102813){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Dekorelacja\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=3]{FLAC-scheme.pdf}}%
-    \put(0.53781845,0.02102813){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Modelowanie\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=4]{FLAC-scheme.pdf}}%
-    \put(0.7924792,0.02102813){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Kodowanie\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=5]{FLAC-scheme.pdf}}%
+    \put(0.34487869,0.08844529){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.20788142\unitlength}\raggedright \end{minipage}}}%
+    \put(0.42152082,0.1836684){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Kwantyzacja\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{PAC-scheme.pdf}}%
+    \put(0.7300215,0.18321498){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Kodowanie\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{PAC-scheme.pdf}}%
+    \put(0.18884635,0.18312862){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Analiza\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{PAC-scheme.pdf}}%
+    \put(0.20049619,0.06084919){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Model\end{tabular}}}}%
+    \put(0.10118329,0.02467149){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}psychoakustyczny\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{PAC-scheme.pdf}}%
   \end{picture}%
 \endgroup%

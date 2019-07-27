@@ -28,6 +28,7 @@
 \usepackage[bookmarks,hidelinks]{hyperref}
 
 \usepackage{import}
+\usepackage{bm}
 
 % Środowisko float do kodu źródłowego \begin{program}
 
@@ -250,7 +251,7 @@ backend=biber
   \acknowledgements{%
     Dziękuję mojemu promotorowi, prof.~Borkowskiemu, za cierpliwość, Stevenowi
     G.  Johnsonowi za MDCT.jl, Donaldowi E. Knuthowi za \TeX\ oraz moim
-    przyjaciołom z Grupy Wsparcia.
+    przyjaciołom ot tak, bo mogę.
   }
 
   \setlength{\cftsecnumwidth}{10mm}
@@ -286,20 +287,16 @@ backend=biber
 \section{Zawartość pracy}
 \chapter{Kompresja audio}
 \section{Wprowadzenie}
-W akustyce pojęcie kompresji odnosi się często do zastosowania pewnego typu
-procesora dynamicznego, którego celem jest zmniejszenie dynamiki utworu poprzez
-zmniejszenie poziomu fragmentów sygnału przekraczających pewien ustalony
-poziom. Nie o tym jest ta praca. W informatyce to pojęcie odnosi się do procesu
-zmniejszenia rozmiaru pliku. Jako że pliki multimedialne typu filmy i muzyka są
-dużej wielkości {\color{red}jakiej, porównać!} bez użycia kompresji w
-porównaniu do innego typu plików wykorzystywanych przez użytkowników komputera,
-a ponadto przesyłane są często one przez łącze sieciowe do odbiorcy,
-zmniejszenie ich rozmiaru oszczędza ogromne ilości miejsca na dysku
-{\color{red}jakie ilości} jak i przepustowości sieci. Z tego powodu kompresja
-audio, video i obrazów jest stosowana powszechnie, nieskompresowane pliki
-multimedialne używane są wyłącznie gdy wymagany jest szybki dostęp do ich
-fragmentów i brak obaw o pogorszenie jakości, to znaczy podczas procesu ich
-edycji.
+W informatyce pojęcie kompresji odnosi się do procesu zmniejszenia rozmiaru
+pliku. Jako że pliki multimedialne typu filmy i muzyka są dużej wielkości
+{\color{red}jakiej, porównać!} bez użycia kompresji w porównaniu do innego typu
+plików wykorzystywanych przez użytkowników komputera, a ponadto przesyłane są
+często one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru
+oszczędza ogromne ilości miejsca na dysku {\color{red}jakie ilości} jak i
+przepustowości sieci. Z tego powodu kompresja audio, video i obrazów jest
+stosowana powszechnie, nieskompresowane pliki multimedialne używane są
+wyłącznie gdy wymagany jest szybki dostęp do ich fragmentów i brak obaw o
+pogorszenie jakości, na przykład podczas procesu ich edycji.
 
 Ponadto, gdyż rodzaj kompresji stosowany do innych plików, np.\ tekstowych,
 czyli kompresja bezstratna nie osiąga wystarczającego zmniejszenia rozmiaru
@@ -353,16 +350,64 @@ błędu. W kompresji FLAC wykorzystane jest kodowanie Huffmana, które
 wykorzystuje nierównomierności rozkładu częstotliwości występowania sekwencji
 bitów w danych, zapisując najczęściej występujące sekwencję mniejszą liczbą
 bitów. Zazwyczaj związane jest to z zapisem tzw.\ słownika, który
-przyporządkowuje sekwencje bitów do kodów Huffmana. Natomiast ponieważ dane
+przyporządkowuje sekwencje bitów do kodów Huffmana. Natomiast, ponieważ dane
 błędu uzyskane w tym procesie posiadają rozkład Laplace'a (podwójnie
-wykładniczy) możliwe jest zastosowanie szczególnego układu kodów Huffmana,
+wykładniczy), możliwe jest zastosowanie szczególnego układu kodów Huffmana,
 nazwanych kodami Rice'a. Własnością tych kodów jest możliwość ich wygenerowania
 na podstawie pojedynczego parametru opisującego rozkład danych (parametru
 Rice'a), ponadto standard FLAC pozwala na podzielenie fragmentu na części,
 gdzie każda część posiada inny parametr Rice'a, co pozwala na lepsze
 dopasowanie go do zmienności rozkładu w trakcie trwania sygnału.
 
+Poprawnie działający enkoder i dekoder pozwolą otrzymać, po kompresji i
+dekompresji pliku, plik w którym próbki sygnału audio będą takie same jak w
+pliku oryginalnym. Z tego powodu wykrycie czy plik został poddany takiemu
+procesowi niemożliwe na podstawie samego sygnału audio.
+
 \section{Kompresja stratna}
+
+Celem kompresji stratnej, w przeciwieństwie do bezstratnej nie jest stworzenie
+mniejszego pliku który po dekompresji odtworzy sygnał wejściowy co do próbki, lecz
+stworzenie pliku dużo mniejszego, który po dekompresji i odtworzeniu będzie
+możliwie nierozróżnialny od oryginalnego dla większości słuchaczy. Dlatego też
+ten typ kompresji jest dużo bardziej skomplikowany gdyż wykorzystuje nie tylko
+te techniki co kompresja bezstratna, ale również wymaga zastosowania wiedzy
+z dziedziny psychoakustyki. W związku z tym przetestowanie działania kodeku
+wymaga testów odsłuchowych co znacząco spowalnia proces tworzenia nowych
+rozwiązań.
+
+\begin{figure}[!tbh]
+  \centering
+  \import{./vecgraphics/}{PAC-scheme.pdf_tex}
+  \caption{Schemat kompresji stratnej}
+  \label{fig:PAC_scheme}
+\end{figure}
+
+Na rysunku \ref{fig:PAC_scheme} przedstawiony jest uproszczony schemat typowego
+enkodera PAC (eng. \textit{Perceptual Audio Coding}) wykorzystywanego w
+kompresji stratnej. Posiada on cztery główne elementy: transformację
+analizującą, kwantyzator, enkoder i model psychoakustyczny.
+
+Pierwszym elementem jest transformacja analizująca, która zamienia sygnał audio
+na postać którą może wykorzystać kwantyzator wraz z modelem psychakustycznym.
+Każdy z opisanych w tym rozdziale kodeków wykorzystuje w tym celu miedzy innymi
+zmodyfikowaną transformację kosinusową MDCT (eng. \textit{Modified Discrete
+Cosine Transform}) określoną wzorem:
+\begin{equation}
+  X_k = \sum_{n=0}^{2N-1}x_n\cos\left[\frac{\pi}{N}
+  \left(n+\frac{1}{2}+\frac{N}{2}\right)\left(k+\frac{1}{2}\right)\right].
+\end{equation}
+Jest to funkcja liniowa $F\colon \bm{R}^{2N} \to \bm{R}^N$, która przekształca
+$2N$ liczb rzeczywistych $x_0, \dotsc, x_{2N+1}$ w $N$ liczb rzeczywistych
+$x_0, \dotsc, x_{N+1}$. Posiada ona szczególną właściwość wykorzystywaną w
+procesie kompresji, mianowicie większość współczynników z niej uzyskanych
+posiada wartości bliskie zeru, dzięki czemu w procesie kwantyzacji ulegną one
+wyzerowaniu, co zostanie następnie efektywnie zakodowane.
+
+Sygnał audio jest także przetwarzany przez model psychakustyczny którego
+zadaniem jest przewidzenie zachowania ucha ludzkiego, w taki sposób by określić
+czego potencjalny słuchacz może nie usłyszeć, a co usłyszy.
+
 \subsection{MP3}
 \subsection{AAC}
 \subsection{Ogg Vorbis}

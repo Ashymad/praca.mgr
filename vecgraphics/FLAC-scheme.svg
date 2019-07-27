@@ -25,16 +25,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="241.0915"
-     inkscape:cy="-25.489826"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="215.41517"
+     inkscape:cy="-0.66904864"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1896"
-     inkscape:window-height="1036"
+     inkscape:window-height="1020"
      inkscape:window-x="10"
-     inkscape:window-y="10"
+     inkscape:window-y="28"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata5">
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -76,12 +76,12 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88055563px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="2.746788"
-       y="10.133304"
+       y="10.565105"
        id="text4757"><tspan
          sodipodi:role="line"
          id="tspan4755"
          x="2.746788"
-         y="10.133304"
+         y="10.565105"
          style="font-size:4.23333311px;stroke-width:0.26458332">Fragmentacja</tspan></text>
     <path
        sodipodi:type="star"
@@ -164,11 +164,11 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88055563px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="37.384441"
-       y="10.133304"
+       y="10.565105"
        id="text4931"><tspan
          sodipodi:role="line"
          x="37.384441"
-         y="10.133304"
+         y="10.565105"
          style="font-size:4.23333311px;stroke-width:0.26458332"
          id="tspan4937">Dekorelacja</tspan></text>
     <rect
@@ -183,11 +183,11 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="69.36515"
-       y="10.133304"
+       y="10.565105"
        id="text4943"><tspan
          sodipodi:role="line"
          x="69.36515"
-         y="10.133304"
+         y="10.565105"
          style="stroke-width:0.26458332"
          id="tspan4945">Modelowanie</tspan></text>
     <rect
@@ -202,12 +202,12 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="104.498"
-       y="10.133304"
+       y="10.565105"
        id="text4951"><tspan
          sodipodi:role="line"
          id="tspan4949"
          x="104.498"
-         y="10.133304"
+         y="10.565105"
          style="stroke-width:0.26458332">Kodowanie</tspan></text>
     <path
        sodipodi:type="star"
