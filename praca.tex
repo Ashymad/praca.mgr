@@ -401,17 +401,62 @@ Jest to funkcja liniowa $F\colon \bm{R}^{2N} \to \bm{R}^N$, która przekształca
 $2N$ liczb rzeczywistych $x_0, \dotsc, x_{2N+1}$ w $N$ liczb rzeczywistych
 $x_0, \dotsc, x_{N+1}$. Posiada ona szczególną właściwość wykorzystywaną w
 procesie kompresji, mianowicie większość współczynników z niej uzyskanych
-posiada wartości bliskie zeru, dzięki czemu w procesie kwantyzacji ulegną one
-wyzerowaniu, co zostanie następnie efektywnie zakodowane.
+posiada wartości bliskie zeru.
+
+Aby przeprowadzić transformację na sygnale, wybierana jest długość okna $l =
+2c$, gdzie $c \in \bm N$, oraz
+skok $h \in \bm N$. Długość okna określa długość fragmentu sygnału $s$ który zostanie pomnożony
+przez okno $w$, a następnie poddany transformacji, natomiast skok określa co ile
+próbek jest wycinany kolejny fragment. Wynikiem całej operacji jest jest
+macierz $\bm X(f) = \begin{bmatrix}X_1(f) & X_2(f) & \cdots  &
+X_k(f)\end{bmatrix}$, której elementy to wektory 
+\[X_n =
+\text{MDCT}\{w\begin{bmatrix}s_{(n-1)h}\\\vdots\\s_{(n-1)h+l}\end{bmatrix}\},\]
+gdzie okno $w$ jest wektorem o długości $l$, wyznaczonym na podstawie pewnej
+funkcji, której zadaniem jest zniwelowanie efektów brzegowych. Aby
+transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
+warunek $w_n = w_{l-1-n}$, oraz musi spełniać warunek Princena-Bradleya
+$w_n^2+w_{n+\frac{l}{2}}^2 = 1$.
 
 Sygnał audio jest także przetwarzany przez model psychakustyczny którego
-zadaniem jest przewidzenie zachowania ucha ludzkiego, w taki sposób by określić
-czego potencjalny słuchacz może nie usłyszeć, a co usłyszy.
+zadaniem jest przewidywanie zachowania ucha ludzkiego, w taki sposób by
+określić czego potencjalny słuchacz może nie usłyszeć, a co usłyszy.
+Wykorzystuje on w tym celu wiedzę o konstrukcji ucha oraz wiedzę uzyskaną
+poprzez przeprowadzanie testów odsłuchowych.
+
+Informacje uzyskane z modelu psychoakustycznego są następnie stosowanie przez
+kwantyzator do kwantyzacji (ograniczenia zbioru wartości) wyniku transformacji
+analizującej. Elementy które model uzna za niesłyszalne dla potencjalnego
+odbiorcy zostaną silniej skwantyzowane niż te które zostaną uznane za
+słyszalne. Jest to proces nieodwracalny z którego wynika ,,stratność'' tego
+rodzaju kompresji, w jego wyniku dostaje się także macierz wag przez którą
+trzeba pomnożyć uzyskane wartości w procesie odwrotnym.
+
+W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane uzyskane
+z poprzedniego kroku są zakodowane przy użyciu kodowania entropijnego. Jest ono
+bardzo skuteczne na uzyskanych danych dzięki opisanej wcześniej własności
+transformaty MDCT oraz procesowi kwantyzacji, które powodują wyzerowanie się
+dużej liczby współczynników uzyskanych w procesie transformacji.
+
+\begin{figure}[!tbh]
+  \centering
+  \import{./vecgraphics/}{IPAC-scheme.pdf_tex}
+  \caption{Schemat dekompresji stratnej}
+  \label{fig:IPAC_scheme}
+\end{figure}
+
+Aby z pliku skompresowanego uzyskać sygnał audio stosuje się dekompresją (patrz
+rys. \ref{fig:IPAC_scheme}), gdzie kolejno następuje: dekodowanie zakodowanych
+entropijnie danych, odwrotna kwantyzacja która polega na wymnożeniu danych
+przez odpowiednie wagi (ten proces jednakże nie odtwarza w pełni danych z przed
+kwantyzacji lecz dane zbliżone) oraz synteza, czyli zastosowanie odwrotnych
+transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
+\textit{Inverse Modified Discrete Cosine Transform})
 
 \subsection{MP3}
 \subsection{AAC}
 \subsection{Ogg Vorbis}
-\subsection{AC3}
+\subsection{AC-3}
 \subsection{WMA}
 \chapter{Realizacja}
 \section{Podejście algorytmiczne}
