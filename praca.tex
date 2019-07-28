@@ -29,6 +29,11 @@
 
 \usepackage{import}
 \usepackage{bm}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{tikzscale}
+\usepgfplotslibrary{external}
+\tikzexternalize
 
 % Środowisko float do kodu źródłowego \begin{program}
 
@@ -96,7 +101,6 @@ backend=biber
     \renewcommand\labelnamepunct{:\space}
     \renewcommand\newunitpunct{\addcomma\space}
     \renewcommand{\finentrypunct}{}
-    
     \renewcommand{\bibopenparen}{\addcomma\addspace}
     \renewcommand{\bibcloseparen}{\addspace}
 }
@@ -453,7 +457,21 @@ kwantyzacji lecz dane zbliżone) oraz synteza, czyli zastosowanie odwrotnych
 transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
 \textit{Inverse Modified Discrete Cosine Transform})
 
+W kolejnych punktach zostaną dokładniej opisane elementy procesu kompresji
+wykorzystane w pięciu popularnych kodekach.
+
 \subsection{MP3}
+Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako część
+standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
+następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5
+
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=0.5\textwidth]{plots/win_sine.pgf}
+  \caption{Okno}
+  \label{fig:win_sine}
+\end{figure}
+
 \subsection{AAC}
 \subsection{Ogg Vorbis}
 \subsection{AC-3}
