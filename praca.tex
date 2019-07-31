@@ -465,6 +465,35 @@ Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako 
 standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
 następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5.
 
+W tym kodeku oprócz MDCT do analizy sygnału jest zastosowany również bank
+filtrów PQMF (eng. \textit{Pseudo-QMF Cosine Modulation}), jest to bank filtrów
+o prawie idealnej rekonstrukcji, którego proces konstrukcji wygląda
+następująca:
+\begin{enumerate}
+  \item Projekt prototypowego filtra dolnoprzepustowego $h(n)$ o długości $M =
+    LN$, gdzie $L, M, N \in \bm Z$
+  \item Filtr musi anulować aliasing w sąsiadujących podpasmach: \[
+      \begin{array}{rl}
+        |H(e^{i\omega})|^2 + H(e^{i\frac{\pi}{N}-\omega})|^2 = 2, &
+        \quad0<|\omega|<\frac{\pi}{2N} \\
+        |H(e^{i\omega})|^2 = 0, & \quad|\omega| > \frac{\pi}{N}
+      \end{array}\]
+    \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
+        h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
+          \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
+        gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
+        \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
+      \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
+        odwróconymi w czasie:\[
+        f_k(n) = h_k(M-1-n)\]
+\end{enumerate}
+
+W procesie MDCT zastosowane jest okno sinusowe (nazywane też kosinusowym) (rys.
+\ref{fig:win_MP3}) o następującym wzorze:
+\begin{equation}
+  w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} -
+  \frac{\pi}{2}\right).
+\end{equation}
 
 \begin{figure}[!tbh]
   \centering
