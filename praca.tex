@@ -500,8 +500,8 @@ pasmami i o $M = 512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia k
 pasm zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
 
 MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
-\ref{fig:win_MP3}) o następującym wzorze:
-\begin{equation}
+\ref{fig:win_MP3}) o długości $N$, o następującym wzorze:
+\begin{equation}\label{eq:sine_win}
   w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} - \frac{\pi}{2}\right).
 \end{equation}
 
@@ -518,14 +518,15 @@ MDCT w tym formacie wykorzystuje okno KBD (eng.
 \textit{Keiser-Bessel-derived}), jest to okno pochodne okna Keisera, stworzone
 by spełniało warunki zastosowania w MDCT (\ref{eq:symm_cond},
 \ref{eq:p-b_cond}). Okno Kaisera ma wzór:
-\begin{equation}
+\begin{equation}\label{eq:kaiser_win}
   w_k(n) = \frac{I_0\left[\pi\alpha\sqrt{1-\left(\frac{2n}{N}-1\right)^2}\right]}
   {I_0(\pi\alpha)},\quad 0 \leq n \leq N,
 \end{equation}
 gdzie długość okna wynosi $N+1$, $I_0$ to zerowego rzędu zmodyfikowana funkcja
 Bessela pierwszego rodzaju, a $\alpha$ to parametr wpływający na kształt tego
-okna. Na jego podstawie zdefiniowane jest okno Kaisera-Bessela o wzorze:
-\begin{equation}
+okna. Na jego podstawie zdefiniowane jest okno Kaisera-Bessela o długości $2N$
+o wzorze:
+\begin{equation}\label{eq:kbd_win}
   w(n) = \begin{cases}
     \sqrt{\frac{\sum_{i=0}^{n}w_k(i)}{\sum_{i=0}{N}w_k(i)}} & \text{dla }0 \leq n \leq N \\
     \sqrt{\frac{\sum_{i=0}^{2N-1-n}w_k(i)}{\sum_{i=0}{N}w_k(i)}} & \text{dla }N \leq n \leq 2N-1 \\
@@ -543,6 +544,12 @@ AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
 
 \subsection{Ogg Vorbis}
 
+MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
+\ref{fig:win_OGG}) o długości $N$, o wzorze:
+\begin{equation}\label{eq:slope_win}
+  w(n) = \sin\left(\frac{\pi}{2}\sin^2\left(\frac{\left(n +
+  \frac{1}{2}\right)}{N\pi}\right)\right)
+\end{equation}
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/win_OGG.pgf}
@@ -552,6 +559,8 @@ AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
 
 \subsection{AC-3}
 
+MDCT w tym formacie wykorzystuje okno KBD (\ref{eq:kaiser_win},
+\ref{eq:kbd_win}), z parametrem $\alpha = 5$ (rys. \ref{fig:win_AC3}).
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/win_AC3.pgf}
@@ -561,13 +570,31 @@ AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
 
 \subsection{WMA}
 
-Okno to samo co MP3
+MDCT w tym formacie wykorzystuje okno sinusowe (\ref{eq:sine_win})
+(rys. \ref{fig:win_MP3})
 
 \chapter{Realizacja}
+Aby stworzyć proces pozwalający na wykrycie formatu z którego sygnał audio
+został dekodowany, przeanalizowano dwa podejścia, nie tylko wykorzystano
+techniki uczenia maszynowego, ale ponadto, zaimplementowano algorytm który, w
+przeciwieństwie do modelu, nie wymaga uprzedniego treningu.
 \section{Podejście algorytmiczne}
-\subsection{Optymalizacja algorytmu}
-\subsubsection{MDCT}
-\subsubsection{Średnia kwadratowa logarytmów}
+Implementowany algorytm oparty został o algorytm opisany w
+{\color{red}odnośnik}. Algorytm ten potrafi stwierdzić czy dany sygnał został
+skompresowany przez pewien kodek audio, którego parametry: transformacja
+analizująca $T(x)$, długość okna $N \in \bm N_+$, funkcja okna $w(n)$ oraz skok
+$h \in \left[1, N\right]$ są znane.
+Przedstawia się on następująco:
+\begin{enumerate}
+  \item Wybranie fragmentu o długości $L$ z sygnału audio, przy czym im dłuższy
+    fragment tym czas analizy będzie dłuższy natomiast wynik dokładniejszy. Z
+    badań wywnioskowano że odpowiednia długość fragmentu zawiera się w
+    przedziale od dziesięciu do trzydziestu sekund.
+\end{enumerate}
+\subsection{MDCT}
+\subsection{Średnia kwadratowa logarytmów}
+\subsection{Biblioteka \textit{IOLA.jl}}
+\subsection{Wykrywanie modulo}
 \section{Uczenie maszynowe}
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
