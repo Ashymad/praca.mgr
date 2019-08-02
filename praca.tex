@@ -419,8 +419,14 @@ X_k(f)\end{bmatrix}$, której elementy to wektory
 gdzie okno $w$ jest wektorem o długości $l$, wyznaczonym na podstawie pewnej
 funkcji, której zadaniem jest zniwelowanie efektów brzegowych. Aby
 transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
-warunek $w_n = w_{l-1-n}$, oraz musi spełniać warunek Princena-Bradleya
-$w_n^2+w_{n+\frac{l}{2}}^2 = 1$.
+warunek symetryczności (\ref{eq:symm_cond}) i warunek Princena-Bradleya
+(\ref{eq:p-b_cond}).
+\begin{equation}\label{eq:symm_cond}
+  w_n = w_{l-1-n}
+\end{equation}
+\begin{equation}\label{eq:p-b_cond}
+  w_n^2+w_{n+\frac{l}{2}}^2 = 1
+\end{equation}
 
 Sygnał audio jest także przetwarzany przez model psychakustyczny którego
 zadaniem jest przewidywanie zachowania ucha ludzkiego, w taki sposób by
@@ -463,7 +469,9 @@ wykorzystane w pięciu popularnych kodekach.
 \subsection{MP3}
 Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako część
 standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
-następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5.
+następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Jest to obecnie
+nadal jeden z najbardziej popularnych formatów, choć od czasu jego wprowadzenia
+powstały kodeki o dużo lepszych parametrach.
 
 W tym kodeku oprócz MDCT do analizy sygnału jest zastosowany również bank
 filtrów PQMF (eng. \textit{Pseudo-QMF Cosine Modulation}), jest to bank filtrów
@@ -478,21 +486,23 @@ następująca:
         \quad0<|\omega|<\frac{\pi}{2N} \\
         |H(e^{i\omega})|^2 = 0, & \quad|\omega| > \frac{\pi}{N}
       \end{array}\]
-    \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
-        h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
-          \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
-        gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
-        \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
-      \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
-        odwróconymi w czasie:\[
-        f_k(n) = h_k(M-1-n)\]
+  \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
+      h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
+      \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
+      gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
+      \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
+  \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
+    odwróconymi w czasie:\[
+      f_k(n) = h_k(M-1-n)\]
 \end{enumerate}
+W formatach od MPEG-1 Layer I do MPEG-1 Layer III, ten bank filtrów użyto z $N = 32$
+pasmami i o $M = 512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia każdego z
+pasm zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
 
-W procesie MDCT zastosowane jest okno sinusowe (nazywane też kosinusowym) (rys.
+MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
 \ref{fig:win_MP3}) o następującym wzorze:
 \begin{equation}
-  w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} -
-  \frac{\pi}{2}\right).
+  w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} - \frac{\pi}{2}\right).
 \end{equation}
 
 \begin{figure}[!tbh]
@@ -503,6 +513,26 @@ W procesie MDCT zastosowane jest okno sinusowe (nazywane też kosinusowym) (rys.
 \end{figure}
 
 \subsection{AAC}
+
+MDCT w tym formacie wykorzystuje okno KBD (eng.
+\textit{Keiser-Bessel-derived}), jest to okno pochodne okna Keisera, stworzone
+by spełniało warunki zastosowania w MDCT (\ref{eq:symm_cond},
+\ref{eq:p-b_cond}). Okno Kaisera ma wzór:
+\begin{equation}
+  w_k(n) = \frac{I_0\left[\pi\alpha\sqrt{1-\left(\frac{2n}{N}-1\right)^2}\right]}
+  {I_0(\pi\alpha)},\quad 0 \leq n \leq N,
+\end{equation}
+gdzie długość okna wynosi $N+1$, $I_0$ to zerowego rzędu zmodyfikowana funkcja
+Bessela pierwszego rodzaju, a $\alpha$ to parametr wpływający na kształt tego
+okna. Na jego podstawie zdefiniowane jest okno Kaisera-Bessela o wzorze:
+\begin{equation}
+  w(n) = \begin{cases}
+    \sqrt{\frac{\sum_{i=0}^{n}w_k(i)}{\sum_{i=0}{N}w_k(i)}} & \text{dla }0 \leq n \leq N \\
+    \sqrt{\frac{\sum_{i=0}^{2N-1-n}w_k(i)}{\sum_{i=0}{N}w_k(i)}} & \text{dla }N \leq n \leq 2N-1 \\
+    0 & \text{w innym przypadku}
+  \end{cases}.
+\end{equation}
+AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
 
 \begin{figure}[!tbh]
   \centering
