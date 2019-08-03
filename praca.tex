@@ -35,6 +35,8 @@
 \usepgfplotslibrary{external}
 \tikzexternalize
 
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 % Środowisko float do kodu źródłowego \begin{program}
 
 \floatstyle{plaintop}
@@ -408,16 +410,15 @@ procesie kompresji, mianowicie większość współczynników z niej uzyskanych
 posiada wartości bliskie zeru.
 
 Aby przeprowadzić transformację na sygnale, wybierana jest długość okna $l =
-2c$, gdzie $c \in \bm N$, oraz
-skok $h \in \bm N$. Długość okna określa długość fragmentu sygnału $s$ który zostanie pomnożony
-przez okno $w$, a następnie poddany transformacji, natomiast skok określa co ile
-próbek jest wycinany kolejny fragment. Wynikiem całej operacji jest jest
-macierz $\bm X(f) = \begin{bmatrix}X_1(f) & X_2(f) & \cdots  &
-X_k(f)\end{bmatrix}$, której elementy to wektory 
-\[X_n =
-\text{MDCT}\{w\begin{bmatrix}s_{(n-1)h}\\\vdots\\s_{(n-1)h+l}\end{bmatrix}\},\]
-gdzie okno $w$ jest wektorem o długości $l$, wyznaczonym na podstawie pewnej
-funkcji, której zadaniem jest zniwelowanie efektów brzegowych. Aby
+2c$, gdzie $c \in \bm N$, oraz skok $h \in \bm N$. Długość okna określa długość
+fragmentu sygnału $\bm s$ który zostanie pomnożony przez okno $\bm w$, a
+następnie poddany transformacji, natomiast skok określa co ile próbek jest
+wycinany kolejny fragment. Wynikiem całej operacji jest jest macierz $\bm X =
+\begin{bmatrix}\bm x_1 & \bm x_2 & \cdots  & \bm x_k\end{bmatrix}$, stworzona z
+wektorów \[\bm x_n = \text{MDCT}\left\{\bm
+w\begin{bmatrix}s_{(n-1)h}\\\vdots\\s_{(n-1)h+l}\end{bmatrix}\right\},\] gdzie
+okno $\bm w$ jest wektorem o długości $l$, wyznaczonym na podstawie pewnej
+funkcji $w(n)$, której zadaniem jest zniwelowanie efektów brzegowych. Aby
 transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
 warunek symetryczności (\ref{eq:symm_cond}) i warunek Princena-Bradleya
 (\ref{eq:p-b_cond}).
@@ -586,10 +587,91 @@ analizująca $T(x)$, długość okna $N \in \bm N_+$, funkcja okna $w(n)$ oraz s
 $h \in \left[1, N\right]$ są znane.
 Przedstawia się on następująco:
 \begin{enumerate}
-  \item Wybranie fragmentu o długości $L$ z sygnału audio, przy czym im dłuższy
-    fragment tym czas analizy będzie dłuższy natomiast wynik dokładniejszy. Z
-    badań wywnioskowano że odpowiednia długość fragmentu zawiera się w
-    przedziale od dziesięciu do trzydziestu sekund.
+  \item Wycięcie $\frac{N}{2}+1$ fragmentów o długości $L$ z sygnału $\bm s$,
+    poczynając od indeksu $i$ do indeksu $i+\frac{N}{2}$
+    \begin{equation}
+      \begin{bmatrix}
+        s_i \\\vdots\\ s_{i+L-1}
+      \end{bmatrix},
+      \begin{bmatrix}
+        s_{i+1} \\\vdots\\ s_{i+L}
+      \end{bmatrix}, \dotsc,
+      \begin{bmatrix}
+        s_{i+\frac{N}{2}} \\\vdots\\ s_{i+\frac{N}{2}+L-1}
+      \end{bmatrix}
+    \end{equation}
+  \item Wykonanie krótkoczasowej transformacji $T(x)$ z oknem $w(n)$ o długości
+    $N$ i skoku $h$ na fragmentach uzyskanych w poprzednim kroku uzyskując
+    $\frac{N}{2}+1$ macierzy $\hat{\bm S}_i$
+    \begin{equation}
+      \hat{\bm S}_i = \underset{w(n), N, h}{T}\left(
+        \begin{bmatrix}
+          s_i \\\vdots\\ s_{i+L-1}
+        \end{bmatrix}\right)
+    \end{equation}
+  \item Policzenie średniej modułów logarytmów dziesiętnych modułów macierzy
+    $\hat{\bm S}_i$ uzyskując $\frac{N}{2}+1$ średnich $\left<\hat{\bm S}_i\right>$
+    \begin{equation}
+      \left<\hat{\bm S}_i\right> =
+      \frac{1}{L}\sum_m\sum_n\left|\log_{10}
+      \left(\left|\hat{S}_{i, mn}\right|\right)\right|
+    \end{equation}
+  \item Wyznaczenie modułów różnic pomiędzy kolejnymi średnimi uzyskując
+    wektor $\bm d_i$ o długości $N$
+    \begin{equation}
+      \bm d_i = \begin{bmatrix}
+        \left<\hat{\bm S}_i\right> - \left<\hat{\bm S}_{i+1}\right>\\
+        \left<\hat{\bm S}_{i+1}\right> - \left<\hat{\bm S}_{i+2}\right>\\
+        \vdots\\
+        \left<\hat{\bm S}_{i+\frac{N}{2}-1}\right> - \left<\hat{\bm S}_{i+\frac{N}{2}}\right>
+      \end{bmatrix}
+    \end{equation}
+    \item Znalezienie wartości maksymalnej $d_{i,\max}$ wektora $\bm d_i$ oraz
+      indeksu $k_{i,\max}$ który posiada ta wartość w tym wektorze
+      \begin{equation}
+        d_{i,\max} = \max_k\left\{d_{i, k}\right\}
+      \end{equation}
+      \begin{equation}
+        k_{i,\max} = \argmax_k\left\{d_{i,k}\right\} \iff d_{i,\max} =
+        d_{i,k_{i,\max}}
+      \end{equation}
+    \item Powtarzanie poprzednich kroków $M$ razy, zwiększając wartość $i$ o $L$
+      w każdym kroku, tak że w $m$-tym kroku $i = i_0 + (m-1)L$, gdzie $i_0$ to
+      dowolny wybrany indeks sygnału $\bm s$. Wynikiem operacji są wektory
+      wartości maksymalnych $\bm d_{\max}$ i odpowiadających im indeksów $\bm
+      k_{\max}$ o długości $M$
+      \begin{equation}
+        \bm d_{\max} = \begin{bmatrix}
+          d_{i_0,\max}\\
+          d_{i_0+L,\max}\\
+          \vdots\\
+          d_{i_0+(M-1)L,\max}
+        \end{bmatrix},
+        \bm k_{\max} = \begin{bmatrix}
+          k_{i_0,\max}\\
+          k_{i_0+L,\max}\\
+          \vdots\\
+          k_{i_0+(M-1)L,\max}
+        \end{bmatrix}
+      \end{equation}
+    \item Znalezienie okresu $p_{\min}$, zdefiniowanego jako największa wartość
+      $p \in [3, h]$ dla której współczynnik zmienności $r_{\sigma}(p)$ reszt z dzielenie
+      elementów wektora indeksów wartości maksymalnych $\bm k_{\max}$ przez $p$
+      osiąga wartość minimalną
+      \begin{equation}
+        r(p, j) = k_{\max, j}\mod p
+      \end{equation}
+      \begin{equation}
+        \overline r(p) = \frac{1}{M}\sum_{j=0}^{M}r(p, j)
+      \end{equation}
+      \begin{equation}
+        r_{\sigma}(p) = \frac{1}{\overline r(p)}\sqrt{\frac{1}{M}
+        \sum_{j=1}^{M}\left(r(p, j) - \overline r(p)\right)^2}
+      \end{equation}
+      \begin{equation}
+        p_{\min} = \max\left\{\argmin_{3 \leq p \leq h}
+        \left\{r_{\sigma}(p)\right\}\right\}
+      \end{equation}
 \end{enumerate}
 \subsection{MDCT}
 \subsection{Średnia kwadratowa logarytmów}
