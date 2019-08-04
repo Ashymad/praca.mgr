@@ -475,7 +475,7 @@ nadal jeden z najbardziej popularnych formatów, choć od czasu jego wprowadzeni
 powstały kodeki o dużo lepszych parametrach.
 
 W tym kodeku oprócz MDCT do analizy sygnału jest zastosowany również bank
-filtrów PQMF (eng. \textit{Pseudo-QMF Cosine Modulation}), jest to bank filtrów
+filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank filtrów
 o prawie idealnej rekonstrukcji, którego proces konstrukcji wygląda
 następująca:
 \begin{enumerate}
@@ -617,13 +617,16 @@ Przedstawia się on następująco:
       \left(\left|\hat{S}_{i, mn}\right|\right)\right|
     \end{equation}
   \item Wyznaczenie modułów różnic pomiędzy kolejnymi średnimi uzyskując
-    wektor $\bm d_i$ o długości $N$
+    wektor $\bm d_i$ o długości $\frac{N}{2}$
     \begin{equation}
       \bm d_i = \begin{bmatrix}
-        \left<\hat{\bm S}_i\right> - \left<\hat{\bm S}_{i+1}\right>\\
-        \left<\hat{\bm S}_{i+1}\right> - \left<\hat{\bm S}_{i+2}\right>\\
+        \left|\left<\hat{\bm S}_i\right> -
+        \left<\hat{\bm S}_{i+1}\right>\right|\\
+        \left|\left<\hat{\bm S}_{i+1}\right> -
+        \left<\hat{\bm S}_{i+2}\right>\right|\\
         \vdots\\
-        \left<\hat{\bm S}_{i+\frac{N}{2}-1}\right> - \left<\hat{\bm S}_{i+\frac{N}{2}}\right>
+        \left|\left<\hat{\bm S}_{i+\frac{N}{2}-1}\right> -
+        \left<\hat{\bm S}_{i+\frac{N}{2}}\right>\right|
       \end{bmatrix}
     \end{equation}
     \item Znalezienie wartości maksymalnej $d_{i,\max}$ wektora $\bm d_i$ oraz
@@ -655,22 +658,45 @@ Przedstawia się on następująco:
         \end{bmatrix}
       \end{equation}
     \item Znalezienie okresu $p_{\min}$, zdefiniowanego jako największa wartość
-      $p \in [3, h]$ dla której współczynnik zmienności $r_{\sigma}(p)$ reszt z dzielenie
-      elementów wektora indeksów wartości maksymalnych $\bm k_{\max}$ przez $p$
-      osiąga wartość minimalną
+      $p \in [3, h]$ dla której współczynnik zmienności $V_{r}(p)$ reszt $r(p,
+      j)$ z dzielenia elementów wektora indeksów wartości maksymalnych $\bm
+      k_{\max}$ przez $p$ osiąga wartość minimalną
       \begin{equation}
         r(p, j) = k_{\max, j}\mod p
       \end{equation}
       \begin{equation}
-        \overline r(p) = \frac{1}{M}\sum_{j=0}^{M}r(p, j)
+        \overline r(p) = \frac{1}{M}\sum_{j=1}^{M}r(p, j)
       \end{equation}
       \begin{equation}
-        r_{\sigma}(p) = \frac{1}{\overline r(p)}\sqrt{\frac{1}{M}
+        V_{r}(p) = \frac{1}{\overline r(p)}\sqrt{\frac{1}{M}
         \sum_{j=1}^{M}\left(r(p, j) - \overline r(p)\right)^2}
       \end{equation}
       \begin{equation}
         p_{\min} = \max\left\{\argmin_{3 \leq p \leq h}
-        \left\{r_{\sigma}(p)\right\}\right\}
+        \left\{V_{r}(p)\right\}\right\}
+      \end{equation}
+    \item Wyznaczenie wektora kątów $\bm\phi_k$ poprzez pomnożenie stosunku
+      reszty z dzielenia elementów wektora $\bm k_{\max}$ przez
+      okres $p_{\min}$ do $p_{\min}$ przez $2\pi$
+      \begin{equation}
+        \bm\phi_k = \frac{2\pi}{p_{\min}}\begin{bmatrix}
+          k_{\max,1}\mod p_{\min}\\
+          \vdots\\
+          k_{\max,M}\mod p_{\min}\\
+        \end{bmatrix}
+      \end{equation}
+    \item Obliczenie jednoliczbowego wskaźnika $C_{T(x),w(n),N,h}$ którego
+      wielkość jest wprost proporcjonalna do prawdopodobieństwa zastosowania
+      kompresji o parametrach $T(x)$, $w(n)$, $N$ i $h$. Jest
+      on zdefiniowany jako odległość od środka układu średniej geometrycznej
+      punktów określonych w układzie współrzędnych radialnych jako pary
+      $(d_{\max, j}, \phi_{k, j})$, gdzie promieniami są elementy wektora
+      wartości maksymalnych $\bm d_{\max}$, natomiast kątami są odpowiadające im
+      elementy wektora kątów $\bm\phi_k$
+      \begin{equation}
+        C_{T(x),w(n),N,h} =\frac{1}{M}\sqrt{\left(\sum_{j=1}^{M}d_{\max,j}\sin
+        \phi_{k,j}\right)^2+\left(\sum_{j=1}^{M}d_{\max,j}\cos
+        \phi_{k,j}\right)^2}
       \end{equation}
 \end{enumerate}
 \subsection{MDCT}
