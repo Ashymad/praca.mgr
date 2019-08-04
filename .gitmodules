@@ -1,3 +1,6 @@
 [submodule "aghdpl-imir"]
 	path = aghdpl-imir
 	url = https://github.com/Ashymad/aghdpl-imir
+[submodule "jlcode"]
+	path = jlcode
+	url = https://github.com/wg030/jlcode

@@ -119,7 +119,8 @@ backend=biber
 \usepackage{newtxmath}
 
 \usepackage{listings}
-\lstset{language=TeX}
+\usepackage{jlcode}
+\lstset{language=Julia}
 
 \lstset{%
         literate={ą}{{\k{a}}}1
@@ -581,7 +582,7 @@ techniki uczenia maszynowego, ale ponadto, zaimplementowano algorytm który, w
 przeciwieństwie do modelu, nie wymaga uprzedniego treningu.
 \section{Podejście algorytmiczne}
 Implementowany algorytm oparty został o algorytm opisany w
-{\color{red}odnośnik}. Algorytm ten potrafi stwierdzić czy dany sygnał został
+{\color{red}odnośnik}. Algorytm ten potrafi wskazać czy dany sygnał został
 skompresowany przez pewien kodek audio, którego parametry: transformacja
 analizująca $T(x)$, długość okna $N \in \bm N_+$, funkcja okna $w(n)$ oraz skok
 $h \in \left[1, N\right]$ są znane.
@@ -699,9 +700,12 @@ Przedstawia się on następująco:
         \phi_{k,j}\right)^2}
       \end{equation}
 \end{enumerate}
-\subsection{MDCT}
-\subsection{Średnia kwadratowa logarytmów}
 \subsection{Biblioteka \textit{IOLA.jl}}
+Procedury algorytmu zaimplementowano w języku programowania \textit{Julia} w
+postaci biblioteki o nazwie \textit{IOLA} (eng.\ \textit{Identification Of
+Lossy Audio}).
+\subsection{Średnia kwadratowa logarytmów}
+\subsection{MDCT}
 \subsection{Wykrywanie modulo}
 \section{Uczenie maszynowe}
 \subsection{Biblioteka Knet.jl}
