@@ -588,7 +588,8 @@ analizująca $T(x)$, długość okna $N \in \bm N_+$, funkcja okna $w(n)$ oraz s
 $h \in \left[1, N\right]$ są znane.
 Przedstawia się on następująco:
 \begin{enumerate}
-  \item Wycięcie $\frac{N}{2}+1$ fragmentów o długości $L$ z sygnału $\bm s$,
+  \item Wycięcie $\frac{N}{2}+1$ fragmentów o długości $L = nN$, gdzie $n \in
+    \bm N$, z sygnału $\bm s$,
     poczynając od indeksu $i$ do indeksu $i+\frac{N}{2}$
     \begin{equation}
       \begin{bmatrix}
@@ -703,10 +704,93 @@ Przedstawia się on następująco:
 \subsection{Biblioteka \textit{IOLA.jl}}
 Procedury algorytmu zaimplementowano w języku programowania \textit{Julia} w
 postaci biblioteki o nazwie \textit{IOLA} (eng.\ \textit{Identification Of
-Lossy Audio}).
+Lossy Audio}). Udostępnia ona dwa elementy: moduł \lstinline|Codec| i funkcję
+\lstinline|analyze(signal, transform, segment_length, overlap, normalize)|.
+Ponadto w module \lstinline|Codec.Utils| udostępnione są funkcje
+\lstinline|findperiod(indexes, domain)| oraz
+\lstinline|radiusofmean(radiuses, angles)|.
+
+Moduł \lstinline|Codec| zawiera parametry kodeków, które następnie można
+wykorzystać do analizy fragmentu audio. Udostępnione są w tym celu: funkcja
+\lstinline|Codec.getparams(codec_type)|, funkcja
+\lstinline|Codec.gettransform(codec_params)|, oraz enumerator
+\lstinline|Codec.CodecType| zawierający obsługiwane kodeki, obecnie są to:
+\lstinline|Codec.MP3|, \lstinline|Codec.AAC|, \lstinline|Codec.AC3|,
+\lstinline|Codec.OGG| i \lstinline|Codec.WMA|. Aby uzyskać parametry kodeka
+należy wywołać funkcję \lstinline|Codec.getparams()| na którejś wartości
+enumeratora \lstinline|Codec.CodecType|, uzyskując strukturę
+\lstinline|Codec.CodecParams| która zawiera pola \lstinline|transform|,
+\lstinline|window|, \lstinline|length| i \lstinline|hop|, które odpowiadają
+parametrom $T(x)$, $w(n)$, $N$ i $h$. Wywołanie funkcji
+\lstinline|gettransform()| na uzyskanej strukturze natomiast pozwala uzyskać
+krótkoczasową transformatę $\underset{w(n),N,h}{T(x)}$.
+
+Funkcja \lstinline|analyze()| jest najważniejszą częścią biblioteki, wykonuje
+ona kroki algorytmu od pierwszego do szóstego zwracając macierz $M \times 2$,
+która w pierwszej kolumnie zawiera elementy wektora $\bm d_{\max}$ natomiast w
+drugiej kolumnie elementy wektora $\bm k_{\max}$:
+\[\begin{bmatrix}
+    d_{\max,1} & k_{\max,1}\\
+    \vdots & \vdots\\
+    d_{\max,M} & k_{\max,M}
+\end{bmatrix}.\]
+Wymaga ona podania fragmentu sygnału $\bm s$ na którym chce się przeprowadzić
+analizę, krótkoczasowej transformaty $\underset{w(n),N,h}{T(x)}$, długości
+fragmentu $L$ oraz skoku $h$. Ponadto posiada ona opcjonalny parametr który,
+jeśli ustalony na wartość \lstinline|true|, dodaje dodatkowy krok po kroku
+czwartym, polegający na normalizacji wektora $\bm d_i$, czyli odjęciu średniej
+$\overline{d_i}$ i podzieleniu przez odchylenie standardowe $s_{d_i}$ każdego
+elementu, zastępując go wektorem znormalizowanym $\bm d_{i, \text{norm}}$ w
+dalszych krokach.
+\begin{equation}
+  \overline{d_i} = \frac{1}{M}\sum_{j=1}^{M}d_{i,j}
+\end{equation}
+\begin{equation}
+  s_{d_i} = \sqrt{\frac{1}{M-1}\sum_{j=1}^{M}\left(d_{i, j} -
+  \overline{d_{i}}\right)},
+\end{equation}
+\begin{equation}
+  \bm d_{i, \text{norm}} = \frac{1}{s_{d_i}}\begin{bmatrix}
+    d_{i,1} - \overline{d_i}\\
+    \vdots\\
+    d_{i,M} - \overline{d_i}
+  \end{bmatrix}
+\end{equation}
+Ten dodatkowy krok pozwala łatwiej porównać wyniki uzyskane dla różnych
+sygnałów, lecz zmniejsza różnice pomiędzy wynikami dla różnych stopni kompresji
+utrudniając tym samym ich rozróżnienie.
+
+Funkcje pomocnicze \lstinline|findperiod()| i \lstinline|radiusofmean()|
+wykonują odpowiednio siódmy i dziewiąty krok algorytmu. Pierwsza zwraca
+$p_{\min}$ po podaniu jej wektora $\bm k_{\max}$ i zakresu szukania np.
+$[3,h]$, natomiast druga pozwala wyliczyć $C_{T(x),w(n),N,h}$ na podstawie $\bm
+d_{\max}$ i $\bm\phi_k$. Kod źródłowy 
+
+\begin{program}
+  \caption{Zastosowanie biblioteki \textit{IOLA.jl} do analizy kompresji MP3}
+  \label{lst:IOLA_example}
+  \begin{lstlisting}
+  # Zaimportowanie potrzebnych bibliotek
+  using IOLA
+  using IOLA.Utils
+  using WAV
+  # Wczytanie parametrów kodeka i danych audio oraz ustalenie długości segmentu
+  params = Codec.getparams(Codec.MP3)
+  transform = Codec.gettransform(params)
+  L = 10*params.length
+  (s, fs, nbits, opt) = wavread("audio.wav")
+  # Analiza sygnału
+  dk = analyze(y, transform, L, params.hop)
+  d = dk[:,1]
+  k = dk[:,2]
+  # Wyznaczenie wskaźnika *@$\color{mygreen}C_{T(x),w(n),N,h}$@*
+  pmin = findperiod(k, 3:params.hop)
+  phi = 2pi*mod.(k, pmin)./pmin
+  C = radiusofmean(d, phi)
+  \end{lstlisting}
+\end{program}
 \subsection{Średnia kwadratowa logarytmów}
 \subsection{MDCT}
-\subsection{Wykrywanie modulo}
 \section{Uczenie maszynowe}
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
