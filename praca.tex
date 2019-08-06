@@ -701,6 +701,12 @@ Przedstawia się on następująco:
         \phi_{k,j}\right)^2}
       \end{equation}
 \end{enumerate}
+
+Algorytm ten usprawnia poprzednie rozwiązania poprzez dodanie siódmego kroku
+który automatycznie znajduje wartość $p_{\min}$ oraz modyfikuje krok trzecie
+poprzez wprowadzenie średniej modułów logarytmów modułów zamiast modułu
+logarytmów średniej kwadratowej, pozwalając na znacznie efektywniejszą
+implementację.
 \subsection{Biblioteka \textit{IOLA.jl}}
 Procedury algorytmu zaimplementowano w języku programowania \textit{Julia} w
 postaci biblioteki o nazwie \textit{IOLA} (eng.\ \textit{Identification Of
@@ -764,7 +770,11 @@ Funkcje pomocnicze \lstinline|findperiod()| i \lstinline|radiusofmean()|
 wykonują odpowiednio siódmy i dziewiąty krok algorytmu. Pierwsza zwraca
 $p_{\min}$ po podaniu jej wektora $\bm k_{\max}$ i zakresu szukania np.
 $[3,h]$, natomiast druga pozwala wyliczyć $C_{T(x),w(n),N,h}$ na podstawie $\bm
-d_{\max}$ i $\bm\phi_k$. Kod źródłowy 
+d_{\max}$ i $\bm\phi_k$.
+
+Kolejne użycie funkcji z tej biblioteki pozwala przeprowadzić analizę pliku pod
+kątem konkretnego kodeka, przykład takiego użycia dla formatu MP3 przedstawia
+kod źródłowy \ref{lst:IOLA_example}.
 
 \begin{program}
   \caption{Zastosowanie biblioteki \textit{IOLA.jl} do analizy kompresji MP3}
@@ -789,7 +799,32 @@ d_{\max}$ i $\bm\phi_k$. Kod źródłowy
   C = radiusofmean(d, phi)
   \end{lstlisting}
 \end{program}
-\subsection{Średnia kwadratowa logarytmów}
+
+Kluczowe w implementacji było wykorzystanie jak najefektywniejszych procedur, w
+szczególności dla MDCT i średniej modułów logarytmów modułów, których
+implementacje opisano w kolejnych punktach, w celu skrócenia
+długiego czasu przetwarzania. Ponadto wykorzystano wbudowane w język
+\textit{Julia} możliwości wielowątkowości, które pozwalają na rozłożenie kroków
+od pierwszego do piątego na wiele rdzeni procesora jako że są one od siebie
+niezależne.
+\subsection{Średnia modułów logarytmów modułów}
+Mając macierz $\bm X$ o wymiarach $M \times N$ średnia modułów logarytmów modułów
+(od teraz nazywana po prostu ,,średnią'') jest to suma wartości absolutnych z
+logarytmu o podstawie $a$ z wartości absolutnych wszystkich elementów tej
+macierzy.
+\begin{equation}
+  \left<X\right> =
+  \frac{1}{MN}\sum_{m=1}^{M}\sum_{n=1}^{N}\left|\log_{a}\left(\left|X_{mn}\right|\right)\right|
+\end{equation}
+Aby uprościć zagadnienie pominięto nieistotne z punktu widzenia złożoności
+mnożenie przez stałą $\frac{1}{MN}$ oraz przestawiono problem na przykładzie
+wektora $\bm x$ o długości $K=MN$, którego elementy są elementami macierzy $\bm
+  X$ w dowolnej kolejności
+\begin{equation}
+  \left<x\right> = \sum_{k=1}^{K}\left|\log_{a}\left(\left|x_{k}\right|\right)\right|
+\end{equation}
+Jeżeli podzielić wektor $\bm x$ na elementy
+
 \subsection{MDCT}
 \section{Uczenie maszynowe}
 \subsection{Biblioteka Knet.jl}
