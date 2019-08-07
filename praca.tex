@@ -810,20 +810,35 @@ niezależne.
 \subsection{Średnia modułów logarytmów modułów}
 Mając macierz $\bm X$ o wymiarach $M \times N$ średnia modułów logarytmów modułów
 (od teraz nazywana po prostu ,,średnią'') jest to suma wartości absolutnych z
-logarytmu o podstawie $a$ z wartości absolutnych wszystkich elementów tej
+logarytmu o podstawie $q$ z wartości absolutnych wszystkich elementów tej
 macierzy.
 \begin{equation}
   \left<X\right> =
-  \frac{1}{MN}\sum_{m=1}^{M}\sum_{n=1}^{N}\left|\log_{a}\left(\left|X_{mn}\right|\right)\right|
+  \frac{1}{MN}\sum_{m=1}^{M}\sum_{n=1}^{N}\left|\log_{q}\left(\left|X_{mn}\right|\right)\right|
 \end{equation}
 Aby uprościć zagadnienie pominięto nieistotne z punktu widzenia złożoności
 mnożenie przez stałą $\frac{1}{MN}$ oraz przestawiono problem na przykładzie
-wektora $\bm x$ o długości $K=MN$, którego elementy są elementami macierzy $\bm
-  X$ w dowolnej kolejności
+wektora $\bm x$ o długości $K=MN$, którego elementy $x_k = \left|X_{mn}\right|$
+są modułami elementów macierzy $\bm X$  w dowolnej kolejności
 \begin{equation}
-  \left<x\right> = \sum_{k=1}^{K}\left|\log_{a}\left(\left|x_{k}\right|\right)\right|
+  \left<x\right> = \left|\log_{q}\left(x_{1}\right)\right| +
+  \left|\log_{q}\left(x_{2}\right)\right| + \cdots +
+  \left|\log_{q}\left(x_{K}\right)\right|
 \end{equation}
-Jeżeli podzielić wektor $\bm x$ na elementy
+Korzystając z własności modułu i logarytmu:
+\begin{equation}
+  |a| + |b| = \begin{cases}
+    |a + b|, & (a > 0 \land b > 0) \lor (a < 0 \land b < 0)\\
+    |a - b|, & (a > 0 \land b < 0) \lor (a < 0 \land b > 0)\\
+  \end{cases}
+\end{equation}
+\begin{equation}
+  \log_q(a) + \log_q(b) = \log_q(ab)
+\end{equation}
+\begin{equation}
+  \log_q(a) - \log_q(b) = \log_q(\frac{a}{b})
+\end{equation}
+
 
 \subsection{MDCT}
 \section{Uczenie maszynowe}
