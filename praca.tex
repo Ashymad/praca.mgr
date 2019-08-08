@@ -825,19 +825,50 @@ są modułami elementów macierzy $\bm X$  w dowolnej kolejności
   \left|\log_{q}\left(x_{2}\right)\right| + \cdots +
   \left|\log_{q}\left(x_{K}\right)\right|
 \end{equation}
-Korzystając z własności modułu i logarytmu:
+Korzystając z własności modułu i własności logarytmu:
 \begin{equation}
   |a| + |b| = \begin{cases}
-    |a + b|, & (a > 0 \land b > 0) \lor (a < 0 \land b < 0)\\
+    |a + b|, & (a \geq 0 \land b \geq 0) \lor (a < 0 \land b < 0)\\
     |a - b|, & (a > 0 \land b < 0) \lor (a < 0 \land b > 0)\\
+  \end{cases},
+\end{equation}
+\begin{equation}
+  \log_q(a) + \log_q(b) = \log_q(ab),
+\end{equation}
+\begin{equation}
+  \log_q(a) - \log_q(b) = \log_q\left(\frac{a}{b}\right),
+\end{equation}
+\begin{equation}
+  \log_q(a) \geq 0 \iff a \geq 1 \land \log_q(a) \leq 0 \iff a \leq 1 .
+\end{equation}
+Można wywnioskować:
+\begin{equation}
+  |\log_q(a)| + |\log_q(b)| = \begin{cases}
+    |\log_q(ab)|, & (a \geq 1 \land b \geq 1) \lor (a < 1 \land b < 1)\\
+    |\log_q\left(\frac{a}{b}\right)|, & (a > 1 \land b < 1) \lor (a < 1 \land b > 1)\\
+  \end{cases}.
+\end{equation}
+Z czego wyprowadzono następujący algorytm:
+\begin{equation}
+  \begin{cases}
+    \overline{x_1} &= x_1\\
+    \overline{x_{k+1}} &= \begin{cases}
+      \overline{x_k}x_{k+1}, & (\overline{x_k} \geq 1 \land x_{k+1} \geq 1) \lor
+      (\overline{x_k} < 1 \land x_{k+1} < 1)\\
+      \frac{\overline{x_k}}{x_{k+1}}, & (\overline{x_k} > 1 \land x_{k+1} < 1)
+      \lor (\overline{x_k} < 1 \land x_{k+1} > 1)\\
   \end{cases}
+  \end{cases},
 \end{equation}
 \begin{equation}
-  \log_q(a) + \log_q(b) = \log_q(ab)
+  \left<x\right> = |\log_q(\overline{x_K})|.
 \end{equation}
-\begin{equation}
-  \log_q(a) - \log_q(b) = \log_q(\frac{a}{b})
-\end{equation}
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=0.6\textwidth]{plots/sum_abs_log10_abs.pgf}
+  \caption{Wydajność algorytmu}
+  \label{fig:sum_abs_log_abs}
+\end{figure}
 
 
 \subsection{MDCT}
