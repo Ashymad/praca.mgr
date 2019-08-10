@@ -10,7 +10,7 @@ axis_theme = @pgf {xmajorgrids,
                    ymajorgrids,
                    "/pgf/number format/use comma",
                    "/pgf/number format/1000 sep"={},
-                   "every axis plot/.style"={no_marks, thick}
+                   "every axis plot/.style"={thick}
                   };
 
 function plot_windows()
@@ -20,7 +20,7 @@ function plot_windows()
         win = par.window(par.length)
 
         fig = @pgf TikzPicture(Axis({axis_theme..., xlabel = raw"$n$", ylabel = raw"$w(n)$"},
-                                    Plot(Table(; x = 1:par.length, y = win))))
+                                    Plot({no_marks}, Table(; x = 1:par.length, y = win))))
 
         pgfsave("plots/win_$codec.pgf", fig)
     end
@@ -33,26 +33,17 @@ function plot_sum_abs_log_abs(recalc=false)
         suite["naive"] = BenchmarkGroup()
         suite["IOLA"] = BenchmarkGroup()
 
-        function sum_abs_log10_abs(x)
-            sum(abs.(log10.(abs.(x))))
-        end
-
-        sizes = 10 .^ (0:7)
+        sizes = 10 .^ (1:8)
         for size in sizes
             data = rand(size)
-            suite["naive"][size] = @benchmarkable sum_abs_log10_abs($data)
+            suite["naive"][size] = @benchmarkable sum(abs.(log10.(abs.($data))))
             suite["IOLA"][size] = @benchmarkable fast_sum_abs_log10_abs!(copy($data))
         end
 
         tune!(suite)
         results = run(suite)
 
-        res = Vector()
-
-        for size in sizes
-            push!(res, median(results["naive"][size].times)/median(results["IOLA"][size].times))
-        end
-        sum_abs_log_abs = Dict("x" => sizes, "y" => res)
+        sum_abs_log_abs = Dict("sizes" => sizes, "results" => results)
         @save "plot_data.jld2" sum_abs_log_abs
         sum_abs_log_abs
     else
@@ -60,10 +51,22 @@ function plot_sum_abs_log_abs(recalc=false)
         sum_abs_log_abs
     end
 
-    fig = @pgf TikzPicture(SemiLogXAxis({axis_theme..., xlabel=raw"$K$",
-                                         ylabel=raw"Stosunek czasu wykonywania",
-                                         ytick_distance=0.5, xtick=data["x"]},
-                                        Plot(Table(; x=data["x"], y=data["y"]))))
+    stdofratio(x, y) = sqrt(mean(x.^2)*mean(1 ./(y.^2)) - (mean(x)*mean(1 ./y))^2)
 
+    results = sum_abs_log_abs["results"]
+    x = sum_abs_log_abs["sizes"]
+    y = Vector{Float64}()
+    y_err = Vector{Float64}()
+
+    for size in x
+        push!(y, mean(results["naive"][size].times)/mean(results["IOLA"][size].times))
+        push!(y_err, stdofratio(results["naive"][size].times, results["IOLA"][size].times))
+    end
+    fig = @pgf TikzPicture(SemiLogXAxis({axis_theme..., xlabel=raw"$K$",
+                                         ylabel=raw"Stosunek czasów wykonywania",
+                                         xtick=x, minor_tick_num=3, yminorgrids},
+                                        PlotInc({"error bars/y dir=both",
+                                                 "error bars/y explicit"},
+                                                Coordinates(x, y; yerror=y_err))))
     pgfsave("plots/sum_abs_log10_abs.pgf", fig)
 end

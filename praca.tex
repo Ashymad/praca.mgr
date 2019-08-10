@@ -820,10 +820,8 @@ Aby uprościć zagadnienie pominięto nieistotne z punktu widzenia złożoności
 mnożenie przez stałą $\frac{1}{MN}$ oraz przestawiono problem na przykładzie
 wektora $\bm x$ o długości $K=MN$, którego elementy $x_k = \left|X_{mn}\right|$
 są modułami elementów macierzy $\bm X$  w dowolnej kolejności
-\begin{equation}
-  \left<x\right> = \left|\log_{q}\left(x_{1}\right)\right| +
-  \left|\log_{q}\left(x_{2}\right)\right| + \cdots +
-  \left|\log_{q}\left(x_{K}\right)\right|
+\begin{equation}\label{eq:naive_algorithm}
+  \left<x\right> = \sum_{k=1}^{K}\left|\log_{q}\left(x_{k}\right)\right|.
 \end{equation}
 Korzystając z własności modułu i własności logarytmu:
 \begin{equation}
@@ -848,28 +846,61 @@ Można wywnioskować:
     |\log_q\left(\frac{a}{b}\right)|, & (a > 1 \land b < 1) \lor (a < 1 \land b > 1)\\
   \end{cases}.
 \end{equation}
-Z czego wyprowadzono następujący algorytm:
-\begin{equation}
-  \begin{cases}
-    \overline{x_1} &= x_1\\
-    \overline{x_{k+1}} &= \begin{cases}
-      \overline{x_k}x_{k+1}, & (\overline{x_k} \geq 1 \land x_{k+1} \geq 1) \lor
-      (\overline{x_k} < 1 \land x_{k+1} < 1)\\
-      \frac{\overline{x_k}}{x_{k+1}}, & (\overline{x_k} > 1 \land x_{k+1} < 1)
-      \lor (\overline{x_k} < 1 \land x_{k+1} > 1)\\
-  \end{cases}
+Z czego, określiwszy operator $\odot$ jako
+\begin{equation}\label{eq:odot_operation}
+  a \odot b = \begin{cases}
+    ab, & (a \geq 1 \land b \geq 1) \lor (a < 1 \land b < 1)\\
+    \frac{a}{b}, & (a > 1 \land b < 1) \lor (a < 1 \land b > 1)\\
   \end{cases},
 \end{equation}
+wyprowadzono następujący algorytm:
 \begin{equation}
-  \left<x\right> = |\log_q(\overline{x_K})|.
+  \left<x\right> = |\log_q(\overline{x_K})|, \quad\text{gdzie}\quad
+  \begin{cases}
+    \overline{x_1} &= x_1\\
+    \overline{x_{k+1}} &= \overline{x_k}\odot x_{k+1}
+  \end{cases},
 \end{equation}
+
+Jak widać w wersji ,,naiwnej'' (\ref{eq:naive_algorithm}) aby policzyć
+$\left<x\right>$ należy wykonać aż $K$ operacji logarytmowania, która jest
+kosztowna pod względem obliczeniowym. W usprawnionej wersji algorytmu wystarczy
+jedna operacja logarytmowania bez względu na rozmiar wektora wejściowego.
+Natomiast ta prosta wersja algorytmu jest bezużyteczna dla dużych wartości $K$
+z powodu ograniczonej precyzji zmiennych zmiennoprzecinkowych. Im większa
+wartość $K$ tym większa szansa na wykorzystanie dostępnej precyzji co objawia
+się uzyskaniem z operacji $a \odot b$ wartości $0$ lub $\pm\infty$, dla
+$a \neq 0 \land b \neq 0$. Wobec tego opracowano algorytm:
+\begin{enumerate}
+  \item Mając wektor początkowy $\bm x$ o długość $N$, należy wyznaczyć wektor
+    pośredni $\bm y$ o długości
+    $\left\lceil\frac{N}{2}\right\rceil$, którego elementy są wynikami
+    zastosowania operacji $\odot$ (\ref{eq:odot_operation}) na kolejnych parach
+    elementów wektora $\bm x$, tak że \begin{equation}
+      y_i = \begin{cases}
+        x_{2i-1}\odot x_{2i}, & 2i \leq N\\
+        x_{2i-1}, & 2i > N
+      \end{cases}
+    \end{equation}
+  \item Należy powtarzać krok pierwszy zastępujać wektor początkowy wektorem
+    wynikowym, do czasu aż wektor wynikowy będzie miał długość 1, lub skończy
+    się precyzja zmiennych, po czym na uzyskanym w ten sposób wektorze
+    zastosować ,,naiwny'' algorytm (\ref{eq:naive_algorithm}).
+\end{enumerate}
+
+Ta metodyka, w zależności od rozmiaru wektora i danych w nim zawartych
+zmniejsza ilość operacji logarytmowania potrzebnch do wyliczenia
+$\left<x\right>$. Na rysunku \ref{fig:sum_abs_log_abs} przedstawiony jest
+stosunek czasu wykonywania algorytmu ,,naiwnego'' do tego algorytmu. Można
+zauważyć że jest on najefektywniejszy dla rozmiarów wektora pomiędzy
+10\textsuperscript{4}, a 10\textsuperscript{5} elementów, gdzie wykonuję tę samą
+operację w czasie cztery razy krótszym niż algorytm ,,naiwny''.
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.6\textwidth]{plots/sum_abs_log10_abs.pgf}
   \caption{Wydajność algorytmu}
   \label{fig:sum_abs_log_abs}
 \end{figure}
-
 
 \subsection{MDCT}
 \section{Uczenie maszynowe}
