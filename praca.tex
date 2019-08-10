@@ -273,7 +273,7 @@ backend=biber
 
 \begin{document}
 
-\titlepages{}
+\titlepages
 
 % Ponowne zdefiniowanie stylu `plain`, aby usunąć numer strony z pierwszej strony spisu treści i poszczególnych rozdziałów.
 \fancypagestyle{plain}
@@ -882,19 +882,21 @@ $a \neq 0 \land b \neq 0$. Wobec tego opracowano algorytm:
         x_{2i-1}, & 2i > N
       \end{cases}
     \end{equation}
-  \item Należy powtarzać krok pierwszy zastępujać wektor początkowy wektorem
+  \item Należy powtarzać krok pierwszy zastępując wektor początkowy wektorem
     wynikowym, do czasu aż wektor wynikowy będzie miał długość 1, lub skończy
     się precyzja zmiennych, po czym na uzyskanym w ten sposób wektorze
     zastosować ,,naiwny'' algorytm (\ref{eq:naive_algorithm}).
 \end{enumerate}
 
 Ta metodyka, w zależności od rozmiaru wektora i danych w nim zawartych
-zmniejsza ilość operacji logarytmowania potrzebnch do wyliczenia
+zmniejsza ilość operacji logarytmowania potrzebnych do wyliczenia
 $\left<x\right>$. Na rysunku \ref{fig:sum_abs_log_abs} przedstawiony jest
 stosunek czasu wykonywania algorytmu ,,naiwnego'' do tego algorytmu. Można
 zauważyć że jest on najefektywniejszy dla rozmiarów wektora pomiędzy
 10\textsuperscript{4}, a 10\textsuperscript{5} elementów, gdzie wykonuję tę samą
-operację w czasie cztery razy krótszym niż algorytm ,,naiwny''.
+operację w czasie cztery razy krótszym niż algorytm ,,naiwny'', lecz nawet dla
+rozmiarów wektora powyżej 10\textsuperscript{6} oferuje on czas wykonywania co
+najmniej \num{2.5} raza krótszy.
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.6\textwidth]{plots/sum_abs_log10_abs.pgf}
@@ -904,8 +906,37 @@ operację w czasie cztery razy krótszym niż algorytm ,,naiwny''.
 
 \subsection{MDCT}
 \section{Uczenie maszynowe}
+Zagadnienie rozróżniania sygnałów audio przedstawiono w postaci zagadnienia
+które jest jednym z podstawowych zagadnień na których skupia się uczenie
+maszynowe, mianowicie chodzi o zagadnienie rozpoznawania obrazów. Sygnał audio
+można przedstawić w postaci spektrogramu, który pozwala nie tylko rozdzielić
+sygnał na pasma częstotliwościowe, dzięki czemu na obrazie znajdują się
+informacje czasowo-częstotliwościowe sygnału.
+\subsection{Konwolucyjne Sieci Neuronowe}
+
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
+
+Model oparto na {\color{red}odnośnik}, jest to typowy model konwolucyjnych
+sieci neuronowych.
+\begin{figure}[!tbh]
+  \centering
+  \scriptsize\import{vecgraphics/}{cnn-scheme2.pdf_tex}
+  \caption{Wydajność algorytmu}
+  \label{fig:cnn_scheme}
+\end{figure}
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
+sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
 \subsection{Dane treningowe}
 \chapter{Ewaluacja}
 \section{Identyfikacja algorytmiczna}
