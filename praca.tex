@@ -913,30 +913,29 @@ można przedstawić w postaci spektrogramu, który pozwala nie tylko rozdzielić
 sygnał na pasma częstotliwościowe, dzięki czemu na obrazie znajdują się
 informacje czasowo-częstotliwościowe sygnału.
 \subsection{Konwolucyjne Sieci Neuronowe}
-
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=0.5\textwidth]{plots/relu.pgf}
+  \caption{Funkcja aktywacji reLU}
+  \label{fig:reLU}
+\end{figure}
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
 
 Model oparto na {\color{red}odnośnik}, jest to typowy model konwolucyjnych
-sieci neuronowych.
+sieci neuronowych. Skład się z trzech warstw konwolucyjnych o rozmiarze jądra
+$3 \times 3$, każdej następowanej przez warstwę podpróbkującą poprzez
+wybieranie wartości maksymalnej. Po tych warstwach następują dwie warstwy w
+pełni połączone o trzystu węzłach i finalna warstwa w pełni połączona o liczbie
+węzłów równej liczbie rozpoznawanych kategorii. Ponadto wszystkie warstwy z pominięciem
+ostatniej korzystają z funkcji aktywacji reLU. Rys. \ref{fig:cnn_scheme}
+przedstawia tę architekturę sieci.
 \begin{figure}[!tbh]
   \centering
   \scriptsize\import{vecgraphics/}{cnn-scheme2.pdf_tex}
-  \caption{Wydajność algorytmu}
+  \caption{Model sieci konwolucyjnej}
   \label{fig:cnn_scheme}
 \end{figure}
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-askdjhdaskdhaskdhkashdkashk ha sdkhas kdjh asksjhd akh dkjas jkhas kjdh ajk
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
-sdka sjkdh aksjh dkajsh kjas djkah sjkdha kjdash d
 \subsection{Dane treningowe}
 \chapter{Ewaluacja}
 \section{Identyfikacja algorytmiczna}

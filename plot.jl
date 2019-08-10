@@ -20,7 +20,7 @@ function plot_windows()
         win = par.window(par.length)
 
         fig = @pgf TikzPicture(Axis({axis_theme..., xlabel = raw"$n$", ylabel = raw"$w(n)$"},
-                                    Plot({no_marks}, Table(; x = 1:par.length, y = win))))
+                                    PlotInc({no_marks}, Table(; x = 1:par.length, y = win))))
 
         pgfsave("plots/win_$codec.pgf", fig)
     end
@@ -69,4 +69,12 @@ function plot_sum_abs_log_abs(recalc=false)
                                                  "error bars/y explicit"},
                                                 Coordinates(x, y; yerror=y_err))))
     pgfsave("plots/sum_abs_log10_abs.pgf", fig)
+end
+
+function plot_relu()
+    x = -6:6
+    y = max.(0, x)
+    fig = @pgf TikzPicture(Axis({axis_theme..., xlabel = raw"$x$", ylabel = raw"$\max(0,x)$"},
+                                PlotInc({no_marks}, Table(; x = x, y = y))))
+    pgfsave("plots/relu.pgf", fig)
 end
