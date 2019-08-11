@@ -35,6 +35,17 @@
 \usepgfplotslibrary{external}
 \tikzexternalize
 
+\usetikzlibrary{fit}
+\tikzset{%
+  highlight/.style={rectangle,rounded corners,fill=red!15,draw,fill opacity=0.5,thick,inner sep=0pt}
+}
+\newcommand{\tikzmark}[2]{\tikz[overlay,remember picture,baseline=(#1.base)] \node (#1) {#2};}
+%
+\newcommand{\Highlight}[1][submatrix]{%
+    \tikz[overlay,remember picture]{
+    \node[highlight,fit=(left.north west) (right.south east)] (#1) {};}
+}
+
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 % Środowisko float do kodu źródłowego \begin{program}
@@ -913,6 +924,178 @@ można przedstawić w postaci spektrogramu, który pozwala nie tylko rozdzielić
 sygnał na pasma częstotliwościowe, dzięki czemu na obrazie znajdują się
 informacje czasowo-częstotliwościowe sygnału.
 \subsection{Konwolucyjne Sieci Neuronowe}
+Konwolucyjne sieci neuronowe (eng. \textit{CNN -- Convolutional Neural
+Networks}) typowo posiadają trzy typy warstw: warstwy konwolucyjne,
+warstwy podpróbkujące oraz warstwy w pełni połączone. Są one stosowane do
+rozpoznawania obrazów, gdyż ich konstrukcja skutecznie wyselekcjonowuje istotne
+informacje z obrazów podobnie jak oczy ludzkie.
+
+Warstwy konwolucyjne wykonują operację splotu wejściowych tensorów z jądrem
+(nazywanym też filtrem) --- tensorem dwuwymiarowym o elementach (tak zwanych
+wagach) które są optymalizowane w procesie nauki sieci. Mając tensor wejściowy
+o wymiarach $W \times H \times D$, odpowiadających szerokości, wysokości i
+głębokości (liczbie kanałów) obrazu wejściowego, oraz kolekcje jąder $M \times
+N$ o wymiarach $D \times T \times M \times N$, wpierw wykonywany jest tzw.
+\textit{padding} --- proces w którym tensor wejściowy zwiększany jest o pewną
+liczbę $P$ zer na krawędziach dwóch pierwszych wymiarów uzyskując tensor
+wymiarach $W+2P \times H+2P \times D$. Następnie każdy z kanałów obrazu
+wejściowego o wymiarach $W+2P \times H+2P$ jest splatany z każdym kolejnym
+jądrem dla danego kanału od 1 do $T$ uzyskując w efekcie $D\times T$ tensorów
+wynikowych splotu. Te tensory są następnie sumowane po wymiarze $D$ uzyskując
+$T$ tensorów wynikowych.
+
+W procesie pojedynczego splotu macierz jądra jest mnożona przez wycinek kanału
+obrazu o wymiarach jądra poczynając od lewej górnej krawędzi i przesuwając się
+w prawo o skok $S$ aż do krawędzi po czym zaczynając z powrotem od lewej
+przesunąwszy się w dół o $S$. Proces ten przedstawia się następująco na
+przykładzie obrazu $\bm O$ o wymiarach $4 \times 4 \times 1$ i jadra $\bm J$ o
+wymiarach $3 \times 3$, padzie $P = 0$ i skoku $S = 1$, gdzie zaznaczono
+elementy macierzy biorące udział w działaniu:
+
+\begin{equation}
+  \bm O = \begin{bmatrix}
+    3 & 3 & 2 & 1\\
+    0 & 0 & 1 & 3\\
+    3 & 1 & 2 & 2\\
+    2 & 0 & 0 & 2
+  \end{bmatrix},\quad
+  \bm J = \begin{bmatrix}
+    0 & 1 & 2\\
+    2 & 2 & 0\\
+    0 & 1 & 2
+  \end{bmatrix},
+\end{equation}
+\tikzexternaldisable
+\begin{equation}
+  \begin{array}{*2{c}}
+    \left[\begin{array}{*4{c}}
+      \tikzmark{left}{3} & 3 & 2 & 1\\
+      0 & 0 & 1 & 3\\
+      3 & 1 & \tikzmark{right}{2} & 2\\
+      2 & 0 & 0 & 2
+    \end{array}\right]\times \bm J =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        \tikzmark{left}{12}\tikzmark{right}{12} & \phantom{12}\\
+        \phantom{10} & \phantom{17}
+    \end{array}\right]
+    \Highlight&
+    \left[\begin{array}{*4{c}}
+      3 & \tikzmark{left}{3} & 2 & 1\\
+      0 & 0 & 1 & 3\\
+      3 & 1 & 2 & \tikzmark{right}{2}\\
+      2 & 0 & 0 & 2
+    \end{array}\right]\times \bm J =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        12 & \tikzmark{left}{12}\tikzmark{right}{12}\\
+        \phantom{10} & \phantom{17}
+    \end{array}\right]
+    \Highlight\\
+    \left[\begin{array}{*4{c}}
+      3 & 3 & 2 & 1\\
+      \tikzmark{left}{0} & 0 & 1 & 3\\
+      3 & 1 & 2 & 2\\
+      2 & 0 & \tikzmark{right}{0} & 2
+    \end{array}\right]\times \bm J =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        12 & 12\\
+        \tikzmark{left}{10}\tikzmark{right}{10} & \phantom{17}
+    \end{array}\right]
+    \Highlight&
+    \left[\begin{array}{*4{c}}
+      3 & 3 & 2 & 1\\
+      0 & \tikzmark{left}{0} & 1 & 3\\
+      3 & 1 & 2 & 2\\
+      2 & 0 & 0 & \tikzmark{right}{2}
+    \end{array}\right]\times \bm J =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+      12 & 12\\
+      10 & \tikzmark{left}{17}\tikzmark{right}{17}
+    \end{array}\right]
+    \Highlight\\
+  \end{array}.
+\end{equation}
+\tikzexternalenable
+Wynikiem tej operacji jest macierz $\bm C$ o wymiarach $2\times 2$:
+\begin{equation}
+  \bm C = \begin{bmatrix}
+    12 & 12\\
+    10 & 17
+  \end{bmatrix}.
+\end{equation}
+
+Kolejnym krokiem po konwolucji jest podpróbkowanie które zmniejsza rozmiar
+tensora kilkukrotnie zachowując najistotniejsze informacje. Tzw okno --- analog
+jądra w konwolucji o pewnym wymiarze przesuwa się ze skokiem $S$ wybierając z
+zaznaczonej części macierzy wartość maksymalną, w przypadku algorytmu
+\textit{Max Pooling}, lub średnią, w przypadku algorytmu \textit{Average
+Pooling}. Dla każdego kanału obrazu ten proces jest wykonywany niezależnie.
+Przykład działania \textit{Max Pooling} na macierzy $\bm O$ z oknem $2 \times
+2$ i skokiem $S = 2$ przedstawia się następująco:
+\tikzexternaldisable
+\begin{equation}
+  \begin{array}{*2{c}}
+    \max\left\{\left[\begin{array}{*4{c}}
+      \tikzmark{left}{3} & 3 & 2 & 1\\
+      0 & \tikzmark{right}{0} & 1 & 3\\
+      3 & 1 & 2 & 2\\
+      2 & 0 & 0 & 2
+    \end{array}\right]\right\} =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        \tikzmark{left}{3}\tikzmark{right}{3} & \phantom{3}\\
+        \phantom{3} & \phantom{2}
+    \end{array}\right]
+    \Highlight&
+    \max\left\{\left[\begin{array}{*4{c}}
+      3 & 3 & \tikzmark{left}{2} & 1\\
+      0 & 0 & 1 & \tikzmark{right}{3}\\
+      3 & 1 & 2 & 2\\
+      2 & 0 & 0 & 2
+\end{array}\right]\right\} =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        3 & \tikzmark{left}{3}\tikzmark{right}{3}\\
+        \phantom{3} & \phantom{2}
+    \end{array}\right]
+    \Highlight\\
+    \max\left\{\left[\begin{array}{*4{c}}
+      3 & 3 & 2 & 1\\
+      0 & 0 & 1 & 3\\
+      \tikzmark{left}{3} & 1 & 2 & 2\\
+      2 & \tikzmark{right}{0} & 0 & 2
+\end{array}\right]\right\}=
+    \Highlight
+    \left[\begin{array}{*2{c}}
+        3 & 3\\
+        \tikzmark{left}{3}\tikzmark{right}{3} & \phantom{2}
+    \end{array}\right]
+    \Highlight&
+    \max\left\{\left[\begin{array}{*4{c}}
+      3 & 3 & 2 & 1\\
+      0 & 0 & 1 & 3\\
+      3 & 1 & \tikzmark{left}{2} & 2\\
+      2 & 0 & 0 & \tikzmark{right}{2}
+\end{array}\right]\right\} =
+    \Highlight
+    \left[\begin{array}{*2{c}}
+      3 & 3\\
+      3 & \tikzmark{left}{2}\tikzmark{right}{2}
+    \end{array}\right]
+    \Highlight\\
+  \end{array}.
+\end{equation}
+\tikzexternalenable
+W wyniku uzyskana jest macierz $\bm M$ o wymiarach $2\times 2$:
+\begin{equation}
+  \bm M = \begin{bmatrix}
+    3 & 3\\
+    3 & 2
+  \end{bmatrix}
+\end{equation}
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/relu.pgf}
@@ -921,15 +1104,16 @@ informacje czasowo-częstotliwościowe sygnału.
 \end{figure}
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
-
 Model oparto na {\color{red}odnośnik}, jest to typowy model konwolucyjnych
 sieci neuronowych. Skład się z trzech warstw konwolucyjnych o rozmiarze jądra
 $3 \times 3$, każdej następowanej przez warstwę podpróbkującą poprzez
-wybieranie wartości maksymalnej. Po tych warstwach następują dwie warstwy w
-pełni połączone o trzystu węzłach i finalna warstwa w pełni połączona o liczbie
-węzłów równej liczbie rozpoznawanych kategorii. Ponadto wszystkie warstwy z pominięciem
-ostatniej korzystają z funkcji aktywacji reLU. Rys. \ref{fig:cnn_scheme}
-przedstawia tę architekturę sieci.
+wybieranie wartości maksymalnej z przestrzeni $2 \times 2$. Po tych warstwach
+następują dwie warstwy w pełni połączone o trzystu węzłach i finalna warstwa w
+pełni połączona o liczbie węzłów równej liczbie rozpoznawanych kategorii.
+Ponadto warstwy w pełni połączone korzystają z wyłączania (dropout), pierwsza z
+prawdopodobieństwem $p = 0.3$, a dwie kolejne z prawdopodobieństwem $p = 0.2$.
+Wszystkie warstwy z pominięciem ostatniej korzystają z funkcji
+aktywacji reLU. Rys. \ref{fig:cnn_scheme} przedstawia tę architekturę sieci.
 \begin{figure}[!tbh]
   \centering
   \scriptsize\import{vecgraphics/}{cnn-scheme2.pdf_tex}
