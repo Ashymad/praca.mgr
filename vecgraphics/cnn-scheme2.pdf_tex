@@ -54,14 +54,14 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{cnn-scheme2.pdf}}%
-    \put(0.00297034,0.12579706){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{conv\\$3\times 3$}\end{tabular}}}}%
-    \put(0.10920569,0.10050005){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{pool\\$2\times 2$}\end{tabular}}}}%
+    \put(-0.02671146,0.11913387){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{splot\\$1\times 16\times 3\times 3$}\end{tabular}}}}%
+    \put(0.10254251,0.09989432){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{max pool\\$2\times 2$}\end{tabular}}}}%
     \put(0.7843899,0.02180553){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{FC\\300}\end{tabular}}}}%
     \put(0.95260722,0.03157031){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}FC\end{tabular}}}}%
-    \put(0.22442007,0.08997661){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{conv\\$3\times 3$}\end{tabular}}}}%
-    \put(0.33274055,0.06446562){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{pool\\$2\times 2$}\end{tabular}}}}%
-    \put(0.44714745,0.0539578){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{conv\\$3\times 3$}\end{tabular}}}}%
-    \put(0.55584869,0.02870628){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{pool\\$2\times 2$}\end{tabular}}}}%
+    \put(0.18080596,0.0796788){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{splot\\$16\times 16\times 3\times 3$}\end{tabular}}}}%
+    \put(0.32789454,0.06143689){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{max pool\\$2\times 2$}\end{tabular}}}}%
+    \put(0.55100268,0.02386027){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{max pool\\$2\times 2$}\end{tabular}}}}%
     \put(0.86524044,0.00268451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{FC\\300}\end{tabular}}}}%
+    \put(0.4098807,0.0434665){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\makecell[c]{splot\\$16\times 16\times 3\times 3$}\end{tabular}}}}%
   \end{picture}%
 \endgroup%

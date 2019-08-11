@@ -41,9 +41,9 @@
      inkscape:window-height="1036"
      id="namedview16907"
      showgrid="false"
-     inkscape:zoom="0.76514346"
-     inkscape:cx="-84.218644"
-     inkscape:cy="233.00884"
+     inkscape:zoom="3.0605738"
+     inkscape:cx="115.00829"
+     inkscape:cy="61.368214"
      inkscape:window-x="10"
      inkscape:window-y="10"
      inkscape:window-maximized="0"
@@ -1236,14 +1236,14 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-939.39783"
-     y="-399.57913"
+     x="-955.4079"
+     y="-395.98508"
      id="text21390"><tspan
        sodipodi:role="line"
-       x="-939.39783"
-       y="-399.57913"
+       x="-955.4079"
+       y="-395.98508"
        style="font-size:8px;text-align:start;text-anchor:start"
-       id="tspan21494">\makecell[c]{conv\\$3\times 3$}</tspan></text>
+       id="tspan21494">\makecell[c]{splot\\$1\times 16\times 3\times 3$}</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -1257,13 +1257,13 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-882.09552"
-     y="-385.93417"
+     x="-885.68958"
+     y="-385.60745"
      id="text21462"><tspan
        sodipodi:role="line"
-       x="-882.09552"
-       y="-385.93417"
-       id="tspan21496">\makecell[c]{pool\\$2\times 2$}</tspan></text>
+       x="-885.68958"
+       y="-385.60745"
+       id="tspan21496">\makecell[c]{max pool\\$2\times 2$}</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -1287,45 +1287,34 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-819.95001"
-     y="-380.25793"
+     x="-843.47504"
+     y="-374.7034"
      id="text21390-9"><tspan
        sodipodi:role="line"
-       x="-819.95001"
-       y="-380.25793"
+       x="-843.47504"
+       y="-374.7034"
        style="font-size:8px;text-align:start;text-anchor:start"
-       id="tspan21494-0">\makecell[c]{conv\\$3\times 3$}</tspan></text>
+       id="tspan21494-0">\makecell[c]{splot\\$16\times 16\times 3\times 3$}</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-761.52301"
-     y="-366.49756"
+     x="-764.1369"
+     y="-364.86389"
      id="text21462-8"><tspan
        sodipodi:role="line"
-       x="-761.52301"
-       y="-366.49756"
-       id="tspan21496-1">\makecell[c]{pool\\$2\times 2$}</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-699.81305"
-     y="-360.82974"
-     id="text21390-9-3"><tspan
-       sodipodi:role="line"
-       x="-699.81305"
-       y="-360.82974"
-       style="font-size:8px;text-align:start;text-anchor:start"
-       id="tspan21494-0-1">\makecell[c]{conv\\$3\times 3$}</tspan></text>
+       x="-764.1369"
+       y="-364.86389"
+       id="tspan21496-1">\makecell[c]{max pool\\$2\times 2$}</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="-641.18066"
-     y="-347.20932"
+     x="-643.79456"
+     y="-344.59543"
      id="text21462-8-1"><tspan
        sodipodi:role="line"
-       x="-641.18066"
-       y="-347.20932"
-       id="tspan21496-1-0">\makecell[c]{pool\\$2\times 2$}</tspan></text>
+       x="-643.79456"
+       y="-344.59543"
+       id="tspan21496-1-0">\makecell[c]{max pool\\$2\times 2$}</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -1336,4 +1325,15 @@
        x="-474.29779"
        y="-333.17343"
        id="tspan21596-4">\makecell[c]{FC\\300}</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="-719.91437"
+     y="-355.17084"
+     id="text21390-9-8"><tspan
+       sodipodi:role="line"
+       x="-719.91437"
+       y="-355.17084"
+       style="font-size:8px;text-align:start;text-anchor:start"
+       id="tspan21494-0-9">\makecell[c]{splot\\$16\times 16\times 3\times 3$}</tspan></text>
 </svg>

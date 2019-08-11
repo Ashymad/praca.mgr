@@ -35,6 +35,7 @@
 \usepgfplotslibrary{external}
 \tikzexternalize
 
+\usetikzlibrary{positioning}
 \usetikzlibrary{fit}
 \tikzset{%
   highlight/.style={rectangle,rounded corners,fill=red!15,draw,fill opacity=0.5,thick,inner sep=0pt}
@@ -965,7 +966,7 @@ elementy macierzy biorące udział w działaniu:
     0 & 1 & 2
   \end{bmatrix},
 \end{equation}
-\tikzexternaldisable
+\tikzset{external/export=false}
 \begin{equation}
   \begin{array}{*2{c}}
     \left[\begin{array}{*4{c}}
@@ -1018,7 +1019,7 @@ elementy macierzy biorące udział w działaniu:
     \Highlight\\
   \end{array}.
 \end{equation}
-\tikzexternalenable
+\tikzset{external/export=true}
 Wynikiem tej operacji jest macierz $\bm C$ o wymiarach $2\times 2$:
 \begin{equation}
   \bm C = \begin{bmatrix}
@@ -1035,7 +1036,7 @@ zaznaczonej części macierzy wartość maksymalną, w przypadku algorytmu
 Pooling}. Dla każdego kanału obrazu ten proces jest wykonywany niezależnie.
 Przykład działania \textit{Max Pooling} na macierzy $\bm O$ z oknem $2 \times
 2$ i skokiem $S = 2$ przedstawia się następująco:
-\tikzexternaldisable
+\tikzset{external/export=false}
 \begin{equation}
   \begin{array}{*2{c}}
     \max\left\{\left[\begin{array}{*4{c}}
@@ -1088,7 +1089,7 @@ Przykład działania \textit{Max Pooling} na macierzy $\bm O$ z oknem $2 \times
     \Highlight\\
   \end{array}.
 \end{equation}
-\tikzexternalenable
+\tikzset{external/export=true}
 W wyniku uzyskana jest macierz $\bm M$ o wymiarach $2\times 2$:
 \begin{equation}
   \bm M = \begin{bmatrix}
@@ -1098,22 +1099,128 @@ W wyniku uzyskana jest macierz $\bm M$ o wymiarach $2\times 2$:
 \end{equation}
 \begin{figure}[!tbh]
   \centering
+  \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+    \tikzset{%
+      every neuron/.style={
+        circle,
+        draw,
+        minimum size=1cm
+      },
+      neuron missing/.style={
+        draw=none, 
+        scale=3,
+        text height=0.333cm,
+        execute at begin node=\color{black}$\vdots$
+      },
+      neuron missing2/.style={
+        draw=none, 
+        scale=3,
+        text height=0.222cm,
+        execute at begin node=\color{black}$\cdots$
+      },
+      neuron none/.style={
+        draw=none
+      }
+    }
+    \foreach \m/\l [count=\y] in {1,2,3,missing,4}{
+      \node [every neuron/.try, neuron \m/.try] (input-\m) at (0,2.5-\y) {};
+    }
+    \foreach \m [count=\y] in {1,2,missing,3}{
+      \node [every neuron/.try, neuron \m/.try ] (hidden-\m) at (1.5,2-\y) {};
+    }
+    \foreach \m [count=\y] in {missing2,missing2,none,missing2}{
+      \node [every neuron/.try, neuron \m/.try ] (dottes-\m) at (2.55,2-\y) {};
+    }
+    \foreach \m [count=\y] in {1,2,missing,3}{
+      \node [every neuron/.try, neuron \m/.try ] (hidden2-\m) at (3.5,2-\y) {};
+    }
+    \foreach \m [count=\y] in {1,missing,2}{
+      \node [every neuron/.try, neuron \m/.try ] (output-\m) at (5,1.5-\y) {};
+    }
+    \foreach \l [count=\i] in {1,2,3,n_0}{
+      \draw [<-] (input-\i) -- ++(-1,0);
+      \node [] at (input-\i) {$i_{\l}$};
+    }
+    \foreach \l [count=\i] in {1,2,n_1}{
+      \node [] at (hidden-\i) {$h_{\l}^{(1)}$};
+    }
+    \foreach \l [count=\i] in {1,2,n_m}{
+      \node [] at (hidden2-\i) {$h_{\l}^{(m)}$};
+    }
+    \foreach \l [count=\i] in {1,n_{m+1}}{
+      \draw [->] (output-\i) -- ++(1,0);
+      \node [] at (output-\i) {$o_{\l}$};
+    }
+    \foreach \i in {1,...,4}{
+      \foreach \j in {1,...,3}{
+        \draw [->] (input-\i) -- (hidden-\j);
+      }
+    }
+    \foreach \i in {1,...,3}{
+      \foreach \j in {1,...,2}{
+        \draw [->] (hidden2-\i) -- (output-\j);
+      }
+    }
+    \foreach \l [count=\x from 0] in {Dane\\wejściowe,Warstwy\\ukryte,Warstwa\\wyjściowa}{
+      \node [align=center, above] at (\x*2.5,2) {\l};
+    }
+  \end{tikzpicture}
+  \caption{Schemat sieci w pełni połączonej}
+  \label{fig:fully_connected}
+\end{figure}
+Trzecim typem warst stosowanych w sieciach CNN są warstwy w pełni połączone
+(eng. \textit{FC -- Fully Connected}). Tego typu warstwy umieszcza się na
+końcu łańcucha przetwarzania, ich zadaniem jest rozpoznanie kategorii obrazu na
+podstawie cech wyseparowanych przez poprzednie warstwy konwolucyjne i
+podpróbkujące. 
+Schematycznie warstwy w pełni połączone przedstawia rysunek
+\ref{fig:fully_connected}, sieć na nim posiada $m$ warstw ukrytych oraz warstwę
+wyjściową. Aby uzyskać element wektora pierwszej warstwy ukrytej $\bm h^{(1)}$,
+należy wymnożyć każdy z elementów wektora danych wyjściowych $\bm i$ przez
+odpowiadający mu element wektora wag $\bm w_{0}$, zsumować wyniki mnożenia i
+na wyniku wykonać funkcję nieliniową $\sigma_0$, zwaną funkcją aktywacji,
+\begin{equation}
+  h_k^{(1)} = \sigma_0\left(\sum_{j=1}^{n_0}i_jw_{0,k,j}\right).
+\end{equation}
+Analogicznie wartości kolejnych warstw ukrytych wynoszą:
+\begin{equation}
+  h_k^{(p)} = \sigma_{p-1}\left(\sum_{j=1}^{n_{p-1}}h_j^{(p-1)}w_{p-1,k,j}\right).
+\end{equation}
+
+W zagadnieniach rozpoznawania obrazów jako funkcję aktywacji $\sigma$ zazwyczaj
+stosuje się funkcję reLU (eng. \textit{Rectified Linear Unit}) $f(x) =
+\max(0,x)$, której wykres przedstawia rysunek \ref{fig:reLU}. Pozwala ona
+uzyskać tą samą dokładność w czasie kilkukrotnie krótszym niż tradycyjnie
+stosowane funkcje $f(x) = \tanh(x)$ lub $f(x) = (1 + e^{-x})^{-1}$. Ta sama
+funkcja stosowana jest także na wyjściach warstw podpróbkujących.
+
+\begin{figure}[!tbh]
+  \centering
   \includegraphics[width=0.5\textwidth]{plots/relu.pgf}
   \caption{Funkcja aktywacji reLU}
   \label{fig:reLU}
 \end{figure}
+
+Wektory wag $\bm w_0,\dotsc,\bm w_m$ podlegają optymalizacji w procesie
+uczenia, podobnie jak jądra w warstwach konwolucyjnych. Odbywa się to poprzez
+wykonanie warstw sieci na danych treningowych i zastosowanie jednego z
+algorytmów optymalizacyjnych, który, na podstawie tzw.\ funkcji strat modyfikuje wagi.
+Kolejne iteracje tego procesu prowadzą do coraz dokładniejszych wyników
+uzyskiwanych z sieci.
+
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
-Model oparto na {\color{red}odnośnik}, jest to typowy model konwolucyjnych
-sieci neuronowych. Skład się z trzech warstw konwolucyjnych o rozmiarze jądra
-$3 \times 3$, każdej następowanej przez warstwę podpróbkującą poprzez
-wybieranie wartości maksymalnej z przestrzeni $2 \times 2$. Po tych warstwach
-następują dwie warstwy w pełni połączone o trzystu węzłach i finalna warstwa w
-pełni połączona o liczbie węzłów równej liczbie rozpoznawanych kategorii.
-Ponadto warstwy w pełni połączone korzystają z wyłączania (dropout), pierwsza z
-prawdopodobieństwem $p = 0.3$, a dwie kolejne z prawdopodobieństwem $p = 0.2$.
-Wszystkie warstwy z pominięciem ostatniej korzystają z funkcji
-aktywacji reLU. Rys. \ref{fig:cnn_scheme} przedstawia tę architekturę sieci.
+Model oparto na {\color{red}odnośnik}. Składa się z trzech warstw
+konwolucyjnych o rozmiarze jądra $3 \times 3$, przy czym pierwsza posiada $1
+\times 16$ takich jąder, a kolejne $16\times 16$. Po każdej następuje warstwa
+podpróbkująca poprzez wybieranie wartości maksymalnej z przestrzeni $2 \times
+2$ (\textit{Max Pooling}). Po tych warstwach następują dwie warstwy ukryte w
+pełni połączone o trzystu węzłach i finalna warstwa w pełni połączona o liczbie
+węzłów równej liczbie rozpoznawanych kategorii. Ponadto warstwy w pełni
+połączone korzystają z wyłączania (dropout), pierwsza z prawdopodobieństwem $p
+= 0.3$, a dwie kolejne z prawdopodobieństwem $p = 0.2$.  Wszystkie warstwy z
+pominięciem ostatniej korzystają z funkcji aktywacji reLU. Rys.
+\ref{fig:cnn_scheme} przedstawia tę architekturę sieci.
 \begin{figure}[!tbh]
   \centering
   \scriptsize\import{vecgraphics/}{cnn-scheme2.pdf_tex}
