@@ -1097,6 +1097,11 @@ W wyniku uzyskana jest macierz $\bm M$ o wymiarach $2\times 2$:
     3 & 2
   \end{bmatrix}
 \end{equation}
+Trzecim typem warst stosowanych w sieciach CNN są warstwy w pełni połączone
+(eng. \textit{FC -- Fully Connected}). Tego typu warstwy umieszcza się na
+końcu łańcucha przetwarzania, ich zadaniem jest rozpoznanie kategorii obrazu na
+podstawie cech wyseparowanych przez poprzednie warstwy konwolucyjne i
+podpróbkujące. 
 \begin{figure}[!tbh]
   \centering
   \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
@@ -1168,11 +1173,6 @@ W wyniku uzyskana jest macierz $\bm M$ o wymiarach $2\times 2$:
   \caption{Schemat sieci w pełni połączonej}
   \label{fig:fully_connected}
 \end{figure}
-Trzecim typem warst stosowanych w sieciach CNN są warstwy w pełni połączone
-(eng. \textit{FC -- Fully Connected}). Tego typu warstwy umieszcza się na
-końcu łańcucha przetwarzania, ich zadaniem jest rozpoznanie kategorii obrazu na
-podstawie cech wyseparowanych przez poprzednie warstwy konwolucyjne i
-podpróbkujące. 
 Schematycznie warstwy w pełni połączone przedstawia rysunek
 \ref{fig:fully_connected}, sieć na nim posiada $m$ warstw ukrytych oraz warstwę
 wyjściową. Aby uzyskać element wektora pierwszej warstwy ukrytej $\bm h^{(1)}$,
@@ -1208,18 +1208,27 @@ algorytmów optymalizacyjnych, który, na podstawie tzw.\ funkcji strat modyfiku
 Kolejne iteracje tego procesu prowadzą do coraz dokładniejszych wyników
 uzyskiwanych z sieci.
 
+Dodatkowym typem warstw stosowanym w tego typu sieciach są warstwy typu
+\textit{dropout} --- wyłączające. Posiadają one parametr $p$ który określa
+prawdopodobieństwo z jakim każdy z elementów tensora zostanie przez warstwę
+wyzerowany. Po przejściu przez tę warstwę tensor posiada około
+$p\cdot\SI{100}{\percent}$ elementów wyzerowanych. Ta operacja pozwala zapobiec
+sytuacji zwanej naddopasowaniem (eng.\textit{overfitting}), gdzie sieć
+zapamiętuje obrazy treningowe, przez co uzyskuje niską dokładność dla obrazów jej
+nieznanych.
+
 \subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
 Model oparto na {\color{red}odnośnik}. Składa się z trzech warstw
-konwolucyjnych o rozmiarze jądra $3 \times 3$, przy czym pierwsza posiada $1
-\times 16$ takich jąder, a kolejne $16\times 16$. Po każdej następuje warstwa
-podpróbkująca poprzez wybieranie wartości maksymalnej z przestrzeni $2 \times
-2$ (\textit{Max Pooling}). Po tych warstwach następują dwie warstwy ukryte w
+konwolucyjnych o rozmiarze jądra $3 \times 3$ ze skokiem 1 i padem 0, przy czym
+pierwsza posiada $1 \times 16$ takich jąder, a kolejne $16\times 16$. Po każdej
+następuje warstwa podpróbkująca typu \textit{Max Pooling} o rozmiarze okna $2
+\times 2$ ze skokiem $2$. Po tych warstwach następują dwie warstwy ukryte w
 pełni połączone o trzystu węzłach i finalna warstwa w pełni połączona o liczbie
-węzłów równej liczbie rozpoznawanych kategorii. Ponadto warstwy w pełni
+węzłów równej liczbie rozpoznawanych kategorii.  Ponadto warstwy w pełni
 połączone korzystają z wyłączania (dropout), pierwsza z prawdopodobieństwem $p
 = 0.3$, a dwie kolejne z prawdopodobieństwem $p = 0.2$.  Wszystkie warstwy z
-pominięciem ostatniej korzystają z funkcji aktywacji reLU. Rys.
+pominięciem ostatniej korzystają z funkcji aktywacji reLU.  Rys.
 \ref{fig:cnn_scheme} przedstawia tę architekturę sieci.
 \begin{figure}[!tbh]
   \centering
@@ -1227,7 +1236,27 @@ pominięciem ostatniej korzystają z funkcji aktywacji reLU. Rys.
   \caption{Model sieci konwolucyjnej}
   \label{fig:cnn_scheme}
 \end{figure}
+
+Do treningu wykorzystano metodę optymalizacji ADAM {\color{red}odnośnik}.
 \subsection{Dane treningowe}
+Stworzono bazę danych treningowych z prywatnych plików audio z muzyką po
+części kupionych na serwisach internetowych oferujących muzykę w formacie
+bezstratnym, takich jak Bandcamp, a po części własnoręcznie zgranych z płyt
+CD. Stworzono skrypt w jeżyku Python, korzystający z biblioteki pydub, który
+z każdego ze znalezionych w folderze plików w formacie FLAC wybiera losowy
+fragment o długości \SI{10}{\second}, po czym konwertuje go na każdy z listy
+formatów, o każdym z listy stopni kompresji, i następnie z powrotem konwertuje
+na sygnał nieskompresowany. Każdy z fragmentów jest normalizowana przed
+kompresją i podpróbkowywany do $f_s = \SI{44100}{\hertz}$, pliki o liczbie bitów
+innej niż 16 są ignorowane. Wszystkie fragmenty w postaci ciągu próbek o
+długości $441000$ są zapisywane w pliku HDF5 wraz z wartością liczbową
+określająca rodzaj i stopień kompresji.
+
+W procesie treningu baza danych dzielona jest na dane treningowe i dane
+testowe, po czym wybierana jest pewna liczba fragmentów, która mieści się w
+pamięci urządzenia przetwarzającego. Fragmenty wczytywane są z dysku i
+przetwarzana na macierze STFT z oknem Hanninga o długości 512 próbek i skokiem
+256 próbek.
 \chapter{Ewaluacja}
 \section{Identyfikacja algorytmiczna}
 \section{Identyfikacja modelem}
