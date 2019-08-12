@@ -945,13 +945,14 @@ jądrem dla danego kanału od 1 do $T$ uzyskując w efekcie $D\times T$ tensoró
 wynikowych splotu. Te tensory są następnie sumowane po wymiarze $D$ uzyskując
 $T$ tensorów wynikowych.
 
-W procesie pojedynczego splotu macierz jądra jest mnożona przez wycinek kanału
-obrazu o wymiarach jądra poczynając od lewej górnej krawędzi i przesuwając się
-w prawo o skok $S$ aż do krawędzi po czym zaczynając z powrotem od lewej
-przesunąwszy się w dół o $S$. Proces ten przedstawia się następująco na
-przykładzie obrazu $\bm O$ o wymiarach $4 \times 4 \times 1$ i jadra $\bm J$ o
-wymiarach $3 \times 3$, padzie $P = 0$ i skoku $S = 1$, gdzie zaznaczono
-elementy macierzy biorące udział w działaniu:
+W procesie pojedynczego splotu wyliczane są iloczyny wewnętrzne Frobeniusa
+(sumy iloczynów elementów o tych samych indeksach) macierzy
+jądra przez wycinek kanału obrazu o wymiarach jądra, poczynając od lewej górnej
+krawędzi i przesuwając się w prawo o skok $S$ do prawej krawędzi po czym zaczynając
+z powrotem od lewej przesunąwszy się w dół o $S$. Proces ten przedstawia się
+następująco na przykładzie obrazu $\bm O$ o wymiarach $4 \times 4 \times 1$ i
+jadra $\bm J$ o wymiarach $3 \times 3$, padzie $P = 0$ i skoku $S = 1$, gdzie
+zaznaczono elementy macierzy biorące udział w działaniu:
 
 \begin{equation}
   \bm O = \begin{bmatrix}
@@ -969,52 +970,52 @@ elementy macierzy biorące udział w działaniu:
 \tikzset{external/export=false}
 \begin{equation}
   \begin{array}{*2{c}}
-    \left[\begin{array}{*4{c}}
-      \tikzmark{left}{3} & 3 & 2 & 1\\
-      0 & 0 & 1 & 3\\
-      3 & 1 & \tikzmark{right}{2} & 2\\
-      2 & 0 & 0 & 2
-    \end{array}\right]\times \bm J =
+    \langle\left[\begin{array}{*4{c}}
+        \tikzmark{left}{3} & 3 & 2 & 1\\
+        0 & 0 & 1 & 3\\
+        3 & 1 & \tikzmark{right}{2} & 2\\
+        2 & 0 & 0 & 2
+    \end{array}\right], J\rangle_F =
     \Highlight
     \left[\begin{array}{*2{c}}
         \tikzmark{left}{12}\tikzmark{right}{12} & \phantom{12}\\
         \phantom{10} & \phantom{17}
     \end{array}\right]
     \Highlight&
-    \left[\begin{array}{*4{c}}
-      3 & \tikzmark{left}{3} & 2 & 1\\
-      0 & 0 & 1 & 3\\
-      3 & 1 & 2 & \tikzmark{right}{2}\\
-      2 & 0 & 0 & 2
-    \end{array}\right]\times \bm J =
+    \langle\left[\begin{array}{*4{c}}
+        3 & \tikzmark{left}{3} & 2 & 1\\
+        0 & 0 & 1 & 3\\
+        3 & 1 & 2 & \tikzmark{right}{2}\\
+        2 & 0 & 0 & 2
+    \end{array}\right],\bm J\rangle_F =
     \Highlight
     \left[\begin{array}{*2{c}}
         12 & \tikzmark{left}{12}\tikzmark{right}{12}\\
         \phantom{10} & \phantom{17}
     \end{array}\right]
     \Highlight\\
-    \left[\begin{array}{*4{c}}
-      3 & 3 & 2 & 1\\
-      \tikzmark{left}{0} & 0 & 1 & 3\\
-      3 & 1 & 2 & 2\\
-      2 & 0 & \tikzmark{right}{0} & 2
-    \end{array}\right]\times \bm J =
+    \langle\left[\begin{array}{*4{c}}
+        3 & 3 & 2 & 1\\
+        \tikzmark{left}{0} & 0 & 1 & 3\\
+        3 & 1 & 2 & 2\\
+        2 & 0 & \tikzmark{right}{0} & 2
+    \end{array}\right],\bm J\rangle_F =
     \Highlight
     \left[\begin{array}{*2{c}}
         12 & 12\\
         \tikzmark{left}{10}\tikzmark{right}{10} & \phantom{17}
     \end{array}\right]
     \Highlight&
-    \left[\begin{array}{*4{c}}
-      3 & 3 & 2 & 1\\
-      0 & \tikzmark{left}{0} & 1 & 3\\
-      3 & 1 & 2 & 2\\
-      2 & 0 & 0 & \tikzmark{right}{2}
-    \end{array}\right]\times \bm J =
+    \langle\left[\begin{array}{*4{c}}
+        3 & 3 & 2 & 1\\
+        0 & \tikzmark{left}{0} & 1 & 3\\
+        3 & 1 & 2 & 2\\
+        2 & 0 & 0 & \tikzmark{right}{2}
+    \end{array}\right],\bm J\rangle_F =
     \Highlight
     \left[\begin{array}{*2{c}}
-      12 & 12\\
-      10 & \tikzmark{left}{17}\tikzmark{right}{17}
+        12 & 12\\
+        10 & \tikzmark{left}{17}\tikzmark{right}{17}
     \end{array}\right]
     \Highlight\\
   \end{array}.
@@ -1217,7 +1218,6 @@ sytuacji zwanej naddopasowaniem (eng.\textit{overfitting}), gdzie sieć
 zapamiętuje obrazy treningowe, przez co uzyskuje niską dokładność dla obrazów jej
 nieznanych.
 
-\subsection{Biblioteka Knet.jl}
 \subsection{Konstrukcja modelu}
 Model oparto na {\color{red}odnośnik}. Składa się z trzech warstw
 konwolucyjnych o rozmiarze jądra $3 \times 3$ ze skokiem 1 i padem 0, przy czym
@@ -1237,7 +1237,66 @@ pominięciem ostatniej korzystają z funkcji aktywacji reLU.  Rys.
   \label{fig:cnn_scheme}
 \end{figure}
 
-Do treningu wykorzystano metodę optymalizacji ADAM {\color{red}odnośnik}.
+Do treningu wykorzystano metodę optymalizacji ADAM {\color{red}odnośnik}, a
+jako funkcję strat wykorzystano NLL (\textit{Negative Log Lokelihood}) $L(y) =
+-\log(y)$.
+\subsection{Implementacja modelu}
+Do stworzenia modelu wykorzystano bibliotekę \textit{Knet.jl} (\textit{Koç
+University deep learning framework}) i jezyk \textit{Julia}.
+
+Ta biblioteka nie posiada predefiniowanych warstw, należy je zdefiniować
+jako struktury, które można wywołać na danych. Kod \ref{lst:Knet_model}
+przedstawia proces konstrukcji modelu wykorzystanego w pracy. Wpierw tworzona
+jest warstwa konwolucyjna, posiada ona pola: \lstinline|w| --- wagi,
+\lstinline|b| --- bias (wektor dodawany do danych wejściowych, uczony podobnie
+jak wagi), \lstinline|f| --- funkcję aktywacji i \lstinline|p| ---
+prawdopodobieństwo warstwy \textit{dropout}. Wywołanie tej warstwy stosuje
+\textit{dropout} na danych wejściowych, po czym liczy splot z kolekcją filtrów,
+stosuje podpróbkowanie \textit{Max Pooling}, dodaje bias i finalnie stosuje
+funkcję aktywacji. Parametry uczone inicjalizuje funkcja \lstinline|param()|,
+której argumenty oznaczają wymiary tensora parametrów. Funkcja
+\lstinline|param0()|, działa tak samo, lecz inicjalizuje parametry jako zera, a
+nie jako wartości losowe.
+
+Analogicznie zdefiniowana jest warstwa w pełni połączona jako wynik
+zastosowania funkcji aktywacji na wyniku sumy iloczynu tensora wag z danymi
+wejściowymi i biasu. Tutaj funkcja \lstinline|mat()| spłaszcza tensor wejściowy
+do wektora.
+
+Ostatnia zdefiniowana jest warstwa \lstinline|Chain|, która służy do łączenia
+warstw w łańcuch całego modelu. Wykonanie jej na danych wykonuje po kolei każdy
+element łańcucha przekazując wynik z poprzedniego do następnego. Posiada też
+możliwość wykonania na danych wejściowych i pożądanych wynikach, w takim
+wypadku wyznacza funkcję strat NLL.
+
+\begin{program}
+  \caption{Konstrukcja modelu przy użyciu \textit{Knet.jl}}
+  \label{lst:Knet_model}
+  \begin{lstlisting}
+  using Knet
+  using Knet: Data
+
+  struct Conv; w; b; f; p; end
+  (c::Conv)(x) = c.f.(pool(conv4(c.w, dropout(x,c.p)) .+ c.b))
+  Conv(w1::Int,w2::Int,cx::Int,cy::Int,f=relu;pdrop=0) = Conv(param(w1,w2,cx,cy), param0(1,1,cy,1), f, pdrop)
+
+  struct Dense; w; b; f; p; end
+  (d::Dense)(x) = d.f.(d.w * mat(dropout(x,d.p)) .+ d.b)
+  Dense(i::Int,o::Int,f=relu;pdrop=0) = Dense(param(o,i), param0(o), f, pdrop)
+
+  struct Chain; layers; Chain(layers...) = new(layers); end
+  (c::Chain)(x) = (for l in c.layers; x = l(x); end; x)
+  (c::Chain)(x,y) = nll(c(x),y)
+  (c::Chain)(d::Data) = mean(c(x,y) for (x,y) in d)
+
+  model = Chain(Conv(3, 3, 1, 16),
+                Conv(3, 3, 16, 16),
+                Conv(3, 3, 16, 16),
+                Dense(102240, 300, pdrop=0.3),
+                Dense(300, 300, pdrop=0.2),
+                Dense(300, no_categories, identity, pdrop=0.2))
+  \end{lstlisting}
+\end{program}
 \subsection{Dane treningowe}
 Stworzono bazę danych treningowych z prywatnych plików audio z muzyką po
 części kupionych na serwisach internetowych oferujących muzykę w formacie
