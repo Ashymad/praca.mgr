@@ -1,3 +1,4 @@
+\PassOptionsToPackage{binary-units}{siunitx}
 \documentclass[pl,12pt]{aghdpl}
 % \documentclass[en,11pt]{aghdpl}  % praca w języku angielskim
 
@@ -307,15 +308,20 @@ backend=biber
 \chapter{Kompresja audio}
 \section{Wprowadzenie}
 W informatyce pojęcie kompresji odnosi się do procesu zmniejszenia rozmiaru
-pliku. Jako że pliki multimedialne typu filmy i muzyka są dużej wielkości
-{\color{red}jakiej, porównać!} bez użycia kompresji w porównaniu do innego typu
-plików wykorzystywanych przez użytkowników komputera, a ponadto przesyłane są
-często one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru
-oszczędza ogromne ilości miejsca na dysku {\color{red}jakie ilości} jak i
-przepustowości sieci. Z tego powodu kompresja audio, video i obrazów jest
-stosowana powszechnie, nieskompresowane pliki multimedialne używane są
-wyłącznie gdy wymagany jest szybki dostęp do ich fragmentów i brak obaw o
-pogorszenie jakości, na przykład podczas procesu ich edycji.
+pliku. Jako że pliki multimedialne posiadają duży rozmiar bez użycia kompresji
+(\SI{10}{\second} nieskompresowanego pliku audio w formacie płyty CD zajmie
+około \SI{1.7}{\mega\byte}, dla porównania nieskompresowane pliki tekstowe
+\LaTeX\ potrzebne do skompilowania tej pracy wraz ze schematami i wykresami
+zajmuje zaledwie \SI{0.4}{\mega\byte}) w porównaniu do innego typu plików
+wykorzystywanych przez użytkowników komputera, a ponadto przesyłane są często
+one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru oszczędza
+ogromne ilości miejsca na dysku jak i przepustowości sieci (kompresja
+bezstratna pozwala skompresować pliki audio do \num{30}-\SI{50}{\percent}
+oryginalnego rozmiaru, a bezstratna nawet do \SI{1}{\percent} oryginalnego
+rozmiaru bez utraty odczuwalnej jakości). Z tego powodu kompresja audio, video
+i obrazów jest stosowana powszechnie, nieskompresowane pliki multimedialne
+używane są wyłącznie gdy wymagany jest szybki dostęp do ich fragmentów i brak
+obaw o pogorszenie jakości, na przykład podczas procesu ich edycji.
 
 Ponadto, gdyż rodzaj kompresji stosowany do innych plików, np.\ tekstowych,
 czyli kompresja bezstratna nie osiąga wystarczającego zmniejszenia rozmiaru
@@ -324,7 +330,6 @@ się metody pozwalające na dalsze zmniejszenie rozmiaru kosztem utraty
 możliwości odtworzenie oryginalnego sygnału po dekompresji -- z tego powodu ten
 typ kompresji nazywa się kompresją stratną.
 
-{\color{red}może wykres z rozmiarami plików po kompresji}
 \section{Kompresja bezstratna}
 
 W procesie kompresji stratnej uzyskuje się zmniejszenie rozmiaru pliku bez
@@ -483,41 +488,39 @@ wykorzystane w pięciu popularnych kodekach.
 \subsection{MP3}
 Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako część
 standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
-następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Jest to obecnie
-nadal jeden z najbardziej popularnych formatów, choć od czasu jego wprowadzenia
-powstały kodeki o dużo lepszych parametrach.
+następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Do czasu uzyskania
+popularności przez AAC był to najpopularniejszy kodek. Ponadto cieszył się on
+dużo popularnością jako format wykorzystywany w przenośnych urządzeniach,
+zwanych, na jego cześć, "empetrójkami", do odsłuchiwania muzyki z powodu dużego
+wsparcia sprzętowego.
 
-W tym kodeku oprócz MDCT do analizy sygnału jest zastosowany również bank
+W tym kodeku przed MDCT do analizy sygnału jest zastosowany również bank
 filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank filtrów
-o prawie idealnej rekonstrukcji, którego proces konstrukcji wygląda
-następująca:
-\begin{enumerate}
-  \item Projekt prototypowego filtra dolnoprzepustowego $h(n)$ o długości $M =
-    LN$, gdzie $L, M, N \in \bm Z$
-  \item Filtr musi anulować aliasing w sąsiadujących podpasmach: \[
-      \begin{array}{rl}
-        |H(e^{i\omega})|^2 + H(e^{i\frac{\pi}{N}-\omega})|^2 = 2, &
-        \quad0<|\omega|<\frac{\pi}{2N} \\
-        |H(e^{i\omega})|^2 = 0, & \quad|\omega| > \frac{\pi}{N}
-      \end{array}\]
-  \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
-      h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
-      \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
-      gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
-      \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
-  \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
-    odwróconymi w czasie:\[
-      f_k(n) = h_k(M-1-n)\]
-\end{enumerate}
+który rezygnuje z możliwości idealnej rekonstrukcji sygnału na rzecz prostszego
+procesu konstrukcji względem banku filtrów QMF. Filtry banku anulują aliasing w
+sąsiadujących pasmach, ponadto bank jest ortogonalny, więc filtry syntezy są
+filtrami analizy odwróconymi w czasie.
+%\begin{enumerate}
+%  \item Projekt prototypowego filtra dolnoprzepustowego $h(n)$ o długości $M =
+%    LN$, gdzie $L, M, N \in \bm Z$
+%  \item Filtr musi anulować aliasing w sąsiadujących podpasmach: \[
+%      \begin{array}{rl}
+%        |H(e^{i\omega})|^2 + H(e^{i\frac{\pi}{N}-\omega})|^2 = 2, &
+%        \quad0<|\omega|<\frac{\pi}{2N} \\
+%        |H(e^{i\omega})|^2 = 0, & \quad|\omega| > \frac{\pi}{N}
+%      \end{array}\]
+%  \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
+%      h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
+%      \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
+%      gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
+%      \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
+%  \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
+%    odwróconymi w czasie:\[
+%      f_k(n) = h_k(M-1-n)\]
+%\end{enumerate}
 W formatach od MPEG-1 Layer I do MPEG-1 Layer III, ten bank filtrów użyto z $N = 32$
 pasmami i o $M = 512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia każdego z
 pasm zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
-
-MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
-\ref{fig:win_MP3}) o długości $N$, o następującym wzorze:
-\begin{equation}\label{eq:sine_win}
-  w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} - \frac{\pi}{2}\right).
-\end{equation}
 
 \begin{figure}[!tbh]
   \centering
@@ -526,9 +529,17 @@ MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
   \label{fig:win_MP3}
 \end{figure}
 
+MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
+\ref{fig:win_MP3}) o długości $N$, o następującym wzorze:
+\begin{equation}\label{eq:sine_win}
+  w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} - \frac{\pi}{2}\right).
+\end{equation}
+MP3 wykorzystuje dwie długości okna, tzw.\ okno krótkie o długości 384 próbek i okno
+długie o długości 1152 próbek.
+
 \subsection{AAC}
 
-MDCT w tym formacie wykorzystuje okno KBD (eng.
+MDCT w tym formacie wykorzystuje miedzy innymi okno KBD (eng.
 \textit{Keiser-Bessel-derived}), jest to okno pochodne okna Keisera, stworzone
 by spełniało warunki zastosowania w MDCT (\ref{eq:symm_cond},
 \ref{eq:p-b_cond}). Okno Kaisera ma wzór:
@@ -547,7 +558,9 @@ o wzorze:
     0 & \text{w innym przypadku}
   \end{cases}.
 \end{equation}
-AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
+AAC wykorzystuje okno sinusowe lub KBD z parametrem $\alpha = 4$ (rys.
+\ref{fig:win_AAC}) o długości 2048 próbek, lub okno KBD z parametrem $\alpha =
+6$ o długości 256 próbek.
 
 \begin{figure}[!tbh]
   \centering
@@ -559,7 +572,7 @@ AAC wykorzystuje okno KBD z parametrem $\alpha = 4$ (rys. \ref{fig:win_AAC})
 \subsection{Ogg Vorbis}
 
 MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
-\ref{fig:win_OGG}) o długości $N$, o wzorze:
+\ref{fig:win_OGG}) o długości $N = 2^{p}$, gdzie $p \in [6,13] \land p \in \bm N$, o wzorze:
 \begin{equation}\label{eq:slope_win}
   w(n) = \sin\left(\frac{\pi}{2}\sin^2\left(\frac{\left(n +
   \frac{1}{2}\right)}{N\pi}\right)\right)
@@ -574,7 +587,8 @@ MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
 \subsection{AC-3}
 
 MDCT w tym formacie wykorzystuje okno KBD (\ref{eq:kaiser_win},
-\ref{eq:kbd_win}), z parametrem $\alpha = 5$ (rys. \ref{fig:win_AC3}).
+\ref{eq:kbd_win}), z parametrem $\alpha = 5$ (rys. \ref{fig:win_AC3}) o
+długości 512 lub 256 próbek.
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/win_AC3.pgf}
@@ -584,8 +598,8 @@ MDCT w tym formacie wykorzystuje okno KBD (\ref{eq:kaiser_win},
 
 \subsection{WMA}
 
-MDCT w tym formacie wykorzystuje okno sinusowe (\ref{eq:sine_win})
-(rys. \ref{fig:win_MP3})
+MDCT w tym formacie wykorzystuje nieznane okno o długości $N = 2^p$, gdzie $p
+\in [8,12] \land p \in\bm N$.
 
 \chapter{Realizacja}
 Aby stworzyć proces pozwalający na wykrycie formatu z którego sygnał audio
