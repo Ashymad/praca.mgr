@@ -1,6 +1,7 @@
 using Statistics
 using HDF5
 using LaTeXTabulars
+using IOLA.Utils
 using LaTeXStrings
 
 cat_mapping =
@@ -29,6 +30,19 @@ Dict{Int8, UInt8}(
 # AC3
 # OGG
 # WMA
+# 
+# C = h5open("results.h5", "r+") do results
+#     C = results["C"]
+#     KD = results["KD"]
+#     p = results["p"]
+# 
+#     for i in 1:size(KD, 4), j in 1:size(KD, 3)
+#         C[j, i] = radiusofmean(KD[:,1,j,i][:], 2π*mod.(KD[:,2,j,i][:],
+#                                                        p[j,i][:])./p[j,i][:])
+#     end
+#     C[:,:]
+# end
+
 C = h5open("results.h5") do results
     results["C"][:,:]
 end
