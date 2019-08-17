@@ -482,9 +482,6 @@ kwantyzacji lecz dane zbliżone) oraz synteza, czyli zastosowanie odwrotnych
 transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
 \textit{Inverse Modified Discrete Cosine Transform})
 
-W kolejnych punktach zostaną dokładniej opisane elementy procesu kompresji
-wykorzystane w pięciu popularnych kodekach.
-
 \subsection{MP3}
 Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako część
 standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
@@ -612,8 +609,12 @@ MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
 \ref{fig:win_OGG}) o długości $N = 2^{p}$, gdzie $p \in [6,13] \land p \in \bm N$, o wzorze:
 \begin{equation}\label{eq:slope_win}
   w(n) = \sin\left(\frac{\pi}{2}\sin^2\left(\frac{\left(n +
-  \frac{1}{2}\right)}{N\pi}\right)\right)
+  \frac{1}{2}\right)}{N\pi}\right)\right).
 \end{equation}
+Wykorzystanie zmiennej długości okna o więcej niż dwóch długościach jak w AAC,
+MP3 i AC-3, pozwala Vorbis adaptować lepiej kompresję do charakteru
+czasowo-częstotliwościowego sygnału.
+
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/win_OGG.pgf}
@@ -622,6 +623,16 @@ MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
 \end{figure}
 
 \subsection{AC-3}
+AC-3 (nazywany też Dolby Digitial, DD, ATSC A/52) to format kompresji stworzony
+przez firmę Dolby Laboratories na potrzeby kin, wspierający wielokanałową konfigurację
+kanałów 5.1. AC-3 miało zastąpić dotychczasowe rozwiązania analogowego zapisu
+sygnału audio jako cyfrowy format zapisu ścieżki audio na taśmie filmowej.
+Pierwszy film który został wypuszczony ze ścieżką dźwiękową w tym formacie to
+\textit{Batman Returns} w roku 1992.
+
+Kodek jest obecnie ciągle w użyciu w kinie, choć zastępowany przez Dolby
+Sorround 7.1 i Dolby Atmos, ponadto jest wykorzystywany do kodowania ścieżek
+dźwiękowych w filmach dystrybuowanych na płytach DVD i Blu-ray.
 
 MDCT w tym formacie wykorzystuje okno KBD (\ref{eq:kaiser_win},
 \ref{eq:kbd_win}), z parametrem $\alpha = 5$ (rys. \ref{fig:win_AC3}) o
@@ -635,8 +646,21 @@ długości 512 lub 256 próbek.
 
 \subsection{WMA}
 
+WMA (eng. \textit{Windows Media Audio}) to kodek stworzony w roku 1999 przez
+firmę Microsoft w celu, podobnie jak AAC i Vorbis, stworzenia kodeka o lepszych
+parametrach niż MP3. Termin WMA może się też odnosić do nowszych kodeków: WMA
+Lossless --- kodeka bezstratnego, WMA Voice --- kodeka dostosowanego do
+kompresji głosu lub WMA Pro --- nowszej, usprawnionej wersji kodeka. W tej
+pracy WMA oznaczać będzie format podstawowy WMA.
+
+WMA jest standardowym enkoderem wykorzystywanym przez oprogramowanie Windows
+Media Player systemu Microsoft Windows do zapisu sygnału audio. Odtwarzanie
+plików jest wspierane przez wszystkie komputery z tym systemem i wiele urządzeń
+przenośnych.
+
 MDCT w tym formacie wykorzystuje nieznane okno o długości $N = 2^p$, gdzie $p
-\in [8,12] \land p \in\bm N$.
+\in [8,12] \land p \in\bm N$. Okno posiada zmienną długość podobnie jak w
+przypadku Ogg Vorbis.
 
 \chapter{Realizacja}
 Aby stworzyć proces pozwalający na wykrycie formatu z którego sygnał audio
@@ -1289,7 +1313,7 @@ pominięciem ostatniej korzystają z funkcji aktywacji reLU.  Rys.
 \end{figure}
 
 Do treningu wykorzystano metodę optymalizacji ADAM {\color{red}odnośnik}, a
-jako funkcję strat wykorzystano NLL (\textit{Negative Log Lokelihood}) $L(y) =
+jako funkcję strat wykorzystano NLL (\textit{Negative Log Likelihood}) $L(y) =
 -\log(y)$.
 \subsection{Implementacja modelu}
 Do stworzenia modelu wykorzystano bibliotekę \textit{Knet.jl} (\textit{Koç
