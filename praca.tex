@@ -1,4 +1,5 @@
 \PassOptionsToPackage{binary-units}{siunitx}
+\PassOptionsToPackage{table}{xcolor}
 \documentclass[pl,12pt]{aghdpl}
 % \documentclass[en,11pt]{aghdpl}  % praca w języku angielskim
 
@@ -22,6 +23,7 @@
 \usepackage{mathtools}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{rotating}
 \usepackage{amsthm}
 \usepackage{float}% do umieszczenia floatów [H]
 \usepackage{enumitem}
@@ -310,9 +312,9 @@ backend=biber
 W informatyce pojęcie kompresji odnosi się do procesu zmniejszenia rozmiaru
 pliku. Jako że pliki multimedialne posiadają duży rozmiar bez użycia kompresji
 (\SI{10}{\second} nieskompresowanego pliku audio w formacie płyty CD zajmie
-około \SI{1.7}{\mega\byte}, dla porównania nieskompresowane pliki tekstowe
+około \SI{1.7}{\mebi\byte}, dla porównania nieskompresowane pliki tekstowe
 \LaTeX\ potrzebne do skompilowania tej pracy wraz ze schematami i wykresami
-zajmuje zaledwie \SI{0.4}{\mega\byte}) w porównaniu do innego typu plików
+zajmuje zaledwie \SI{0.4}{\mebi\byte}) w porównaniu do innego typu plików
 wykorzystywanych przez użytkowników komputera, a ponadto przesyłane są często
 one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru oszczędza
 ogromne ilości miejsca na dysku jak i przepustowości sieci (kompresja
@@ -1372,8 +1374,9 @@ wypadku wyznacza funkcję strat NLL.
                 Dense(300, no_categories, identity, pdrop=0.2))
   \end{lstlisting}
 \end{program}
-\subsection{Dane treningowe}
-Stworzono bazę danych treningowych z prywatnych plików audio z muzyką po
+\chapter{Ewaluacja}
+\subsection{Dane ewaluacyjne}
+Stworzono bazę danych fragmentów muzyki z prywatnych plików audio po
 części kupionych na serwisach internetowych oferujących muzykę w formacie
 bezstratnym, takich jak Bandcamp, a po części własnoręcznie zgranych z płyt
 CD. Stworzono skrypt w jeżyku Python, korzystający z biblioteki pydub, który
@@ -1381,29 +1384,65 @@ z każdego ze znalezionych w folderze plików w formacie FLAC wybiera losowy
 fragment o długości \SI{10}{\second}, po czym konwertuje go na każdy z listy
 formatów, o każdym z listy stopni kompresji, i następnie z powrotem konwertuje
 na sygnał nieskompresowany. Każdy z fragmentów jest normalizowana przed
-kompresją i podpróbkowywany do $f_s = \SI{44100}{\hertz}$, pliki o liczbie bitów
-innej niż 16 są ignorowane. Wszystkie fragmenty w postaci ciągu próbek o
-długości $441000$ są zapisywane w pliku HDF5 wraz z wartością liczbową
-określająca rodzaj i stopień kompresji.
+kompresją oraz skwantyzowana do szesnastu bitów jeśli plik ma ich więcej. Pliki
+i częstotliwości próbkowania różnej od $f_s = \SI{44100}{\hertz}$ są pomijana
+by nie wprowadzać dodatkowej zmiennej w postaci artefaktów podpróbkowywania. W
+przypadku uzyskania po konwersji pliku o większej ilości bitów niż szesnaście,
+jest on ponownie rekwantyzowany do szesnastu (tak jest w przypadku AC-3 i WMA).
+Wszystkie fragmenty w postaci ciągu próbek o długości $441000$ są zapisywane w
+pliku HDF5 wraz z wartością liczbową określająca rodzaj i stopień kompresji.
 
-W procesie treningu baza danych dzielona jest na dane treningowe i dane
-testowe, po czym wybierana jest pewna liczba fragmentów, która mieści się w
-pamięci urządzenia przetwarzającego. Fragmenty wczytywane są z dysku i
-przetwarzana na macierze STFT z oknem Hanninga o długości 512 próbek i skokiem
-256 próbek.
-\chapter{Ewaluacja}
+Stopień kompresji regulowano za pomocą parametru \textit{bitrate} który oznacza
+pożądaną po kompresji ilość bitów (oznaczającą rozmiar pliku na dysku) na
+sekundę sygnału.
+
+Wynikowa baza danych posiada 65536 fragmentów, 4096 w postaci
+nieskompresowanej i po 4096 dla każdej z piętnastu możliwych par formatów MP3,
+AAC, AC-3, Vorbis i WMA z bitrate'ami \SI{320}{\kibi\bit\per\second},
+\SI{192}{\kibi\bit\per\second} i \SI{128}{\kibi\bit\per\second}.
+
 \section{Identyfikacja algorytmiczna}
 \begin{table}[!tbh]
-  \sisetup{round-precision=2, round-mode=places, table-format=1.4}
+  \sisetup{round-precision=2, round-mode=places}
   \centering
   \caption{Wartości parametru $C_{T(x),w(n),N,h}$}
   \include{tables/algo_eval}
 \end{table}
 \section{Identyfikacja modelem}
 \subsection{Identyfikacja kompresji}
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=\textwidth]{plots/model_c.pgf}
+  \caption{Iden}
+  \label{fig:model_c}
+\end{figure}
 \subsection{Identyfikacja typu kompresji}
-\subsection{Identyfikacja parametrów kompresji}
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=\textwidth]{plots/model_c_t.pgf}
+  \caption{Iden}
+  \label{fig:model_c_t}
+\end{figure}
+\begin{table}[!tbh]
+  \sisetup{round-precision=1, round-mode=places}
+  \centering
+  \caption{Macierz konfuzji modelu rozpoznającego typ i parametry kompresji}
+  \include{tables/model_c_t}
+\end{table}
 \subsection{Identyfikacja typu i parametrów kompresji}
+\begin{figure}[!tbh]
+  \centering
+  \includegraphics[width=\textwidth]{plots/model_c_t+p.pgf}
+  \caption{Iden}
+  \label{fig:model_c_t+p}
+\end{figure}
+\begin{sidewaystable}[!tbh]
+  \sisetup{round-precision=1, round-mode=places}
+  \centering
+  \caption{Macierz konfuzji modelu rozpoznającego typ i parametry kompresji}
+  \include{tables/model_c_t+p}
+\end{sidewaystable}
+
 \chapter{Podsumowanie}
 \section{Wnioski końcowe}
 \section{Dalsze kierunki badań}

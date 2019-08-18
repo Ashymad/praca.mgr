@@ -1,4 +1,5 @@
 using IOLA
+using JLD2
 using JLD2, FileIO
 using PGFPlotsX
 using IOLA.Utils: fast_sum_abs_log10_abs!
@@ -15,7 +16,7 @@ axis_theme = @pgf {xmajorgrids,
 
 function plot_windows()
     for codec in instances(Codec.CodecType)
-        par = Codec.getParams(codec)
+        par = Codec.getparams(codec)
 
         win = par.window(par.length)
 
@@ -77,4 +78,41 @@ function plot_relu()
     fig = @pgf TikzPicture(Axis({axis_theme..., xlabel = raw"$x$", ylabel = raw"$\max(0,x)$"},
                                 PlotInc({no_marks}, Table(; x = x, y = y))))
     pgfsave("plots/relu.pgf", fig)
+end
+
+
+function plot_acc(fname)
+    legend = Dict("model_c_t+p" => ["WAV",
+                                    "MP3 320", "MP3 192", "MP3 128",
+                                    "AAC 320", "AAC 192", "AAC 128",
+                                    "Vorbis 320", "Vorbis 192", "Vorbis 128",
+                                    "WMA 320", "WMA 192", "WMA 128",
+                                    "AC-3 320", "AC-3 192", "AC-3 128"],
+                  "model_c_t" => ["WAV", "MP3", "AAC", "Vorbis", "WMA", "AC-3"],
+                  "model_c" => ["Nieskompresowany", "Skompresowany"])
+    cycle_lists = @pgf Dict("model_c_t+p" => {blue,
+                                              red, "{red, dashed}", "{red, dotted}",
+                                              black, "{black, dashed}", "{black, dotted}",
+                                              orange, "{orange, dashed}", "{orange, dotted}",
+                                              brown, "{brown, dashed}", "{brown, dotted}",
+                                              green, "{green, dashed}", "{green, dotted}",
+                                             },
+                            "model_c_t" => {blue, red, black, orange, brown, green},
+                            "model_c" => {blue, red})
+    test_confs = load("$fname.jld2", "test_confs")
+    epochs = 1:length(test_confs)
+    for i in epochs
+        test_confs[i] = 100*test_confs[i]./repeat(sum(test_confs[i], dims=1), size(test_confs[i],1))
+    end
+    plots = Vector()
+    for i = 1:size(test_confs[1],1)
+        accs = [M[i,i] for M in test_confs]
+        @pgf push!(plots, PlotInc(Table(; x = epochs, y = accs)))
+    end
+    fig = @pgf TikzPicture(Axis({axis_theme..., cycle_list=cycle_lists[fname],
+                                 legend_pos={outer_north_east}, xlabel = raw"Epoka",
+                                 xtick=epochs,
+                                 ylabel = raw"Dokładność detekcji [\si{\percent}]"}, plots...,
+                                 Legend(legend[fname]...)))
+    pgfsave("plots/$fname.pgf", fig)
 end
