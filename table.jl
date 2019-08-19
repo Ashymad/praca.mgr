@@ -131,3 +131,39 @@ function table_model_c_t()
                   ])
 
 end
+
+function table_model_c()
+    test_conf = load("model_c.jld2", "test_confs")[end]
+    test_conf = 100*test_conf./repeat(sum(test_conf, dims=1), size(test_conf,1))
+
+    textable = hcat([L"\multirow{16}{*}{\rotatebox[origin=c]{90}{Rzeczywisty format}}";repeat([""],15)],
+                    ["WAV";
+                     L"\multirow{3}{*}{MP3}";"";"";
+                     L"\multirow{3}{*}{AAC}";"";"";
+                     L"\multirow{3}{*}{Vorbis}";"";"";
+                     L"\multirow{3}{*}{WMA}";"";"";
+                     L"\multirow{3}{*}{AC-3}";"";""],
+                    ["---";repeat(["320";"192";"128"],5)],
+                    map((val) -> "\\cellcolor{red!$(10*sqrt(val))}\\num{$val}", test_conf'))
+    latex_tabular("tables/model_c.tex",
+                  Tabular("ccccc"),
+                  [
+                   ["","","",MultiColumn(2, :c, raw"\makecell[c]{Format wykryty\\przez model}")],
+                   CMidRule("1pt", nothing, 4, 5),
+                   ["","","","WAV","Inny"],
+                   CMidRule("0.5pt",nothing,2,5),
+                   textable[1,:],
+                   CMidRule(nothing,nothing,2,5),
+                   textable[2:4,:],
+                   CMidRule(nothing,nothing,2,5),
+                   textable[5:7,:],
+                   CMidRule(nothing,nothing,2,5),
+                   textable[8:10,:],
+                   CMidRule(nothing,nothing,2,5),
+                   textable[11:13,:],
+                   CMidRule(nothing,nothing,2,5),
+                   textable[14:16,:],
+                   CMidRule("1pt",nothing,2,5),
+                  ])
+
+end
