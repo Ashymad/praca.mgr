@@ -1402,13 +1402,78 @@ AAC, AC-3, Vorbis i WMA z bitrate'ami \SI{320}{\kibi\bit\per\second},
 \SI{192}{\kibi\bit\per\second} i \SI{128}{\kibi\bit\per\second}.
 
 \section{Identyfikacja algorytmiczna}
+Ewaluację algorytmu przeprowadzono na 2048 dziesięciosekundowych próbkach audio
+z bazy danych ewaluacyjnych. Na każdej z próbek przeprowadzono detekcję dla
+każdego z pięciu zestawów parametrów kodeków. Jako transformację dla każdego z
+kodeków wykorzystano MDCT, a skok wyznaczono jako połowę długości okna. Okna
+wybrano: kosinusowe o długości 1152 próbek dla MP3, KBD z parametrem $\alpha =
+4$ o długości 2048 dla AAC, zboczowe o długość 2048 dla Vorbis, KBD z
+parametrem $\alpha = 5$ o długości 512 dla AC-3 i kosinusowe o długości 4096
+dla WMA. Nie zastosowano normalizacji wektora $\bm d_i$. Każdą próbkę o
+długości $S = \SI{10}{\second}$ podzielono na $m = 15$ fragmentów o długości
+$L$, gdzie dla każdego zestawu parametrów $T(x),w(n),N,h$ wyznaczono ją jako:
+\begin{equation}
+  L = \left\lfloor\frac{S-h}{mN}\right\rfloor N
+\end{equation}
+
+
+Tablica \ref{tab:algo_eval} przedstawia wyniki średniej wartości parametru
+$C_{T(x),w(n),N,h}$ oraz jego odchylenia standardowego dla detekcji każdym
+zestawem parametrów na każdym z typów pliku.
+
 \begin{table}[!tbh]
   \sisetup{round-precision=2, round-mode=places}
   \centering
   \caption{Wartości parametru $C_{T(x),w(n),N,h}$}
   \include{tables/algo_eval}
+  \label{tab:algo_eval}
 \end{table}
+
+Pierwsza rzecz na którą warto zwrócić uwagę to niskie wartości średniej
+parametru rzędu \num{0.005} w przypadku zastosowaniu algorytmu na sygnale
+niepoddanym kompresji (oznaczonym "WAV" w tablicy), to i odchylenie standardowe
+na poziome \num{0.001} wskazuje że algorytm nie posiada problemu z
+identyfikacją pliku nieskompresowanego jako skompresowany, oraz jednocześnie
+wskazuje na bardzo małą (lub żadną) zawartość plików mylnie uznanych za
+nieskompresowane w bazie danych. 
+
+Algorytm zwraca wartości kilka do stukilkudziesięciu razy większe zastosowany na pliku o
+parametrach zgodnych z zastosowanymi niż dla pliku nieskopmresowanego, w
+szczególności największe wartości zwraca detekcja WMA dla pliku WMA osiągając
+średnio \num{0.63} dla bitrate'a \SI{128}{\kibi\bit\per\second} (około 120
+razy więcej niż dla pliku nieskompresowanego). Natomiast
+najmniejsze wartości występują dla MP3 i AC-3 które zwracają średnio \num{0.02}
+dla bitrate'a \SI{320}{\kibi\bit\per\second} (około 7 razy więcej nż dla pliku
+nieskompresowanego). Oznacza to, że ustalenie odpowiednich wartości granicznych
+pozwoli rozpoznać czy kompresję na pliku z dużą dokładnością.
+
+Rozpoznanie który rodzaj kompresji może być niedokładne z powodu występowania
+dużych wartości parametru w pewnych przypadkach detekcji pliku innego typu niż
+tego którego parametry wykorzystano do identyfikacji. Ten problem występuje dla
+każdego typu plików, lecz najmniejszy jest w przypadku detekcji parametrami
+AC-3, w tym przypadku największe wartości jakie średnio uzyskują inne pliki nie
+przekraczają \num{0.01}. Jednak występowanie tego problemu oznacza że aby nie
+tylko rozpoznać czy kompresja została zastosowana ale też rozpoznać jaki kodek
+był zastosowany do tej kompresji należy wykonać algorytm dla każdego znanego
+zestawu parametrów i następnie porównując wartości znaleźć najbardziej
+prawdopodobny typ kompresji. To podejście jednak też może zawieść, szczególnie
+w przypadku plików AC-3, gdzie identyfikacja z parametrami kodeku WMA uzyskuje
+średnio większe wartości dla bitrate'ów \SI{320}{\kibi\bit\per\second} i
+\SI{192}{\kibi\bit\per\second} oraz w przypadku plików Vorbis, gdzie detekcja z
+parametrami kodeku AAC uzyskuje średnio większe wartości dla bitrate'a
+\SI{320}{\kibi\bit\per\second}.
 \section{Identyfikacja modelem}
+Model wytrenowano w trzech konfiguracjach, w każdej jego architektura była taka
+sama, za wyjątkiem liczby parametrów wyjściowych ostatniej warstwy
+odpowiadającej liczbie rozpoznawanych kategorii. Model trenowano na danych z
+bazy danych ewaluacyjnych wybieranych w ten sposób by ich liczba dla każdej
+kategorii była zbliżona oraz by każdy format kompresji występował z podobną
+częstotliwością. Dane audio zostały poddane transformacji STFT z oknem Hanninga
+o długości 512 próbek i skokiem 256 próbek.
+
+Trening prowadzono przez dziesięć epok zapisując model który uzyskał największą
+dokładność na danych treningowych.
+
 \subsection{Identyfikacja kompresji}
 \begin{figure}[!tbh]
   \centering
