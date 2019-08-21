@@ -490,7 +490,7 @@ standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
 następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Do czasu uzyskania
 popularności przez AAC był to najpopularniejszy kodek. Ponadto cieszył się on
 dużo popularnością jako format wykorzystywany w przenośnych urządzeniach,
-zwanych, na jego cześć, "empetrójkami", do odsłuchiwania muzyki z powodu dużego
+zwanych, na jego cześć, ,,empetrójkami'', do odsłuchiwania muzyki z powodu dużego
 wsparcia sprzętowego.
 
 W tym kodeku przed MDCT do analizy sygnału jest zastosowany również bank
@@ -1375,7 +1375,7 @@ wypadku wyznacza funkcję strat NLL.
   \end{lstlisting}
 \end{program}
 \chapter{Ewaluacja}
-\subsection{Dane ewaluacyjne}
+\section{Dane ewaluacyjne}
 Stworzono bazę danych fragmentów muzyki z prywatnych plików audio po
 części kupionych na serwisach internetowych oferujących muzykę w formacie
 bezstratnym, takich jak Bandcamp, a po części własnoręcznie zgranych z płyt
@@ -1400,6 +1400,26 @@ Wynikowa baza danych posiada 65536 fragmentów, 4096 w postaci
 nieskompresowanej i po 4096 dla każdej z piętnastu możliwych par formatów MP3,
 AAC, AC-3, Vorbis i WMA z bitrate'ami \SI{320}{\kibi\bit\per\second},
 \SI{192}{\kibi\bit\per\second} i \SI{128}{\kibi\bit\per\second}.
+
+\section{Oznaczenia}
+
+W tablicach i na wykresach w tym rozdziale fragmenty niepoddane żadnej kompresji,
+oznaczono skrótowo jak ,,WAV'', co nie oznacza oczywiście że te fragmenty były w tym
+formacie oryginalnie ani że są one w tym formacie w bazie danych. W istocie są
+one tak samo jak wszystkie inne fragmenty reprezentacją sygnału dźwiękowego w
+postaci PCM. Zdecydowano się na takie oznaczenie by było analogiczne do
+oznaczeń formatów skompresowanych z których wywodzi się dana próbka, a
+format WAV jest kojarzony z plikami nieskompresowanymi. Warto zauważyć że jako
+że sygnał ten nie został poddany żadnej kompresji stratnej oznaczenie go jako
+jako ,,FLAC'' lub inny format bezstratny było by równoznaczne z ,,WAV'', gdyż
+kompresja do tego formatu i z powrotem odtworzyła by dokładnie ten sam sygnał.
+
+Jednostką birate'a wykorzystywanego w oznaczeniach tablic i wykresów są
+\si{\kibi\bit\per\second}. Dokładność, podawana w \si{\percent} oznacza część
+odpowiedzi dla których indeks maksimum wektora danych uzyskanych z sieci
+pokrywał się z wartością liczbową oznaczającą kategorię badanego pliku. Inaczej
+mówiąc jest to średnia ilość poprawnych odpowiedzi sieci na sto pytań.
+
 
 \section{Identyfikacja algorytmiczna}
 Ewaluację algorytmu przeprowadzono na 2048 dziesięciosekundowych próbkach audio
@@ -1431,7 +1451,7 @@ zestawem parametrów na każdym z typów pliku.
 
 Pierwsza rzecz na którą warto zwrócić uwagę to niskie wartości średniej
 parametru rzędu \num{0.005} w przypadku zastosowaniu algorytmu na sygnale
-niepoddanym kompresji (oznaczonym "WAV" w tablicy), to i odchylenie standardowe
+niepoddanym kompresji (oznaczonym ,,WAV'' w tablicy), to i odchylenie standardowe
 na poziome \num{0.001} wskazuje że algorytm nie posiada problemu z
 identyfikacją pliku nieskompresowanego jako skompresowany, oraz jednocześnie
 wskazuje na bardzo małą (lub żadną) zawartość plików mylnie uznanych za
@@ -1477,34 +1497,117 @@ dokładność na danych treningowych.
 \subsection{Identyfikacja kompresji}
 \begin{figure}[!tbh]
   \centering
-  \includegraphics[width=\textwidth]{plots/model_c.pgf}
-  \caption{Iden}
+  \includegraphics[width=0.9\textwidth]{plots/model_c.pgf}
+  \caption{Nauka modelu rozpoznającego kompresję}
   \label{fig:model_c}
 \end{figure}
+Pierwszy trening wykonano dla dwóch kategorii: plików poddanych uprzedniej
+kompresji i plików jej niepoddanym. Trening przeprowadzono na 5120 próbkach, a
+testowano na 2560 próbkach. Sieć w tej postaci największą dokładność na danych
+testowych, wynoszącą \SI{97.4}{\percent}, uzyskała po ośmiu epokach.
+
 \begin{table}[!tbh]
   \sisetup{round-precision=1, round-mode=places}
   \centering
-  \caption{Macierz konfuzji modelu rozpoznającego typ i parametry kompresji}
+  \caption{Macierz konfuzji modelu rozpoznającego kompresję}
   \include{tables/model_c}
+  \label{tab:model_c}
 \end{table}
+
+Rysunek \ref{fig:model_c} przedstawia dokładność testową uzyskaną dla każdego
+rodzaju próbki przez osiem epok treningu. Natomiast tablica \ref{tab:model_c}
+przedstawia tę dokładność w postaci macierzy dla finalnego modelu. Jak łatwo
+zauważyć największym wyzwaniem dla sieci było oznaczenie plików skompresowanych
+kodekiem MP3. Dla bitrate'a \SI{320}{\kibi\bit\per\second} dopiero po trzech
+epokach uzyskano dokładność powyżej \SI{80}{\percent}, a finalna sieć
+rozpoznaje poprawie pliki MP3 o tym bitrate dla \SI{88.4}{\percent} przypadków.
+Rozpoznawalność MP3 była również niska dla pozostałych bitrate'ów osiagając
+odpowiednio \SI{93}{\percent} i \SI{96.5}{\percent} dla
+\SI{192}{\kibi\bit\per\second} i \SI{128}{\kibi\bit\per\second}, co jest
+najgorszymi wynikami dla tych bitrate'ów. Natomiast dla bitrate'a
+\SI{320}{\kibi\bit\per\second} najgorsze wyniki osiągnął format WMA, gdzie
+dokładnośc rozpoznawania wynosiła \SI{87.1}{\percent}. Niskie dokładności dla
+tych formatów wskazują na podobieństwo do sygnału źródłowego lub występowanie
+cech o innym charakterze niż dla pozostałych kodeków.
+
+Najlepsze dokładności uzyskały Vorbis i AC-3 z średnią dokładnością
+\SI{99.6}{\percent} przy czym, co interesujące, AC-3, jako jedyny kodek uzyskał
+najgorsze wyniki dla najmniejszego bitrate'a, natomiast jest to najpewniej
+kwestia przypadku.
 \subsection{Identyfikacja typu kompresji}
+Liczba kategorii w przypadku identyfikacji typu kompresji wynosiła sześć, model
+rozpoznawał z jakiego formatu został uzyskany fragment. Trening przeprowadzono
+na 5120 fragmentach, a testowano na 2560 fragmentach. W tym przypadku
+największą dokładność na danych testowych, wynoszącą \SI{96.1}{\percent},
+uzyskano po trzech epokach.
+
 \begin{figure}[!tbh]
   \centering
-  \includegraphics[width=\textwidth]{plots/model_c_t.pgf}
-  \caption{Iden}
+  \includegraphics[width=0.9\textwidth]{plots/model_c_t.pgf}
+  \caption{Nauka modelu rozpoznającego typ kompresji}
   \label{fig:model_c_t}
 \end{figure}
+
+Jak przedstawiają rysunek \ref{fig:model_c_t} i tablica \ref{tab:model_c_t},
+format MP3 również w tym przypadku stanowił problem dla modelu. W szczególności
+można zauważyć, że pliki nieskompresowane są w \SI{4.9}{\percent} przypadków
+rozpoznawane jako MP3, natomiast pliki MP3 są mylone z plikami
+nieskompresowanymi w średnio \SI{4.4}{\percent} przypadków. Wskazuje to na
+podobieństwo spektrogramu plików MP3 do spektrogramu pliku źródłowego,
+utrudniające rozróżnienie. Ponadto dla bitrate'a \SI{320}{\kibi\bit\per\second}
+MP3 jest mylone w \SI{4.9}{\percent} przypadków z formatem WMA, co również
+sugeruje podobieństwo tych fragmentów do plików źródłowych, co zdaje się
+potwierdzać mylność rozpoznawania tego formatu z plikiem nieskompresowanym na
+poziomie \SI{2.1}{\percent}.
+
+Można także zaważyć występowanie podobieństw pomiędzy plikami skompresowanymi
+kodekiem Vorbis i AAC, na co wskazuje mylność AAC z Vorbis wynosząca średnio
+\SI{4.4}{\percent} i mylność Vorbis z AAC na wynosząca średnio
+\SI{1.6}{\percent}.
 \begin{table}[!tbh]
   \sisetup{round-precision=1, round-mode=places}
   \centering
-  \caption{Macierz konfuzji modelu rozpoznającego typ i parametry kompresji}
+  \caption{Macierz konfuzji modelu rozpoznającego typ kompresji}
   \include{tables/model_c_t}
+  \label{tab:model_c_t}
 \end{table}
 \subsection{Identyfikacja typu i parametrów kompresji}
+Jako ostatni wytrenowano model wykorzystując wszystkie dostępne kategorie,
+otrzymując ich szesnaście. Model trenowano na 8192 fragmentach, a testowano na
+4096 fragmentach. Największą dokładność na danych testowych, wynoszącą
+\SI{92.4}{\percent} uzyskano po siedmiu epokach.
+
+Jak można zobaczyć na rysunku \ref{fig:model_c_t+p} oraz w tablicy
+\ref{tab:model_c_t+p}, w przypadku tego modelu najgorsze wyniki uzyskują
+fragmenty skompresowane przez kodek Vorbis co wynika z dużej mylności modelu w
+rozróżnianiu pomiędzy bitrate'ami tego kodeka. Bitrate
+\SI{320}{\kibi\bit\per\second} mylony jest w \SI{10.2}{\percent} przypadków z
+bitratem \SI{192}{\kibi\bit\per\second} i w \SI{2}{\percent} przypadków z
+bitratem \SI{128}{\kibi\bit\per\second}, bitrate \SI{192}{\kibi\bit\per\second}
+mylony jest w \SI{5.5}{\percent} przypadków z bitratem
+\SI{320}{\kibi\bit\per\second} i aż w \SI{23}{|percent} przypadków z bitratem
+\SI{128}{\kibi\bit\per\second}, a bitrate \SI{128}{\kibi\bit\per\second} mylony
+jest z bitratem \SI{192}{\kibi\bit\per\second} w \SI{14.1}{\percent}
+przypadków. W efekcie powoduje to średnią dokładność dla tego kodeka
+wynoszącą \SI{78.3}{\percent}.
+
+Ponadto podobnie jak w poprzednich modela występuje mylność MP3 z formatem
+nieskompresowanym wynosząca średnio \SI{5.5}{\percent}. Także też występuje
+mylność formatu AAC z Vorbis, w szczególności dla bitrate'a
+\SI{128}{\kibi\bit\per\second}, który mylony jest odpowiednio w \SI{9.4}{\percent},
+\SI{2}{\percent} i \SI{1.2}{\percent} z Vorbis o bitrate
+\SI{320}{\kibi\bit\per\second}, \SI{196}{\kibi\bit\per\second} i
+\SI{128}{\kibi\bit\per\second}.
+
+Najprecyzyjniej wykrywane są pliki AC-3 z dokładnością \SI{99.2}{\percent} dla
+bitrate'a \SI{320}{\kibi\bit\per\second}, \SI{100}{\percent} dla
+\SI{192}{\kibi\bit\per\second} i \SI{98.8}{\percent} dla
+\SI{128}{\kibi\bit\per\second}.
+
 \begin{figure}[!tbh]
   \centering
-  \includegraphics[width=\textwidth]{plots/model_c_t+p.pgf}
-  \caption{Iden}
+  \includegraphics[width=0.9\textwidth]{plots/model_c_t+p.pgf}
+  \caption{Nauka modelu rozpoznającego typ i parametry kompresji}
   \label{fig:model_c_t+p}
 \end{figure}
 \begin{sidewaystable}[!tbh]
@@ -1512,6 +1615,7 @@ dokładność na danych treningowych.
   \centering
   \caption{Macierz konfuzji modelu rozpoznającego typ i parametry kompresji}
   \include{tables/model_c_t+p}
+  \label{tab:model_c_t+p}
 \end{sidewaystable}
 
 \chapter{Podsumowanie}
