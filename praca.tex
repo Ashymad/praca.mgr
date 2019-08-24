@@ -306,31 +306,66 @@ backend=biber
 
 \chapter{Wprowadzenie}
 \section{Cel pracy}
+Serwisy internetowe sprzedające muzykę w postaci bezstratnych plików audio
+wymagają od sprzedawców plików w takim formacie \cite{BCWhyLossless}, lecz nie
+przeprowadzają weryfikacji bezstratności tych plików poprzez sprawdzenie czy
+plik nie był uzyskany poprzez dekompresję z pliku w formacie stratnym
+\cite{ZhouWangJinYan2015}. Pliki uzyskane w ten sposób mogą się charakteryzować
+słyszalnie gorszą jakością, w zależności od rodzaju i stopnia zastosowanej
+kompresji, a ponadto ponowna kompresja stratna, stosowana przez serwisy do
+przygotowania plików w innych formatach, w znaczącym stopniu pogarsza ich jakość
+\cite{YangShiHuang2010}.
+
+W pracy przedstawiono wykorzystanie metod uczenia maszynowego do rozpoznania
+czy sygnał cyfrowy audio został uprzednio poddany kompresji stratnej oraz jaki
+rodzaj i stopień kompresji został zastosowany. Ponadto zaimplementowano
+alternatywne rozwiązanie, korzystające z algorytmu opartego o wykrywanie
+pozostałości po, stosowanych w kompresji stratnej, transformatach okienkowanych.
+
 \section{Zawartość pracy}
+Drugi rozdział opisuje zagadnienia związane z kompresją plików dźwiękowych, w
+tym kompresję bezstratną i stratną, ze szczególnym skupieniem uwagi na tej
+drugiej. Zawarto w nim także szczegóły dotyczące działania pięciu
+popularnych kodeków, wybranych do analizy w pracy.
+
+Trzeci rozdział przedstawia szczegóły implementacji algorytmu, wraz z podjętymi
+krokami usprawnień i opisem uzyskanej biblioteki programistycznej. Także
+zawarta jest architektura modelu, wraz z opisem zawartych w nim elementów oraz
+szczegółami implementacyjnymi.
+
+Czwarty rozdział zawiera wyniki ewaluacji zarówno algorytmu, jak i modelu w
+różnych konfiguracjach. Opisana jest zgromadzona baza danych ewaluacyjnych oraz
+procedura zastosowana w procesie ewaluacji.
+
+Ostatni rozdział składa się z wniosków podsumowujących dokonania pracy i
+wyników uzyskanych podczas ewaluacji oraz propozycji dalszych kierunków badań.
+
 \chapter{Kompresja audio}
 \section{Wprowadzenie}
 W informatyce pojęcie kompresji odnosi się do procesu zmniejszenia rozmiaru
 pliku. Jako że pliki multimedialne posiadają duży rozmiar bez użycia kompresji
-(\SI{10}{\second} nieskompresowanego pliku audio w formacie płyty CD zajmie
-około \SI{1.7}{\mebi\byte}, dla porównania nieskompresowane pliki tekstowe
-\LaTeX\ potrzebne do skompilowania tej pracy wraz ze schematami i wykresami
-zajmuje zaledwie \SI{0.4}{\mebi\byte}) w porównaniu do innego typu plików
-wykorzystywanych przez użytkowników komputera, a ponadto przesyłane są często
-one przez łącze sieciowe do odbiorcy, zmniejszenie ich rozmiaru oszczędza
-ogromne ilości miejsca na dysku jak i przepustowości sieci (kompresja
-bezstratna pozwala skompresować pliki audio do \num{30}-\SI{50}{\percent}
-oryginalnego rozmiaru, a bezstratna nawet do \SI{1}{\percent} oryginalnego
-rozmiaru bez utraty odczuwalnej jakości). Z tego powodu kompresja audio, video
-i obrazów jest stosowana powszechnie, nieskompresowane pliki multimedialne
-używane są wyłącznie gdy wymagany jest szybki dostęp do ich fragmentów i brak
+w porównaniu do innego typu plików wykorzystywanych przez użytkowników
+komputera (\SI{10}{\second} nieskompresowanego pliku audio, w formacie płyty
+CD, zajmuje około \SI{1.7}{\mebi\byte}, dla porównania cały tekst powieści
+\textit{Potop} Henryka Sienkiewicza \cite{Sienkiewicz2010}, w postaci
+nieskompresowanego ciągu znaków zakodowanych UTF-8, zajmuje około
+\SI{0.9}{\mebi\byte}), a ponadto przesyłane są często przez łącze sieciowe do
+odbiorcy, zmniejszenie ich rozmiaru oszczędza ogromne ilości miejsca na dysku
+jak i przepustowości sieci (kompresja bezstratna pozwala skompresować pliki
+audio do \num{50}-\SI{70}{\percent} oryginalnego rozmiaru, a stratna nawet
+poniżej \SI{1}{\percent} oryginalnego rozmiaru bez utraty odczuwalnej jakości
+\cite{Beurden2015, kamedo22014}). Z tego powodu kompresja audio, video i
+obrazów jest stosowana powszechnie, nieskompresowane pliki multimedialne
+używane są wyłącznie, gdy wymagany jest szybki dostęp do ich fragmentów i brak
 obaw o pogorszenie jakości, na przykład podczas procesu ich edycji.
 
-Ponadto, gdyż rodzaj kompresji stosowany do innych plików, np.\ tekstowych,
-czyli kompresja bezstratna nie osiąga wystarczającego zmniejszenia rozmiaru
-plików multimedialnych, z powodu wysokiej entropii tego rodzaju plików, stosuje
-się metody pozwalające na dalsze zmniejszenie rozmiaru kosztem utraty
-możliwości odtworzenie oryginalnego sygnału po dekompresji -- z tego powodu ten
-typ kompresji nazywa się kompresją stratną.
+Kompresja bezstranta, wykorzystująca metody powszechnie stosowane także do
+kompresji innych plików (np. ZIP, gzip), nie osiąga dużej skuteczności na
+plikach multimedialnych, z powodu wysokiej entropii tego rodzaju plików
+\cite{Sayood2002}. Wobec tego stosuje się metody pozwalające na dalsze
+zmniejszenie rozmiaru, kosztem utraty możliwości odtworzenie oryginalnego
+sygnału po dekompresji, z tego powodu ten typ kompresji nazywa się kompresją
+stratną.
 
 \section{Kompresja bezstratna}
 
@@ -388,6 +423,9 @@ dopasowanie go do zmienności rozkładu w trakcie trwania sygnału.
 Poprawnie działający enkoder i dekoder pozwolą otrzymać, po kompresji i
 dekompresji pliku, plik w którym próbki sygnału audio będą takie same jak w
 pliku oryginalnym. Z tego powodu wykrycie czy plik został poddany takiemu
+procesowi niemożliwe na podstawie samego sygnału audio.
+
+
 procesowi niemożliwe na podstawie samego sygnału audio.
 
 \section{Kompresja stratna}
@@ -993,7 +1031,6 @@ najmniej \num{2.5} raza krótszy.
   \label{fig:sum_abs_log_abs}
 \end{figure}
 
-\subsection{MDCT}
 \section{Uczenie maszynowe}
 Zagadnienie rozróżniania sygnałów audio przedstawiono w postaci zagadnienia
 które jest jednym z podstawowych zagadnień na których skupia się uczenie
@@ -1620,7 +1657,46 @@ bitrate'a \SI{320}{\kibi\bit\per\second}, \SI{100}{\percent} dla
 
 \chapter{Podsumowanie}
 \section{Wnioski końcowe}
+W pracy przedstawiono dwa zaimplementowane rozwiązania pozwalające
+przeprowadzić analizę na fragmencie sygnału audio, w której wyniku możliwe jest
+stwierdzenie czy dany sygnał został uprzednio poddany kompresji stratnej oraz
+jaki był kodek zastosowany, a nawet jaki był poziom zastosowanej kompresji
+(bitrate).
+
+Podejście oparte o techniki uczenia maszynowego okazało się być znacznie lepsze
+zwracając dużo precyzyjniejsze wyniki, co w dużej mierze jest spowodowane
+uproszczonym modelem kompresji stratnej zakładanej przez algorytm oraz
+niezmiennością jego parametrów takich jak długość czy rodzaj okna, mimo że
+enkoder je zmienia. Ponadto duża złożoność algorytmu, mimo wprowadzonych
+optymalizacji, powoduje długi czas przetwarzania, w przeciwieństwie do prostych
+przekształceń opartych o mnożenie macierzowe wymaganych przez model. Zaletą
+podejścia algorytmicznego jest brak potrzeby posiadania danych treningowych co
+pozwala wykryć kompresję w takim przypadku, może być to użyte, gdy niepewna
+jest jakość danych treningowych, by odrzucić fragmenty podejrzane o uzyskane
+z plików skompresowanych i w efekcie poprawić dokładność modelu.
+
+Zaprojektowana architektura modelu uzyskuje na tyle dużą dokładność że może być
+użyta przez serwisy sprzedające muzykę w formatach bezstratnych do wykrycia
+plików, nie będących w rzeczywistości bezstratnymi, lecz uzyskanych poprzez
+dekompresję z formatu stratnego. Tego typu serwisy mają dostęp do dużej bazy
+fragmentów na których model może być wytrenowany, ponadto w celu wstępnej
+filtracji może być zastosowany opisany w pracy algorytm. Ten sam proces może
+też być zastosowany przez użytkownika tych serwisów.
+
 \section{Dalsze kierunki badań}
+
+W dalszych pracach można poprowadzić kolejną optymalizację algorytmu oraz
+dodanie innych kodeków do biblioteki \textit{IOLA.jl}, jak również
+przeprowadzenie badań na wyznaczeniem odpowiednich wartości granicznych
+parametrów uzyskanych z algorytmu by uzyskać jak najlepszą detekcję.
+
+Usprawnienie modelu można przeprowadzić poprzez zwiększenie jego złożoności,
+przez zwiększenie długość warstw w pełni połączonych, wydłużenie treningu i
+podanie większej ilości danych. Ponadto można wprowadzić więcej kodeków do bazy
+danych, żeby zwiększyć wszechstronność modelu. Aby zobaczyć jak model
+rozpoznaje nieznane formy kompresji można wytrenować go na danych z wyłączeniem
+pewnych kodeków i zaobserwować wyniki dla tych kodeków podczas treningu.
+
 
 %Kod poniżej dodaje Bibliografię do spisu treści
 \cleardoublepage{}
