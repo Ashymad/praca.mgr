@@ -528,11 +528,12 @@ transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
 \subsection{MP3}
 Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991, jako część
 standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}), a
-następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Do czasu uzyskania
-popularności przez AAC był to najpopularniejszy kodek. Cieszył się
-dużo popularnością, jako format, wykorzystywany w przenośnych urządzeniach,
-zwanych, na jego cześć, ,,empetrójkami'', do odsłuchiwania muzyki, z powodu dużego
-wsparcia sprzętowego.
+następnie rozszerzony w standardach MPEG-2 oraz
+MPEG-2.5~\cite{Brandenburg1999}. Do czasu uzyskania popularności przez AAC był
+to najpopularniejszy kodek. Cieszył się dużą popularnością, jako format,
+wykorzystywany w przenośnych urządzeniach, zwanych, na jego cześć,
+,,empetrójkami'', do odsłuchiwania muzyki, z powodu dużego wsparcia
+sprzętowego.
 
 W tym kodeku, przed MDCT, do analizy sygnału jest zastosowany również bank
 filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank
@@ -542,7 +543,7 @@ anulują aliasing w sąsiadujących pasmach, ponadto bank jest ortogonalny, wię
 filtry syntezy są filtrami analizy odwróconymi w czasie.  W formatach od MPEG-1
 Layer I do MPEG-1 Layer III, ten bank filtrów użyto z $N = 32$ pasmami i o $M =
 512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia każdego z pasm
-zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
+zaaplikowano filtr Princena-Bradleya~\cite{Smith2011}.
 
 \begin{figure}[!tbh]
   \centering
