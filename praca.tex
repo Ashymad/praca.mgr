@@ -443,9 +443,9 @@ rozwiązań.
 
 Na rysunku \ref{fig:PAC_scheme} przedstawiony jest uproszczony schemat typowego
 enkodera PAC (eng. \textit{Perceptual Audio Coding})~\cite{BosiGoldberg2002,
-Brandenburg1999}, wykorzystywanego w
-kompresji stratnej . Posiada on cztery główne elementy: transformację
-analizującą, kwantyzator, enkoder i model psychoakustyczny.
+Brandenburg1999}, wykorzystywanego w kompresji stratnej . Posiada on cztery
+główne elementy: transformację analizującą, kwantyzator, enkoder i model
+psychoakustyczny.
 
 Pierwszym elementem jest transformacja analizująca, która zamienia sygnał audio
 na postać, którą może wykorzystać kwantyzator wraz z modelem psychoakustycznym.
@@ -494,22 +494,27 @@ poprzez przeprowadzanie testów odsłuchowych~\cite{BosiGoldberg2002}.
 Informacje, uzyskane z modelu psychoakustycznego, są następnie stosowane, przez
 kwantyzator, do kwantyzacji wyniku transformacji analizującej. Proces ten
 polega na przypisaniu liczbom pewnych wartości z wybranego ograniczonego
-zbioru. Elementy, które model uzna za niesłyszalne dla potencjalnego
-odbiorcy, zostaną silniej skwantyzowane (tzn.\ zbiór wartości do których są
-przypisane jest bardziej ograniczony), niż te, które zostaną uznane za
-słyszalne. Wynikiem kwantyzacji, w zależności od jej rodzaju, są także
-informacje dodatkowe, stosowane w procesie odwrotnym (np.\ wagi przez które
-należy wymnożyć wartości). Kwantyzacja odwrotna pozwala otrzymać tylko
-przybliżone wartości danych z przed kwantyzacji, z czego wynika ,,stratność''
-tego rodzaju kompresji~\cite{Sayood2017}.
+zbioru. Elementy, które model uzna za niesłyszalne dla potencjalnego odbiorcy,
+zostaną silniej skwantyzowane (tzn.\ zbiór wartości do których będą przypisane
+będzie bardziej ograniczony), niż te, które zostaną uznane za słyszalne. Wynikiem
+kwantyzacji, w zależności od jej rodzaju, są także informacje dodatkowe,
+stosowane w procesie odwrotnym (np.\ wagi przez które należy wymnożyć
+wartości). Kwantyzacja odwrotna pozwala otrzymać tylko przybliżone wartości
+danych z przed kwantyzacji, z czego wynika ,,stratność'' tego rodzaju
+kompresji~\cite{Sayood2017}. Na kwantyzację maja także wpływ parametry poziomu
+kompresji, którymi użytkownik enkodera określa pożądany stosunek rozmiaru
+pliku, do jego jakości. Jednym z często stosowanych parametrów jest
+\textit{bitrate}, który określa liczbę bitów na sekundę sygnału wyjściowego,
+którą enkoder stara się uzyskać poprzez, w najprostszym przypadku, regulację
+stopnia kwantyzacji.
 
-W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane, uzyskane
-w poprzednim kroku, są zakodowane przy użyciu kodowania entropijnego. Jest ono
-bardzo skuteczne na uzyskanych danych, dzięki zastosowaniu transformacji MDCT,
-która koncentruje \SI{90}{\percent} energii sygnału w \SI{10}{\percent}
-współczynników~\cite{WangYaroslavskyVilermoVaananen2000} oraz procesowi
-kwantyzacji, które powodują wyzerowanie się dużej liczby współczynników,
-uzyskanych w procesie transformacji.
+W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane,
+uzyskane w poprzednim kroku, są zakodowane przy użyciu kodowania entropijnego.
+Jest ono bardzo skuteczne na uzyskanych danych, dzięki zastosowaniu
+transformacji MDCT, która koncentruje \SI{90}{\percent} energii sygnału w
+\SI{10}{\percent} współczynników~\cite{WangYaroslavskyVilermoVaananen2000}, oraz
+procesowi kwantyzacji, które powodują wyzerowanie się dużej liczby
+współczynników, uzyskanych w procesie transformacji.
 
 \begin{figure}[!tbh]
   \centering
@@ -518,24 +523,24 @@ uzyskanych w procesie transformacji.
   \label{fig:IPAC_scheme}
 \end{figure}
 
-Aby z pliku skompresowanego, uzyskać sygnał audio stosuje się dekompresję (patrz
-rys. \ref{fig:IPAC_scheme}), gdzie kolejno następuje: dekodowanie zakodowanych
-entropijnie danych, odwrotna kwantyzacja która polega na wymnożeniu danych
-przez odpowiednie wagi oraz synteza, czyli zastosowanie odwrotnych
-transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
+Aby z pliku skompresowanego, uzyskać sygnał audio stosuje się dekompresję
+(patrz rys. \ref{fig:IPAC_scheme}), gdzie kolejno następuje: dekodowanie
+zakodowanych entropijnie danych, odwrotna kwantyzacja która polega na
+wymnożeniu danych przez odpowiednie wagi oraz synteza, czyli zastosowanie
+odwrotnych transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
 \textit{Inverse Modified Discrete Cosine Transform})~\cite{Brandenburg1999}.
 
 \subsection{MP3}
-Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991, jako część
-standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}), a
+Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991, jako
+część standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}), a
 następnie rozszerzony w standardach MPEG-2 oraz
-MPEG-2.5~\cite{Brandenburg1999}. Do czasu uzyskania popularności przez AAC był
+MPEG-2.5. Do czasu uzyskania popularności przez AAC był
 to najpopularniejszy kodek. Cieszył się dużą popularnością, jako format,
 wykorzystywany w przenośnych urządzeniach, zwanych, na jego cześć,
 ,,empetrójkami'', do odsłuchiwania muzyki, z powodu dużego wsparcia
-sprzętowego.
+sprzętowego~\cite{Brandenburg1999}.
 
-W tym kodeku, przed MDCT, do analizy sygnału jest zastosowany również bank
+W tym kodeku, przed MDCT, do analizy sygnału jest zastosowany bank
 filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank
 filtrów, który rezygnuje z możliwości idealnej rekonstrukcji sygnału, na rzecz
 prostszego procesu konstrukcji, względem banku filtrów QMF. Filtry banku
@@ -558,7 +563,7 @@ MDCT w tym formacie wykorzystuje okno sinusowe (nazywane też kosinusowym) (rys.
   w(n) = \sin\left(\frac{\pi n}{N}\right) = \cos\left(\frac{\pi n}{N} - \frac{\pi}{2}\right).
 \end{equation}
 MP3 wykorzystuje dwie długości okna, tzw.\ okno krótkie o długości 384 próbek i okno
-długie o długości 1152 próbek.
+długie o długości 1152 próbek~\cite{KimRafii2018}.
 
 \subsection{AAC}
 Format AAC (eng. \textit{Advanced Audio Coding}) został zdefiniowany w roku 1994
@@ -571,15 +576,15 @@ Główne usprawnienia względem MP3 to: ulepszone kodowanie stereo, zwiększone
 możliwości doboru tablic kodowania Huffmana i zastosowanie techniki TNS (eng.
 \textit{Temporal Noise Shaping}), która polega na kształtowaniu szumu w
 dziedzinie czasu zamiast po zastosowanej transformacie, co pozwala uniknąć
-artefaktów typu \textit{pre-echo} pojawiających się w przypadku występowania
+artefaktów typu \textit{pre-echo}, pojawiających się w przypadku występowania
 dźwięków impulsowych. Ponadto w AAC zrezygnowano z hybrydowego banku PQMF+MDCT,
-na cześć samego MDCT.
+na cześć samego MDCT~\cite{Brandenburg1999}.
 
 Kodek ten jest obecnie stosowany przez duże serwisy internetowe dostarczające
-treści multimedialne takie jak YouTube i Netflix do kompresji ścieżek
-dźwiękowych w filmach.
+treści multimedialne, takie jak YouTube i Netflix, do kompresji ścieżek
+dźwiękowych w plikach wideo~\cite{YouTubeRecommended, Ronca2013}.
 
-MDCT w tym formacie wykorzystuje miedzy innymi okno KBD (eng.
+MDCT w tym formacie wykorzystuje, miedzy innymi, okno KBD (eng.
 \textit{Keiser-Bessel-derived}), jest to okno pochodne okna Keisera, stworzone
 by spełniało warunki zastosowania w MDCT (\ref{eq:symm_cond},
 \ref{eq:p-b_cond}). Okno Kaisera ma wzór:
@@ -590,7 +595,7 @@ by spełniało warunki zastosowania w MDCT (\ref{eq:symm_cond},
 gdzie długość okna wynosi $N+1$, $I_0$ to zerowego rzędu zmodyfikowana funkcja
 Bessela pierwszego rodzaju, a $\alpha$ to parametr wpływający na kształt tego
 okna. Na jego podstawie zdefiniowane jest okno Kaisera-Bessela o długości $2N$
-o wzorze:
+o wzorze~\cite{BosiGoldberg2002}:
 \begin{equation}\label{eq:kbd_win}
   w(n) = \begin{cases}
     \sqrt{\frac{\sum_{i=0}^{n}w_k(i)}{\sum_{i=0}{N}w_k(i)}} & \text{dla }0 \leq n \leq N \\
@@ -599,8 +604,8 @@ o wzorze:
   \end{cases}.
 \end{equation}
 AAC wykorzystuje okno sinusowe (rys. \ref{fig:win_MP3}) lub KBD z parametrem
-$\alpha = 4$ (rys.  \ref{fig:win_AAC}) o długości 2048 próbek, lub okno KBD z
-parametrem $\alpha = 6$ o długości 256 próbek.
+$\alpha = 4$ (rys.  \ref{fig:win_AAC}), o długości 2048 próbek, lub okno KBD z
+parametrem $\alpha = 6$, o długości 256 próbek~\cite{KimRafii2018}.
 
 \begin{figure}[!tbh]
   \centering
@@ -611,28 +616,32 @@ parametrem $\alpha = 6$ o długości 256 próbek.
 
 \subsection{Ogg Vorbis}
 
-Praca nad kodekiem Vorbis została rozpoczęta w roku 1993 przez Chrisa
-Montgomery'iego, a obecnie jego rozwój jest nadzorowany przez organizację
-Xiph.Org, której jest założycielem. Celem jest stworzenie kodeka nieobciążonego
-przez licencjonowanie i prawa patentowe oraz który posiada lepsze parametry niż
-inne stosowane kodeki. Format kontenera stworzony i stosowany przez tę
-organizację do jej formatów nazywa się \textit{Ogg}, stąd rozszerzenie pliku
-tego kontenera to \lstinline|.ogg|, a pełna nazwa pliku kontenera Ogg z audio w
-formacie Vorbis to Ogg Vorbis.
+Praca nad kodekiem Vorbis została rozpoczęta w roku 1998 przez członków obecnej
+fundacji Xiph.org, po tym jak Fraunhofer (firma posiadająca wtedy patenty do
+MP3), wysłał listy z żądaniem opłat do twórców oprogramowania, obsługującego
+format MP3~\cite{XiphNaming}. Celem jest stworzenie kodeka nieobciążonego przez
+licencjonowanie i prawa patentowe oraz posiadającego lepsze parametry niż inne
+stosowane kodeki.
+
+Format kontenera stworzony i stosowany przez tę organizację, do jej formatów,
+nazywa się \textit{Ogg}, stąd rozszerzenie pliku tego kontenera to
+\lstinline|.ogg|, a pełna nazwa pliku kontenera Ogg z audio w formacie Vorbis
+to Ogg Vorbis.
 
 Specyfikacja kodeka jest w pełni otwarta, a referencyjne implementacje dekodera
 i enkodera są udostępnione na licencji typu Open Source, co pozwala każdemu na
-użycie go w dowolnym celu bez ponoszenia żadnych opłat.
+ich użycie go w dowolnym celu bez ponoszenia żadnych opłat.
 
 Kodek korzysta z transformacji MDCT, a wynikowy sygnał w dziedzinie
 częstotliwości dzielony jest na szum i komponenty szczątkowe, po czym jest
-poddany kwantyzacji i kwantyzacji wektorowej.
+poddany kwantyzacji i kwantyzacji wektorowej~\cite{XiphVorbisDoc}.
 
 Vorbis jest obecnie używany przez najpopularniejszy serwis z muzyką
-strumieniową: Spotify oraz jest w użyciu przez studia gier komputerowych.
+strumieniową: Spotify oraz Netflix~\cite{SpotifyMastering, Ronca2013}.
 
 MDCT w tym formacie wykorzystuje okno zboczowe (eng. \textit{slope}) (rys.
-\ref{fig:win_OGG}) o długości $N = 2^{p}$, gdzie $p \in [6,13] \land p \in \bm N$, o wzorze:
+\ref{fig:win_OGG}) o długości $N = 2^{p}$, gdzie $p \in [6,13] \land p \in \bm
+N$, o wzorze~\cite{XiphVorbisDoc}:
 \begin{equation}\label{eq:slope_win}
   w(n) = \sin\left(\frac{\pi}{2}\sin^2\left(\frac{\left(n +
   \frac{1}{2}\right)}{N\pi}\right)\right).
@@ -650,19 +659,19 @@ czasowo-częstotliwościowego sygnału.
 
 \subsection{AC-3}
 AC-3 (nazywany też Dolby Digitial, DD, ATSC A/52) to format kompresji stworzony
-przez firmę Dolby Laboratories na potrzeby kin, wspierający wielokanałową konfigurację
-kanałów 5.1. AC-3 miało zastąpić dotychczasowe rozwiązania analogowego zapisu
-sygnału audio jako cyfrowy format zapisu ścieżki audio na taśmie filmowej.
-Pierwszy film który został wypuszczony ze ścieżką dźwiękową w tym formacie to
-\textit{Batman Returns} w roku 1992.
+przez firmę Dolby Laboratories na potrzeby kin, wspierający wielokanałową
+konfigurację kanałów 5.1. AC-3 miało zastąpić dotychczasowe rozwiązania
+analogowego zapisu sygnału audio jako cyfrowy format zapisu ścieżki audio na
+taśmie filmowej.  Pierwszy film który został wypuszczony ze ścieżką dźwiękową w
+tym formacie to \textit{Batman Returns} w roku 1992~\cite{Fisher1992}.
 
 Kodek jest obecnie ciągle w użyciu w kinie, choć zastępowany przez Dolby
 Sorround 7.1 i Dolby Atmos, ponadto jest wykorzystywany do kodowania ścieżek
-dźwiękowych w filmach dystrybuowanych na płytach DVD i Blu-ray.
+dźwiękowych w filmach dystrybuowanych na płytach DVD~\cite{DolbyDigital}.
 
 MDCT w tym formacie wykorzystuje okno KBD (\ref{eq:kaiser_win},
 \ref{eq:kbd_win}), z parametrem $\alpha = 5$ (rys. \ref{fig:win_AC3}) o
-długości 512 lub 256 próbek.
+długości 512 lub 256 próbek~\cite{atsc2012}.
 \begin{figure}[!tbh]
   \centering
   \includegraphics[width=0.5\textwidth]{plots/win_AC3.pgf}
@@ -677,7 +686,8 @@ firmę Microsoft w celu, podobnie jak AAC i Vorbis, stworzenia kodeka o lepszych
 parametrach niż MP3. Termin WMA może się też odnosić do nowszych kodeków: WMA
 Lossless --- kodeka bezstratnego, WMA Voice --- kodeka dostosowanego do
 kompresji głosu lub WMA Pro --- nowszej, usprawnionej wersji kodeka. W tej
-pracy WMA oznaczać będzie format podstawowy WMA.
+pracy WMA oznaczać będzie format podstawowy WMA
+\cite{AvelarMorrissetteForbesAlbert2008}.
 
 WMA jest standardowym enkoderem wykorzystywanym przez oprogramowanie Windows
 Media Player systemu Microsoft Windows do zapisu sygnału audio. Odtwarzanie
@@ -1413,11 +1423,10 @@ by nie wprowadzać dodatkowej zmiennej w postaci artefaktów podpróbkowywania. 
 przypadku uzyskania po konwersji pliku o większej ilości bitów niż szesnaście,
 jest on ponownie rekwantyzowany do szesnastu (tak jest w przypadku AC-3 i WMA).
 Wszystkie fragmenty w postaci ciągu próbek o długości $441000$ są zapisywane w
-pliku HDF5 wraz z wartością liczbową określająca rodzaj i stopień kompresji.
+pliku HDF5 wraz z wartością liczbową określająca rodzaj i stopień kompresji.  
 
-Stopień kompresji regulowano za pomocą parametru \textit{bitrate} który oznacza
-pożądaną po kompresji ilość bitów (oznaczającą rozmiar pliku na dysku) na
-sekundę sygnału.
+Stopień kompresji regulowano za pomocą parametru \textit{bitrate}, gdyż ten
+parametr jest przyjmowany przez każdy wykorzystywany kodek.
 
 Wynikowa baza danych posiada 65536 fragmentów, 4096 w postaci
 nieskompresowanej i po 4096 dla każdej z piętnastu możliwych par formatów MP3,
