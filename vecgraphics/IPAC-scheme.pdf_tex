@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{298.58151654bp}%
+    \setlength{\unitlength}{298.58149491bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,15 +50,15 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.07448969)%
+  \begin{picture}(1,0.0744897)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.20862087,0.07452068){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.19347511\unitlength}\raggedright \end{minipage}}}%
+    \put(0.20862088,0.07452068){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.19347513\unitlength}\raggedright \end{minipage}}}%
     \put(0.05840742,0.02380128){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Dekodowanie\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{IPAC-scheme.pdf}}%
-    \put(0.80469886,0.02408262){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Synteza\end{tabular}}}}%
+    \put(0.80469891,0.02408262){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Synteza\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{IPAC-scheme.pdf}}%
-    \put(0.35064013,0.02380128){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Odwrotna kwantyzacja\end{tabular}}}}%
+    \put(0.35064015,0.02380128){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Odwrotna kwantyzacja\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{IPAC-scheme.pdf}}%
   \end{picture}%
 \endgroup%

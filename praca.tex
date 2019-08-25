@@ -369,8 +369,8 @@ stratną.
 
 \section{Kompresja bezstratna}
 
-W procesie kompresji stratnej uzyskuje się zmniejszenie rozmiaru pliku bez
-utraty informacji. Uzyskuje się to poprzez zastosowanie pewnych przekształceń
+W procesie kompresji bezstratnej uzyskuje się zmniejszenie rozmiaru pliku bez
+utraty informacji. Następuje to poprzez zastosowanie pewnych przekształceń,
 które zostaną tu wytłumaczone na przykładzie kompresji FLAC
 (eng. \textit{Free Lossless Audio Codec}), z dwóch powodów: FLAC jest obecnie
 najpopularniejszym formatem kompresji bezstratnej oraz posiada w pełni otwartą
@@ -385,59 +385,56 @@ specyfikację i referencyjny enkoder.
 
 Podczas procesu kompresji FLAC występują cztery główne kroki (patrz rys.
 \ref{fig:FLAC_scheme}): fragmentacja, dekorelacja, modelowanie i kodowanie.
-Pierwszy krok, czyli fragmentacja dzieli sygnał cyfrowy na fragmenty (eng.
-\textit{blocks}), których długość wybierana jest na tyle krótka by model
-stworzony w trzecim kroku był jak najbardziej efektywny i na tyle długa by
-nadmiarowość (eng. \textit{overhead}) wynikająca z konieczności zapisu
-parametrów zastosowanych do kompresji fragmentu była jak najmniejsza. 
+Pierwszy krok, czyli fragmentacja, dzieli sygnał cyfrowy na fragmenty (eng.
+\textit{blocks}), których długość wybierana jest na tyle krótka, by model,
+stworzony w trzecim kroku, był jak najbardziej efektywny i na tyle długa, by
+nadmiarowość (eng. \textit{overhead}), wynikająca z konieczności zapisu
+parametrów zastosowanych do kompresji fragmentu, była jak najmniejsza. 
 
 W drugim kroku przeprowadzana jest dekorelacja kanałów w pliku audio, w
 przypadku pliku stereofonicznego kanały prawy $r$ i lewy $l$ zamieniane są na środkowy
 $m = \frac{l + r}{2}$ i boczny $s = l - r$. Pozwala to znacznie zwiększyć
 poziom kompresji w dalszych krokach, ponieważ typowo duża korelacja pomiędzy
-kanałami powoduje że kanał różnicowy (boczny) zawiera niewielkie wartości
+kanałami powoduje, że kanał różnicowy (boczny) zawiera niewielkie wartości
 amplitudy próbek.
 
-Trzeci krok jest najbardziej istotny gdyż w nim tworzony jest model
-matematyczny w taki sposób, by różnica pomiędzy sygnałem wygenerowanym przez
-niego a sygnałem rzeczywistym (nazywana błędem lub residuum), wymagała
+Trzeci krok jest najbardziej istotny, gdyż w nim tworzony jest model
+matematyczny, w taki sposób, by różnica pomiędzy sygnałem wygenerowanym przez
+niego, a sygnałem rzeczywistym (nazywana błędem lub residuum), wymagała
 jak najmniejszej liczby bitów na próbkę (eng. \textit{bits-per-sample}).
 Standard FLAC przewiduje dwa typy modeli: wielomian lub kodowanie predykcyjne
 LPC (eng. \textit{Linear Predictive Coding}). Dopasowanie wielomianu wymaga
-mniejszej mocy obliczeniowej lecz wynik jest mniej dokładny niż LPC.
+mniejszej mocy obliczeniowej, lecz wynik jest mniej dokładny niż LPC.
 
-Ostatni krok to kodowanie entropijne uzyskanego w poprzednim kroku sygnału
+Ostatni krok to kodowanie entropijne, uzyskanego w poprzednim kroku, sygnału
 błędu. W kompresji FLAC wykorzystane jest kodowanie Huffmana, które
-wykorzystuje nierównomierności rozkładu częstotliwości występowania sekwencji
+wykorzystuje nierównomierność rozkładu częstotliwości występowania sekwencji
 bitów w danych, zapisując najczęściej występujące sekwencję mniejszą liczbą
 bitów. Zazwyczaj związane jest to z zapisem tzw.\ słownika, który
 przyporządkowuje sekwencje bitów do kodów Huffmana. Natomiast, ponieważ dane
-błędu uzyskane w tym procesie posiadają rozkład Laplace'a (podwójnie
+błędu, uzyskane w tym procesie, posiadają rozkład Laplace'a (podwójnie
 wykładniczy), możliwe jest zastosowanie szczególnego układu kodów Huffmana,
 nazwanych kodami Rice'a. Własnością tych kodów jest możliwość ich wygenerowania
-na podstawie pojedynczego parametru opisującego rozkład danych (parametru
-Rice'a), ponadto standard FLAC pozwala na podzielenie fragmentu na części,
+na podstawie pojedynczego parametru, opisującego rozkład danych (parametru
+Rice'a). Standard FLAC pozwala na podzielenie fragmentu na części,
 gdzie każda część posiada inny parametr Rice'a, co pozwala na lepsze
 dopasowanie go do zmienności rozkładu w trakcie trwania sygnału.
 
 Poprawnie działający enkoder i dekoder pozwolą otrzymać, po kompresji i
 dekompresji pliku, plik w którym próbki sygnału audio będą takie same jak w
 pliku oryginalnym. Z tego powodu wykrycie czy plik został poddany takiemu
-procesowi niemożliwe na podstawie samego sygnału audio.
-
-
-procesowi niemożliwe na podstawie samego sygnału audio.
+procesowi jest niemożliwe na podstawie samego sygnału audio.
 
 \section{Kompresja stratna}
 
-Celem kompresji stratnej, w przeciwieństwie do bezstratnej nie jest stworzenie
-mniejszego pliku który po dekompresji odtworzy sygnał wejściowy co do próbki, lecz
+Celem kompresji stratnej, w przeciwieństwie do bezstratnej, nie jest stworzenie
+mniejszego pliku, który po dekompresji odtworzy sygnał wejściowy co do próbki, lecz
 stworzenie pliku dużo mniejszego, który po dekompresji i odtworzeniu będzie
 możliwie nierozróżnialny od oryginalnego dla większości słuchaczy. Dlatego też
-ten typ kompresji jest dużo bardziej skomplikowany gdyż wykorzystuje nie tylko
+ten typ kompresji jest dużo bardziej skomplikowany, gdyż wykorzystuje, nie tylko
 te techniki co kompresja bezstratna, ale również wymaga zastosowania wiedzy
 z dziedziny psychoakustyki. W związku z tym przetestowanie działania kodeku
-wymaga testów odsłuchowych co znacząco spowalnia proces tworzenia nowych
+wymaga testów odsłuchowych, co znacząco spowalnia proces tworzenia nowych
 rozwiązań.
 
 \begin{figure}[!tbh]
@@ -448,36 +445,40 @@ rozwiązań.
 \end{figure}
 
 Na rysunku \ref{fig:PAC_scheme} przedstawiony jest uproszczony schemat typowego
-enkodera PAC (eng. \textit{Perceptual Audio Coding}) wykorzystywanego w
+enkodera PAC (eng. \textit{Perceptual Audio Coding}, wykorzystywanego w
 kompresji stratnej. Posiada on cztery główne elementy: transformację
 analizującą, kwantyzator, enkoder i model psychoakustyczny.
 
 Pierwszym elementem jest transformacja analizująca, która zamienia sygnał audio
-na postać którą może wykorzystać kwantyzator wraz z modelem psychakustycznym.
-Każdy z opisanych w tym rozdziale kodeków wykorzystuje w tym celu miedzy innymi
-zmodyfikowaną transformację kosinusową MDCT (eng. \textit{Modified Discrete
-Cosine Transform}) określoną wzorem:
+na postać, którą może wykorzystać kwantyzator wraz z modelem psychoakustycznym.
+Każdy z opisanych w tym rozdziale kodeków wykorzystuje w tym celu, miedzy
+innymi, zmodyfikowaną transformację kosinusową MDCT (eng. \textit{Modified
+Discrete Cosine Transform}), określoną wzorem:
 \begin{equation}
   X_k = \sum_{n=0}^{2N-1}x_n\cos\left[\frac{\pi}{N}
   \left(n+\frac{1}{2}+\frac{N}{2}\right)\left(k+\frac{1}{2}\right)\right].
 \end{equation}
 Jest to funkcja liniowa $F\colon \bm{R}^{2N} \to \bm{R}^N$, która przekształca
 $2N$ liczb rzeczywistych $x_0, \dotsc, x_{2N+1}$ w $N$ liczb rzeczywistych
-$x_0, \dotsc, x_{N+1}$. Posiada ona szczególną właściwość wykorzystywaną w
-procesie kompresji, mianowicie większość współczynników z niej uzyskanych
+$x_0, \dotsc, x_{N+1}$. Posiada ona szczególną właściwość, wykorzystywaną w
+procesie kompresji, tzn.\ większość współczynników z niej uzyskanych
 posiada wartości bliskie zeru.
 
 Aby przeprowadzić transformację na sygnale, wybierana jest długość okna $l =
 2c$, gdzie $c \in \bm N$, oraz skok $h \in \bm N$. Długość okna określa długość
-fragmentu sygnału $\bm s$ który zostanie pomnożony przez okno $\bm w$, a
+fragmentu sygnału $\bm s$, który zostanie pomnożony przez okno $\bm w$, a
 następnie poddany transformacji, natomiast skok określa co ile próbek jest
-wycinany kolejny fragment. Wynikiem całej operacji jest jest macierz $\bm X =
+wycinany kolejny fragment. Wynikiem całej operacji jest macierz $\bm X =
 \begin{bmatrix}\bm x_1 & \bm x_2 & \cdots  & \bm x_k\end{bmatrix}$, stworzona z
-wektorów \[\bm x_n = \text{MDCT}\left\{\bm
-w\begin{bmatrix}s_{(n-1)h}\\\vdots\\s_{(n-1)h+l}\end{bmatrix}\right\},\] gdzie
-okno $\bm w$ jest wektorem o długości $l$, wyznaczonym na podstawie pewnej
-funkcji $w(n)$, której zadaniem jest zniwelowanie efektów brzegowych. Aby
-transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
+wektorów 
+\begin{equation}
+  \bm x_n = \text{MDCT}\left\{\bm w\begin{bmatrix}
+      s_{(n-1)h}\\\vdots\\s_{(n-1)h+l}
+  \end{bmatrix}\right\},
+\end{equation}
+gdzie okno $\bm w$ jest wektorem o długości $l$, wyznaczonym na podstawie
+pewnej funkcji $w(n)$, której zadaniem jest zniwelowanie efektów brzegowych.
+Aby transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
 warunek symetryczności (\ref{eq:symm_cond}) i warunek Princena-Bradleya
 (\ref{eq:p-b_cond}).
 \begin{equation}\label{eq:symm_cond}
@@ -487,25 +488,26 @@ warunek symetryczności (\ref{eq:symm_cond}) i warunek Princena-Bradleya
   w_n^2+w_{n+\frac{l}{2}}^2 = 1
 \end{equation}
 
-Sygnał audio jest także przetwarzany przez model psychakustyczny którego
+Sygnał audio jest także przetwarzany przez model psychoakustyczny, którego
 zadaniem jest przewidywanie zachowania ucha ludzkiego, w taki sposób by
 określić czego potencjalny słuchacz może nie usłyszeć, a co usłyszy.
 Wykorzystuje on w tym celu wiedzę o konstrukcji ucha oraz wiedzę uzyskaną
 poprzez przeprowadzanie testów odsłuchowych.
 
-Informacje uzyskane z modelu psychoakustycznego są następnie stosowanie przez
-kwantyzator do kwantyzacji (ograniczenia zbioru wartości) wyniku transformacji
-analizującej. Elementy które model uzna za niesłyszalne dla potencjalnego
-odbiorcy zostaną silniej skwantyzowane niż te które zostaną uznane za
-słyszalne. Jest to proces nieodwracalny z którego wynika ,,stratność'' tego
-rodzaju kompresji, w jego wyniku dostaje się także macierz wag przez którą
-trzeba pomnożyć uzyskane wartości w procesie odwrotnym.
+Informacje uzyskane z modelu psychoakustycznego są następnie stosowane, przez
+kwantyzator, do kwantyzacji (ograniczenia zbioru wartości) wyniku transformacji
+analizującej. Elementy, które model uzna za niesłyszalne dla potencjalnego
+odbiorcy, zostaną silniej skwantyzowane, niż te, które zostaną uznane za
+słyszalne. W wyniku tego procesu, otrzymuje się także macierz wag, przez którą
+trzeba pomnożyć uzyskane wartości w procesie odwrotnym. Kwantyzacja odwrotna
+pozwala otrzymać tylko przybliżone wartości danych z przed kwantyzacji, z czego
+wynika ,,stratność'' tego rodzaju kompresji.
 
-W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane uzyskane
-z poprzedniego kroku są zakodowane przy użyciu kodowania entropijnego. Jest ono
-bardzo skuteczne na uzyskanych danych dzięki opisanej wcześniej własności
+W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane, uzyskane
+w poprzednim kroku, są zakodowane przy użyciu kodowania entropijnego. Jest ono
+bardzo skuteczne na uzyskanych danych, dzięki, opisanej wcześniej, własności
 transformaty MDCT oraz procesowi kwantyzacji, które powodują wyzerowanie się
-dużej liczby współczynników uzyskanych w procesie transformacji.
+dużej liczby współczynników, uzyskanych w procesie transformacji.
 
 \begin{figure}[!tbh]
   \centering
@@ -514,27 +516,26 @@ dużej liczby współczynników uzyskanych w procesie transformacji.
   \label{fig:IPAC_scheme}
 \end{figure}
 
-Aby z pliku skompresowanego uzyskać sygnał audio stosuje się dekompresją (patrz
+Aby z pliku skompresowanego, uzyskać sygnał audio stosuje się dekompresję (patrz
 rys. \ref{fig:IPAC_scheme}), gdzie kolejno następuje: dekodowanie zakodowanych
 entropijnie danych, odwrotna kwantyzacja która polega na wymnożeniu danych
-przez odpowiednie wagi (ten proces jednakże nie odtwarza w pełni danych z przed
-kwantyzacji lecz dane zbliżone) oraz synteza, czyli zastosowanie odwrotnych
+przez odpowiednie wagi oraz synteza, czyli zastosowanie odwrotnych
 transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
 \textit{Inverse Modified Discrete Cosine Transform})
 
 \subsection{MP3}
-Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991 jako część
-standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}) a
+Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991, jako część
+standardu MPEG-1 (eng. \textit{Moving Picture Experts Group Phase 1}), a
 następnie rozszerzony w standardach MPEG-2 oraz MPEG-2.5. Do czasu uzyskania
-popularności przez AAC był to najpopularniejszy kodek. Ponadto cieszył się on
-dużo popularnością jako format wykorzystywany w przenośnych urządzeniach,
-zwanych, na jego cześć, ,,empetrójkami'', do odsłuchiwania muzyki z powodu dużego
+popularności przez AAC był to najpopularniejszy kodek. Cieszył się
+dużo popularnością, jako format, wykorzystywany w przenośnych urządzeniach,
+zwanych, na jego cześć, ,,empetrójkami'', do odsłuchiwania muzyki, z powodu dużego
 wsparcia sprzętowego.
 
-W tym kodeku przed MDCT do analizy sygnału jest zastosowany również bank
-filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank filtrów
-który rezygnuje z możliwości idealnej rekonstrukcji sygnału na rzecz prostszego
-procesu konstrukcji względem banku filtrów QMF. Filtry banku anulują aliasing w
+W tym kodeku, przed MDCT, do analizy sygnału jest zastosowany również bank
+filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank
+filtrów, który rezygnuje z możliwości idealnej rekonstrukcji sygnału, na rzecz prostszego
+procesu konstrukcji, względem banku filtrów QMF. Filtry banku anulują aliasing w
 sąsiadujących pasmach, ponadto bank jest ortogonalny, więc filtry syntezy są
 filtrami analizy odwróconymi w czasie.
 %\begin{enumerate}
