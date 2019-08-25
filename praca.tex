@@ -307,14 +307,12 @@ backend=biber
 \chapter{Wprowadzenie}
 \section{Cel pracy}
 Serwisy internetowe sprzedające muzykę w postaci bezstratnych plików audio
-wymagają od sprzedawców plików w takim formacie \cite{BCWhyLossless}, lecz nie
+wymagają od sprzedawców plików w takim formacie~\cite{BCWhyLossless}, lecz nie
 przeprowadzają weryfikacji bezstratności tych plików poprzez sprawdzenie czy
-plik nie był uzyskany poprzez dekompresję z pliku w formacie stratnym
-\cite{ZhouWangJinYan2015}. Pliki uzyskane w ten sposób mogą się charakteryzować
+plik nie był uzyskany poprzez dekompresję z pliku w formacie stratnym~\cite{ZhouWangJinYan2015}. Pliki uzyskane w ten sposób mogą się charakteryzować
 słyszalnie gorszą jakością, w zależności od rodzaju i stopnia zastosowanej
 kompresji, a ponadto ponowna kompresja stratna, stosowana przez serwisy do
-przygotowania plików w innych formatach, w znaczącym stopniu pogarsza ich jakość
-\cite{YangShiHuang2010}.
+przygotowania plików w innych formatach, w znaczącym stopniu pogarsza ich jakość~\cite{YangShiHuang2010}.
 
 W pracy przedstawiono wykorzystanie metod uczenia maszynowego do rozpoznania
 czy sygnał cyfrowy audio został uprzednio poddany kompresji stratnej oraz jaki
@@ -347,22 +345,20 @@ pliku. Jako że pliki multimedialne posiadają duży rozmiar bez użycia kompres
 w porównaniu do innego typu plików wykorzystywanych przez użytkowników
 komputera (\SI{10}{\second} nieskompresowanego pliku audio, w formacie płyty
 CD, zajmuje około \SI{1.7}{\mebi\byte}, dla porównania cały tekst powieści
-\textit{Potop} Henryka Sienkiewicza \cite{Sienkiewicz2010}, w postaci
+\textit{Potop} Henryka Sienkiewicza~\cite{Sienkiewicz2010}, w postaci
 nieskompresowanego ciągu znaków zakodowanych UTF-8, zajmuje około
 \SI{0.9}{\mebi\byte}), a ponadto przesyłane są często przez łącze sieciowe do
 odbiorcy, zmniejszenie ich rozmiaru oszczędza ogromne ilości miejsca na dysku
 jak i przepustowości sieci (kompresja bezstratna pozwala skompresować pliki
 audio do \num{50}-\SI{70}{\percent} oryginalnego rozmiaru, a stratna nawet
-poniżej \SI{1}{\percent} oryginalnego rozmiaru bez utraty odczuwalnej jakości
-\cite{Beurden2015, kamedo22014}). Z tego powodu kompresja audio, video i
+poniżej \SI{1}{\percent} oryginalnego rozmiaru bez utraty odczuwalnej jakości~\cite{Beurden2015, kamedo22014}). Z tego powodu kompresja audio, video i
 obrazów jest stosowana powszechnie, nieskompresowane pliki multimedialne
 używane są wyłącznie, gdy wymagany jest szybki dostęp do ich fragmentów i brak
 obaw o pogorszenie jakości, na przykład podczas procesu ich edycji.
 
 Kompresja bezstranta, wykorzystująca metody powszechnie stosowane także do
 kompresji innych plików (np. ZIP, gzip), nie osiąga dużej skuteczności na
-plikach multimedialnych, z powodu wysokiej entropii tego rodzaju plików
-\cite{Sayood2002}. Wobec tego stosuje się metody pozwalające na dalsze
+plikach multimedialnych, z powodu wysokiej entropii tego rodzaju plików~\cite{Sayood2002}. Wobec tego stosuje się metody pozwalające na dalsze
 zmniejszenie rozmiaru, kosztem utraty możliwości odtworzenie oryginalnego
 sygnału po dekompresji, z tego powodu ten typ kompresji nazywa się kompresją
 stratną.
@@ -374,7 +370,7 @@ utraty informacji. Następuje to poprzez zastosowanie pewnych przekształceń,
 które zostaną tu wytłumaczone na przykładzie kompresji FLAC
 (eng. \textit{Free Lossless Audio Codec}), z dwóch powodów: FLAC jest obecnie
 najpopularniejszym formatem kompresji bezstratnej oraz posiada w pełni otwartą
-specyfikację i referencyjny enkoder.
+specyfikację i referencyjny enkoder~\cite{XiphFLAC}.
 
 \begin{figure}[!tbh]
   \centering
@@ -396,15 +392,16 @@ przypadku pliku stereofonicznego kanały prawy $r$ i lewy $l$ zamieniane są na 
 $m = \frac{l + r}{2}$ i boczny $s = l - r$. Pozwala to znacznie zwiększyć
 poziom kompresji w dalszych krokach, ponieważ typowo duża korelacja pomiędzy
 kanałami powoduje, że kanał różnicowy (boczny) zawiera niewielkie wartości
-amplitudy próbek.
+amplitudy próbek~\cite{MuinGunawanKartiwiElsheikh2017}.
 
 Trzeci krok jest najbardziej istotny, gdyż w nim tworzony jest model
 matematyczny, w taki sposób, by różnica pomiędzy sygnałem wygenerowanym przez
 niego, a sygnałem rzeczywistym (nazywana błędem lub residuum), wymagała
 jak najmniejszej liczby bitów na próbkę (eng. \textit{bits-per-sample}).
 Standard FLAC przewiduje dwa typy modeli: wielomian lub kodowanie predykcyjne
-LPC (eng. \textit{Linear Predictive Coding}). Dopasowanie wielomianu wymaga
-mniejszej mocy obliczeniowej, lecz wynik jest mniej dokładny niż LPC.
+LPC (eng. \textit{Linear Predictive Coding})~\cite{Shaughnessy1988}.
+Dopasowanie wielomianu wymaga mniejszej mocy obliczeniowej, lecz wynik jest
+mniej dokładny niż LPC.
 
 Ostatni krok to kodowanie entropijne, uzyskanego w poprzednim kroku, sygnału
 błędu. W kompresji FLAC wykorzystane jest kodowanie Huffmana, które
@@ -445,8 +442,9 @@ rozwiązań.
 \end{figure}
 
 Na rysunku \ref{fig:PAC_scheme} przedstawiony jest uproszczony schemat typowego
-enkodera PAC (eng. \textit{Perceptual Audio Coding}, wykorzystywanego w
-kompresji stratnej. Posiada on cztery główne elementy: transformację
+enkodera PAC (eng. \textit{Perceptual Audio Coding})~\cite{BosiGoldberg2002,
+Brandenburg1999}, wykorzystywanego w
+kompresji stratnej . Posiada on cztery główne elementy: transformację
 analizującą, kwantyzator, enkoder i model psychoakustyczny.
 
 Pierwszym elementem jest transformacja analizująca, która zamienia sygnał audio
@@ -460,9 +458,7 @@ Discrete Cosine Transform}), określoną wzorem:
 \end{equation}
 Jest to funkcja liniowa $F\colon \bm{R}^{2N} \to \bm{R}^N$, która przekształca
 $2N$ liczb rzeczywistych $x_0, \dotsc, x_{2N+1}$ w $N$ liczb rzeczywistych
-$x_0, \dotsc, x_{N+1}$. Posiada ona szczególną właściwość, wykorzystywaną w
-procesie kompresji, tzn.\ większość współczynników z niej uzyskanych
-posiada wartości bliskie zeru.
+$x_0, \dotsc, x_{N+1}$.
 
 Aby przeprowadzić transformację na sygnale, wybierana jest długość okna $l =
 2c$, gdzie $c \in \bm N$, oraz skok $h \in \bm N$. Długość okna określa długość
@@ -480,7 +476,8 @@ gdzie okno $\bm w$ jest wektorem o długości $l$, wyznaczonym na podstawie
 pewnej funkcji $w(n)$, której zadaniem jest zniwelowanie efektów brzegowych.
 Aby transformacja była odwracalna, okno musi być symetryczne, tzn.\ spełniać
 warunek symetryczności (\ref{eq:symm_cond}) i warunek Princena-Bradleya
-(\ref{eq:p-b_cond}).
+(\ref{eq:p-b_cond})~\cite{PrincenBradley1986,
+WangYaroslavskyVilermoVaananen2000}.
 \begin{equation}\label{eq:symm_cond}
   w_n = w_{l-1-n}
 \end{equation}
@@ -492,22 +489,27 @@ Sygnał audio jest także przetwarzany przez model psychoakustyczny, którego
 zadaniem jest przewidywanie zachowania ucha ludzkiego, w taki sposób by
 określić czego potencjalny słuchacz może nie usłyszeć, a co usłyszy.
 Wykorzystuje on w tym celu wiedzę o konstrukcji ucha oraz wiedzę uzyskaną
-poprzez przeprowadzanie testów odsłuchowych.
+poprzez przeprowadzanie testów odsłuchowych~\cite{BosiGoldberg2002}.
 
-Informacje uzyskane z modelu psychoakustycznego są następnie stosowane, przez
-kwantyzator, do kwantyzacji (ograniczenia zbioru wartości) wyniku transformacji
-analizującej. Elementy, które model uzna za niesłyszalne dla potencjalnego
-odbiorcy, zostaną silniej skwantyzowane, niż te, które zostaną uznane za
-słyszalne. W wyniku tego procesu, otrzymuje się także macierz wag, przez którą
-trzeba pomnożyć uzyskane wartości w procesie odwrotnym. Kwantyzacja odwrotna
-pozwala otrzymać tylko przybliżone wartości danych z przed kwantyzacji, z czego
-wynika ,,stratność'' tego rodzaju kompresji.
+Informacje, uzyskane z modelu psychoakustycznego, są następnie stosowane, przez
+kwantyzator, do kwantyzacji wyniku transformacji analizującej. Proces ten
+polega na przypisaniu liczbom pewnych wartości z wybranego ograniczonego
+zbioru. Elementy, które model uzna za niesłyszalne dla potencjalnego
+odbiorcy, zostaną silniej skwantyzowane (tzn.\ zbiór wartości do których są
+przypisane jest bardziej ograniczony), niż te, które zostaną uznane za
+słyszalne. Wynikiem kwantyzacji, w zależności od jej rodzaju, są także
+informacje dodatkowe, stosowane w procesie odwrotnym (np.\ wagi przez które
+należy wymnożyć wartości). Kwantyzacja odwrotna pozwala otrzymać tylko
+przybliżone wartości danych z przed kwantyzacji, z czego wynika ,,stratność''
+tego rodzaju kompresji~\cite{Sayood2017}.
 
 W ostatnim kroku, podobnie jak w przypadku kompresji bezstratnej, dane, uzyskane
 w poprzednim kroku, są zakodowane przy użyciu kodowania entropijnego. Jest ono
-bardzo skuteczne na uzyskanych danych, dzięki, opisanej wcześniej, własności
-transformaty MDCT oraz procesowi kwantyzacji, które powodują wyzerowanie się
-dużej liczby współczynników, uzyskanych w procesie transformacji.
+bardzo skuteczne na uzyskanych danych, dzięki zastosowaniu transformacji MDCT,
+która koncentruje \SI{90}{\percent} energii sygnału w \SI{10}{\percent}
+współczynników~\cite{WangYaroslavskyVilermoVaananen2000} oraz procesowi
+kwantyzacji, które powodują wyzerowanie się dużej liczby współczynników,
+uzyskanych w procesie transformacji.
 
 \begin{figure}[!tbh]
   \centering
@@ -521,7 +523,7 @@ rys. \ref{fig:IPAC_scheme}), gdzie kolejno następuje: dekodowanie zakodowanych
 entropijnie danych, odwrotna kwantyzacja która polega na wymnożeniu danych
 przez odpowiednie wagi oraz synteza, czyli zastosowanie odwrotnych
 transformat analizujących, w przypadku MDCT będzie to IMDCT (eng.
-\textit{Inverse Modified Discrete Cosine Transform})
+\textit{Inverse Modified Discrete Cosine Transform})~\cite{Brandenburg1999}.
 
 \subsection{MP3}
 Format MP3 (eng. \textit{MPEG-1 Layer 3}) został zdefiniowany w roku 1991, jako część
@@ -534,31 +536,13 @@ wsparcia sprzętowego.
 
 W tym kodeku, przed MDCT, do analizy sygnału jest zastosowany również bank
 filtrów PQMF (eng. \textit{Pseudo Quadrature Mirror Filter}), jest to bank
-filtrów, który rezygnuje z możliwości idealnej rekonstrukcji sygnału, na rzecz prostszego
-procesu konstrukcji, względem banku filtrów QMF. Filtry banku anulują aliasing w
-sąsiadujących pasmach, ponadto bank jest ortogonalny, więc filtry syntezy są
-filtrami analizy odwróconymi w czasie.
-%\begin{enumerate}
-%  \item Projekt prototypowego filtra dolnoprzepustowego $h(n)$ o długości $M =
-%    LN$, gdzie $L, M, N \in \bm Z$
-%  \item Filtr musi anulować aliasing w sąsiadujących podpasmach: \[
-%      \begin{array}{rl}
-%        |H(e^{i\omega})|^2 + H(e^{i\frac{\pi}{N}-\omega})|^2 = 2, &
-%        \quad0<|\omega|<\frac{\pi}{2N} \\
-%        |H(e^{i\omega})|^2 = 0, & \quad|\omega| > \frac{\pi}{N}
-%      \end{array}\]
-%  \item Filtry analizy $h_k(n)$ to modulacje kosinusowe filtra $h(n)$:\[
-%      h_k(n) = h(n)\cos\left[\left(k+\frac{1}{2}\right)
-%      \left(n-\frac{M-1}{2}\right)\frac{\pi}{N}+\phi_k\right],\]
-%      gdzie $k = 0,\dotsc,N-1$, a faza spełnia warunek:\[
-%      \phi_{k+1}-\phi_k = (2r+1)\frac{\pi}{2}.\]
-%  \item Bank filtrów jest ortogonalny, więc filtry syntezy są filtrami analizy
-%    odwróconymi w czasie:\[
-%      f_k(n) = h_k(M-1-n)\]
-%\end{enumerate}
-W formatach od MPEG-1 Layer I do MPEG-1 Layer III, ten bank filtrów użyto z $N = 32$
-pasmami i o $M = 512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia każdego z
-pasm zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
+filtrów, który rezygnuje z możliwości idealnej rekonstrukcji sygnału, na rzecz
+prostszego procesu konstrukcji, względem banku filtrów QMF. Filtry banku
+anulują aliasing w sąsiadujących pasmach, ponadto bank jest ortogonalny, więc
+filtry syntezy są filtrami analizy odwróconymi w czasie.  W formatach od MPEG-1
+Layer I do MPEG-1 Layer III, ten bank filtrów użyto z $N = 32$ pasmami i o $M =
+512$ współczynnikach, przy czym w MP3 dodatkowo do wyjścia każdego z pasm
+zaaplikowano filtr Princena-Bradleya {\color{red}odnośnik}.
 
 \begin{figure}[!tbh]
   \centering
