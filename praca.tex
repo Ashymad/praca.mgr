@@ -255,19 +255,39 @@ backend=biber
 
   \thesisplan{% Przykładowy plan pracy, należy omówić z promotorem
     \begin{enumerate}
-    \item Omówienie tematu pracy i sposobu realizacji z promotorem.
-    \item Zebranie i opracowanie literatury dotyczącej tematu pracy.
-    \item Zebranie i opracowanie wyników badań.
-    \item Analiza wyników badań, ich omówienie i zatwierdzenie przez promotora.
-    \item Opracowanie redakcyjne.
+      \item Omówienie tematu pracy i sposobu realizacji z promotorem.
+      \item Zebranie i opracowanie literatury dotyczącej tematu pracy.
+      \item Zebranie i opracowanie wyników badań.
+      \item Analiza wyników badań, ich omówienie i zatwierdzenie przez promotora.
+      \item Opracowanie redakcyjne.
     \end{enumerate}
   }
 
   \summaryPL{\indent\indent%
-	  {[Treść streszczenia]}
+    Obecnie wszechobecnie stosowane są formaty kompresji audio, w celu
+    zmniejszenia rozmiaru plików, a więc ograniczenia miejsca na dysku i
+    ograniczenia przesyłu danych przez internet. Kompresja stratna znacząco
+    zmniejsza ten rozmiar, poświęcając możliwość odtworzenia oryginalnego
+    pliku. W obrocie mogą się znajdować pliki uznane za nieskompresowane, które
+    uzyskano drogą dekompresji z pliku w formacie skompresowanym stratnie.
+    W pracy przedstawiono rozwiązanie, pozwalające na rozpoznanie czy dany
+    fragment sygnału audio został poddany kompresji stratnej. Wykorzystano w
+    tym celu techniki uczenia maszynowego, w szczególności, skonstruowano sieć
+    opartą o Konwolucyjne Sieci Neuronowe, rozpoznającą na podstawie
+    spektrogramów. Sieć wytrenowano na zgromadzonej bazie danych fragmentów
+    muzyki, uzyskując dokładność \SI{97.4}{\percent}. Rozszerzono także
+    zagadnienie o rozpoznanie typu i stopnia kompresji zastosowanego do pliku, z
+    równie dobrymi wynikami, uzyskując dokładność \SI{92.4}{\percent}.
+    Podjęto się także implementacji algorytmu niewymagającego uczenia opartego
+    o wykrywanie dużych różnic, pomiędzy kolejnymi średnimi energiami wyników
+    transformaty MDCT. Algorytm usprawniono poprzez dodanie kroków rafinujących
+    wyniki oraz wykorzystanie efektywnych procedur. W szczególności,
+    przedstawiono algorytm obliczający średnią modułów logarytmów modułów,
+    oferujący czas wykonania ponad dwa i pół raza krótszy niż rozwiązanie
+    alternatywne.
   }
   \summaryEN{\indent\indent%
-	  {[Summary text]}
+    {[Summary text]}
   }
 
   \acknowledgements{%
