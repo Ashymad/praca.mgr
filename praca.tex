@@ -274,7 +274,7 @@ backend=biber
     fragment sygnału audio został poddany kompresji stratnej. Wykorzystano w
     tym celu techniki uczenia maszynowego, w szczególności, skonstruowano sieć
     opartą o Konwolucyjne Sieci Neuronowe, rozpoznającą na podstawie
-    spektrogramów. Sieć wytrenowano na zgromadzonej bazie danych fragmentów
+    spektrogramów. Sieć wytrenowano na zgromadzonej bazie fragmentów
     muzyki, uzyskując dokładność \SI{97.4}{\percent}. Rozszerzono także
     zagadnienie o rozpoznanie typu i stopnia kompresji zastosowanego do pliku, z
     równie dobrymi wynikami, uzyskując dokładność \SI{92.4}{\percent}.
@@ -287,7 +287,25 @@ backend=biber
     alternatywne.
   }
   \summaryEN{\indent\indent%
-    {[Summary text]}
+    Currently, audio file compression is used everywhere, to reduce the size of
+    files, which subsequently means reduction of disk usage as well as
+    reduction of data sent through the web. Lossy compression reduces the size
+    extremely effectively, but gives up the possiblity to recreate the original
+    file. Files, thought to be uncompressed, but obtained through decompression
+    of a lossy compressed file, can be sold and bought. The thesis presents a
+    software solution which can be used to detect if an audio signal fragment
+    was previously lossy compressed. To achieve that, machine learning
+    techniques were employed, a Convolutional Neural Network was architectured,
+    that learns on spectrograms. The network was trained on a collected music
+    fragment database, reaching accuracy of \SI{97.4}{\percent}. The problem
+    was also extended to detection of the type and the bitrate of the used
+    codec, reaching similarly good accuracy of \SI{92.4}{\percent}. A
+    algorithm without a need to be trained, based on detection of big
+    differences of subsequent mean energies of the MDCT transform, was
+    implemented as well. The algorithm was improved, by adding steps refining
+    the results, and optimized. A algorithm to calculate the mean of absolute
+    values of logarithms of absolute values was explained, that is over two and
+    a half times faster the a naive version.
   }
 
   \acknowledgements{%
